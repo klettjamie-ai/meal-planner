@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fb923c"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Meals"><meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png">
+<title>FitPlan Meals</title><style>:root{--bg:#fff8f1;--card:#fff;--ink:#3b2f2a;--muted:#8a7a70;--line:#f1e4d8;--pri:#ea580c;--pri2:#f59e0b;--soft:#fff1e6;--ok:#15803d;--okbg:#e8f7ec;--warnbg:#fff4d6;--sale:#e11d48;--salebg:#ffe4ea;--r:20px}
+*{box-sizing:border-box}
+body{margin:0;font-family:ui-rounded,"SF Pro Rounded",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg);line-height:1.45;font-size:15px}
+a{color:var(--pri)}
+header{background:linear-gradient(135deg,#fb923c,#f59e0b);color:#fff;padding:18px 16px 54px}
+header .wrap{max-width:1040px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+header h1{margin:0;font-size:24px;letter-spacing:-.3px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{background:rgba(255,255,255,.22);color:#fff;border:0;border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.chip:hover{background:rgba(255,255,255,.35)}
+main{max-width:1040px;margin:-38px auto 24px;padding:0 14px;display:grid;gap:16px}
+.card{background:var(--card);border-radius:var(--r);box-shadow:0 6px 24px rgba(120,60,20,.08);padding:20px}
+h2{margin:0 0 12px;font-size:18px}h3{margin:18px 0 8px;font-size:15px}
+label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin:12px 0 5px}
+input,select,textarea{width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:14px;font:inherit;font-size:15px;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--pri2)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 18px;border:0;border-radius:14px;background:var(--pri);color:#fff;font:inherit;font-weight:700;font-size:15px;cursor:pointer}
+.btn:hover{filter:brightness(1.06)}.btn.big{padding:15px 26px;font-size:17px;border-radius:16px}
+.btn.sec{background:var(--soft);color:var(--ink)}.btn.sm{padding:7px 12px;font-size:13px;border-radius:10px}.btn.ghost{background:transparent;color:var(--muted)}.btn.danger{background:#fde8e8;color:#b91c1c}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.muted{color:var(--muted)}.small{font-size:13px}.hint{font-size:13px;color:var(--muted);margin:6px 0 0}
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--soft);color:#9a3412;white-space:nowrap;vertical-align:1px}
+.pill.sale{background:var(--salebg);color:var(--sale)}.pill.stretch{background:#fef3c7;color:#92400e}.pill.d1{background:#e8f7ec;color:#166534}.pill.d2{background:#e0efff;color:#1e40af}.pill.d3{background:#f6e8ff;color:#7e22ce}
+.note{border-radius:14px;padding:10px 14px;font-size:14px;margin-top:10px;background:var(--soft)}.note.ok{background:var(--okbg);color:#14532d}.note.warn{background:var(--warnbg);color:#7c4a03}
+details>summary{cursor:pointer;font-weight:600;color:var(--pri);font-size:13px;list-style:none;margin-top:8px}details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"▸ ";}details[open]>summary::before{content:"▾ "}
+details.sec{border:1.5px solid var(--line);border-radius:16px;padding:4px 14px;margin:10px 0}details.sec>summary{font-size:15px;color:var(--ink);padding:10px 0;margin:0}
+/* week bar */
+.wbar{display:flex;gap:12px;align-items:end;flex-wrap:wrap}.wbar>.f{flex:1;min-width:170px}
+.wsel{display:flex;gap:6px}.wsel .btn{padding:0 14px}
+.rec{margin-top:14px;padding:12px 14px;border-radius:16px;background:linear-gradient(135deg,#fff3e0,#fef9c3);font-size:14px}
+.rec b{font-size:16px}.rec ul{margin:6px 0 0;padding-left:18px;font-size:13px}
+/* tabs */
+.tabs{display:flex;gap:6px;overflow-x:auto;margin:-4px -4px 14px;padding:4px}
+.tabs button{flex:0 0 auto;border:0;background:var(--soft);padding:9px 16px;border-radius:999px;font:inherit;font-weight:700;cursor:pointer;color:var(--muted)}
+.tabs button.on{background:var(--pri);color:#fff}
+/* plan */
+.sum{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.sum span{background:var(--soft);border-radius:12px;padding:6px 12px;font-size:13px}.sum b{font-size:15px}
+.grid7{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.day{border:1.5px solid var(--line);border-radius:18px;padding:12px 14px;background:#fff}
+.day .hd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}.day .hd b{font-size:16px}
+.meal{display:flex;gap:8px;padding:7px 0;border-top:1px dashed var(--line);font-size:14px}.meal:first-of-type{border-top:0}
+.meal .ic{width:22px;flex:0 0 22px;text-align:center}.meal .nm{flex:1}.meal .nm a{color:inherit;text-decoration:none;font-weight:600}.meal .nm a:hover{color:var(--pri)}
+.meal .kc{font-size:12px;color:var(--muted);white-space:nowrap}
+.tot{margin-top:8px;font-size:13px;font-weight:700;border-radius:10px;padding:6px 10px;text-align:center}.tot.good{background:var(--okbg);color:var(--ok)}.tot.off{background:var(--warnbg);color:#92400e}
+/* grocery */
+.gl{columns:2;column-gap:28px}@media(max-width:700px){.gl{columns:1}}
+.gl section{break-inside:avoid;margin-bottom:16px}.gl h4{margin:0 0 6px;font-size:14px;color:var(--pri)}
+.gl label.it{display:flex;gap:10px;align-items:center;font-weight:400;color:var(--ink);font-size:14px;margin:0;padding:6px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.gl label.it input{width:20px;height:20px;accent-color:var(--pri);flex:0 0 auto}.gl .q{color:var(--muted);font-size:13px;margin-left:auto;white-space:nowrap}.gl .done{text-decoration:line-through;opacity:.5}
+/* prep */
+.prep ol,.prep ul{padding-left:20px;margin:4px 0 10px}.prep li{margin:4px 0;font-size:14px}
+.tip{background:#fff7e6;border-radius:12px;padding:8px 12px;font-size:14px;margin:6px 0}
+.rc h4{margin:0 0 4px;font-size:15px}.rc p{margin:6px 0;font-size:14px}.rc .meta{font-size:13px;color:var(--muted)}
+/* settings */
+.set{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:800px){.set{grid-template-columns:1fr}}
+.set .card{box-shadow:none;border:1.5px solid var(--line)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}.stat{background:var(--soft);border-radius:14px;padding:8px;text-align:center}.stat .k{font-size:11px;color:var(--muted);font-weight:700}.stat .v{font-size:17px;font-weight:800}
+.level{font-size:26px;font-weight:800;color:var(--pri)}
+.sp{max-height:300px;overflow:auto;margin-top:6px}.sp table{width:100%;border-collapse:collapse;font-size:13px}.sp td{padding:6px 4px;border-bottom:1px solid var(--line)}.sp td.pr{color:var(--sale);font-weight:700;white-space:nowrap}.sp tr.used td:first-child{font-weight:700}
+table.hist{width:100%;border-collapse:collapse;font-size:14px}table.hist td,table.hist th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left}
+/* modal / wizard */
+.modal{position:fixed;inset:0;background:rgba(59,47,42,.45);display:flex;align-items:center;justify-content:center;z-index:9;padding:14px}
+.modal .box{background:#fff;border-radius:24px;max-width:640px;width:100%;max-height:92vh;overflow:auto;padding:24px}
+.steps{display:flex;gap:6px;margin-bottom:16px}.steps i{flex:1;height:6px;border-radius:9px;background:var(--line)}.steps i.on{background:var(--pri)}
+.wz h2{font-size:22px;margin-bottom:4px}.wz .foot{display:flex;justify-content:space-between;gap:10px;margin-top:20px}
+.q{padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}.q .opts{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.q .opts button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 16px;cursor:pointer;font:inherit;font-size:14px}.q .opts button.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.tile{border:1.5px solid var(--line);border-radius:16px;background:#fff;padding:12px 8px;text-align:center;cursor:pointer;font:inherit;font-weight:600;font-size:14px}
+.tile .e{display:block;font-size:26px;margin-bottom:4px}.tile.on{border-color:var(--pri);background:var(--soft)}.tile.rec{grid-column:1/-1;background:linear-gradient(135deg,#fff3e0,#fef9c3)}
+.hidden{display:none!important}
+.disc{font-size:12px;color:var(--muted);text-align:center;max-width:800px;margin:0 auto 24px;padding:0 16px}
+@media(max-width:600px){header h1{font-size:20px}.card{padding:16px}.row3{grid-template-columns:1fr 1fr 1fr}.grid7{grid-template-columns:1fr}.wbar>.f{min-width:100%}.wbar>div:last-child{width:100%}.wbar .btn.big{width:100%}.stats{grid-template-columns:repeat(2,1fr)}.modal .box{padding:18px;border-radius:20px}}
+@media print{header,.wbar,.tabs,.btn,.rec{display:none!important}main{margin:0}.card{box-shadow:none}}
+/* ---- iPhone / touch ---- */
+html{-webkit-text-size-adjust:100%}
+body{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+header{padding-top:calc(18px + env(safe-area-inset-top))}
+input,select,textarea{font-size:16px;min-height:44px}
+.btn,.chip,.tile,.q .opts button,.tabs button{min-height:44px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.btn.sm{min-height:40px}.btn.ghost{min-width:44px}
+.meal .nm a{display:inline-block;padding:4px 0}
+.ti{display:none}
+@media(hover:none){.btn:hover,.chip:hover{filter:none}}
+@media(max-width:700px){
+  body{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+  .tabs{position:fixed;left:0;right:0;bottom:0;z-index:8;margin:0;padding:6px 6px calc(6px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);gap:2px;overflow:visible}
+  .tabs button{background:transparent;border-radius:12px;padding:4px 2px;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:1px;min-height:50px}
+  .tabs button.on{background:var(--soft);color:var(--pri)}
+  .ti{display:block;font-size:20px;line-height:1.1}
+  .modal{align-items:flex-end;padding:0}
+  .modal .box{border-radius:24px 24px 0 0;max-height:94vh;padding-bottom:calc(18px + env(safe-area-inset-bottom))}
+  .wsel select{min-width:0}
+}
+</style></head><body>
+<header><div class="wrap"><h1>🍊 FitPlan Meals</h1><div class="chips" id="chips"></div></div></header>
+<main>
+  <section class="card">
+    <div class="wbar">
+      <div class="f"><label for="weekSel">Week</label><div class="wsel"><button class="btn sec" id="wPrev" type="button" aria-label="Previous week">‹</button><select id="weekSel"></select><button class="btn sec" id="wNext" type="button" aria-label="Next week">›</button></div></div>
+      <div class="f"><label for="cuisineSel">Cuisine</label><select id="cuisineSel"></select></div>
+      <div><button class="btn big" id="gen" type="button">Make my week</button></div>
+    </div>
+    <div id="recBox"></div><div id="weekNotes"></div>
+  </section>
+  <section class="card">
+    <div class="tabs" id="tabs"><button data-t="plan" class="on"><span class="ti">📅</span>Plan</button><button data-t="grocery"><span class="ti">🛒</span>Groceries</button><button data-t="prep"><span class="ti">🔪</span>Prep</button><button data-t="history"><span class="ti">🗂️</span>History</button><button data-t="settings"><span class="ti">⚙️</span>Settings</button></div>
+    <div id="out"></div>
+  </section>
+</main>
+<p class="disc">General guidance, not medical advice. Macros and sale prices are estimates. Check prices in store.</p>
+<div id="modal" class="modal hidden"><div class="box" id="mbox"></div></div>
+
+<script id="data">/* Recipe database. Macros are per serving (kcal, protein g, carbs g, fat g), estimates.
+   meal: b = breakfast, m = main (lunch/dinner), s = snack. diff: 1 Beginner, 2 Intermediate, 3 Advanced.
+   ingredients: "name;qty;unit;section" joined by |   sections: P produce, M meat/seafood, D dairy/eggs/deli, B bakery/tortillas, G pantry, F frozen */
+const RAW = [];
+function R(id, name, cuisine, meal, kcal, p, c, f, diff, active, total, tech, equip, ing, steps, tip) {
+  RAW.push({ id, name, cuisine, meal, kcal, p, c, f, diff, active, total: total || active, tech: tech ? tech.split(',') : [], equip: equip ? equip.split(',') : [],
+    ing: ing.split('|').map(s => { const [n, q, u, sec] = s.split(';'); return { n: n.trim(), q: +q, u, sec }; }), steps, tip: tip || '' });
+}
+
+/* ---------- Mexican ---------- */
+R('mx1','Huevos rancheros with black beans','Mexican','b',430,24,40,19,1,15,15,'egg','pan','eggs;2;ea;D|corn tortillas;2;ea;B|black beans (canned);0.5;cup;G|salsa roja;0.25;cup;G|queso fresco;1;oz;D|avocado;0.25;ea;P','Warm tortillas and beans. Fry eggs to your liking. Top tortillas with beans, eggs, salsa, crumbled queso fresco and avocado.');
+R('mx2','Egg, potato & pepper jack breakfast burritos','Mexican','b',480,28,48,19,1,20,25,'egg,dice','pan','eggs;2;ea;D|flour tortillas (10 in);1;ea;B|potato;0.5;ea;P|pepper jack;1;oz;D|onion;0.25;ea;P|salsa verde;2;tbsp;G','Dice potato and onion; pan-fry until tender (10 min). Add beaten eggs and scramble. Roll in tortillas with cheese and salsa. Wrap in foil — freezes well for the week.','Make 4 at once on prep day; reheat 60–90 s in the microwave.');
+R('mx3','Chicken tinga rice bowls','Mexican','m',560,45,60,14,2,25,35,'chicken,simmer,rice,dice','pot,pan','chicken breast;6;oz;M|chipotle in adobo;1;tbsp;G|tomato;1;ea;P|onion;0.5;ea;P|garlic;1;clove;P|white rice;0.33;cup dry;G|black beans (canned);0.33;cup;G|lime;0.5;ea;P','Simmer chicken in salted water 15 min until 165°F, then shred. Blend tomato, chipotle, garlic. Sauté onion, add sauce and chicken, simmer 10 min. Serve over rice with beans and lime.');
+R('mx4','Sirloin carne asada tacos','Mexican','m',540,42,45,20,2,20,25,'sear,dice','pan','sirloin tip steak;5;oz;M|corn tortillas;3;ea;B|onion;0.25;ea;P|cilantro;0.25;bunch;P|lime;1;ea;P|salsa verde;3;tbsp;G|garlic;1;clove;P','Rub steak with lime, garlic, salt and cumin (marinate 15 min+). Sear in a very hot pan 3–4 min per side, rest 5 min, slice thin against the grain. Serve in warm tortillas with diced onion, cilantro and salsa.');
+R('mx5','Sheet-pan shrimp fajitas','Mexican','m',480,38,46,15,1,15,25,'roast,dice','sheet','shrimp (raw, peeled);6;oz;M|bell pepper;1;ea;P|onion;0.5;ea;P|flour tortillas (6 in);2;ea;B|avocado oil;1;tbsp;G|fajita seasoning;1;tsp;G|lime;0.5;ea;P','Slice peppers and onion; toss with oil and seasoning and roast at 425°F for 12 min. Add shrimp, roast 6–8 min more until pink. Squeeze lime and serve in tortillas.');
+R('mx6','Pozole verde with chicken (Instant Pot)','Mexican','m',450,40,42,12,3,30,55,'pressure,blend,chicken,dice','pressure,blender','chicken thighs (boneless);5;oz;M|hominy (canned);0.75;cup;G|tomatillos;3;ea;P|anaheim chili;1;ea;P|onion;0.5;ea;P|garlic;2;clove;P|cabbage;0.5;cup;P|radishes;2;ea;P','Broil tomatillos, Anaheim chili and onion until charred; blend with garlic and 1 cup broth. Pressure cook chicken with sauce and hominy 15 min, natural release 10. Shred chicken, season, top with cabbage and radish.','Charring under the broiler adds big flavor — watch closely, it takes 4–6 min.');
+R('mx7','Baked chicken milanesa with lime-crema salad','Mexican','m',520,46,40,18,2,20,30,'bake,chicken','oven,sheet','chicken breast milanesa (thin cutlets);6;oz;M|panko breadcrumbs;0.33;cup;G|eggs;0.5;ea;D|salad greens;2;cup;P|crema;1;tbsp;D|lime;0.5;ea;P|tomato;0.5;ea;P','Dip cutlets in egg then panko. Bake on an oiled sheet at 425°F 15–18 min, flipping once, to 165°F. Toss greens and tomato with crema thinned with lime juice.');
+R('mx8','Papaya & Persian cucumber cup with Tajín + string cheese','Mexican','s',200,9,28,6,1,5,5,'dice','','papaya;1;cup;P|persian cucumbers;1;ea;P|lime;0.25;ea;P|Tajín;0.5;tsp;G|string cheese;1;ea;D','Cube papaya and cucumber, squeeze lime, sprinkle Tajín. Eat with a string cheese.');
+
+/* ---------- Italian ---------- */
+R('it1','Ricotta toast with strawberries & honey','Italian','b',380,22,42,13,1,5,5,'','','part-skim ricotta;0.5;cup;D|whole-grain bread;2;slice;B|strawberries;0.5;cup;P|honey;1;tsp;G','Toast bread, spread ricotta, top with sliced strawberries and a drizzle of honey.');
+R('it2','Spinach & mushroom frittata','Italian','b',340,26,8,22,2,15,30,'egg,bake,dice','oven,pan','eggs;3;ea;D|spinach;1;cup;P|mushrooms;2;oz;P|parmesan;0.5;oz;D|olive oil;1;tsp;G','Sauté mushrooms and spinach in an oven-safe pan. Pour in beaten eggs with parmesan, cook 2 min on the stove, then bake at 375°F for 12–15 min until set. Cut into wedges for the week.');
+R('it3','Turkey bolognese with whole-wheat pasta','Italian','m',620,45,70,16,2,25,40,'pasta,sauce,dice,simmer','pot,pan','ground turkey (93% lean);5;oz;M|whole-wheat pasta;2.5;oz;G|crushed tomatoes;0.5;cup;G|onion;0.33;ea;P|carrot;0.33;ea;P|garlic;1;clove;P|parmesan;0.33;oz;D','Sauté diced onion, carrot and garlic 5 min. Brown turkey. Add tomatoes and simmer 20 min. Boil pasta in well-salted water to al dente; toss with sauce and parmesan.');
+R('it4','Chicken cacciatore','Italian','m',480,44,22,22,2,25,50,'sear,sauce,simmer,chicken,dice','pan','chicken thighs (boneless);6;oz;M|bell pepper;0.5;ea;P|mushrooms;2;oz;P|crushed tomatoes;0.5;cup;G|onion;0.33;ea;P|garlic;1;clove;P|olive oil;1;tsp;G|ciabatta;1;slice;B','Sear seasoned chicken until browned; remove. Sauté onion, pepper, mushrooms, garlic. Add tomatoes and chicken back, simmer covered 25 min to 165°F. Serve with ciabatta.');
+R('it5','Lemon-garlic salmon, roasted broccoli & orzo','Italian','m',590,40,50,24,2,15,30,'fish,roast,pasta','sheet,pot','salmon fillet;5;oz;M|broccoli;1.5;cup;P|orzo;2;oz;G|lemon;0.5;ea;P|garlic;1;clove;P|olive oil;1;tsp;G','Toss broccoli with oil and roast at 425°F 10 min. Add salmon (lemon, garlic, salt) to the pan and roast 10–12 min until it flakes (145°F). Boil orzo; toss with lemon zest.');
+R('it6','Pesto shrimp pasta with cherry tomatoes','Italian','m',600,40,62,20,1,20,20,'pasta','pot,pan','shrimp (raw, peeled);5;oz;M|pasta (spaghetti);2.5;oz;G|basil pesto;1.5;tbsp;G|cherry tomatoes;0.75;cup;P|garlic;1;clove;P','Boil pasta. Meanwhile sauté garlic and shrimp 3–4 min until pink. Toss pasta, shrimp, halved tomatoes and pesto with a splash of pasta water.');
+R('it7','Sheet-pan chicken sausage, peppers & potatoes','Italian','m',450,30,30,22,1,10,35,'roast','sheet','chicken sausage (Italian);2;link;M|bell pepper;1;ea;P|onion;0.5;ea;P|potato;0.5;ea;P|olive oil;1;tsp;G','Cut everything into chunks, toss with oil and Italian seasoning. Roast at 425°F 25–30 min, stirring once.');
+R('it8','Caprese skewers with prosciutto','Italian','s',180,13,4,12,1,5,5,'','','fresh mozzarella;1;oz;D|cherry tomatoes;4;ea;P|prosciutto;0.5;oz;D|basil;4;leaf;P','Thread mozzarella, tomato, basil and folded prosciutto on toothpicks; drizzle balsamic.');
+
+/* ---------- Mediterranean ---------- */
+R('md1','Greek yogurt bowl with peaches, honey & walnuts','Mediterranean','b',380,25,40,14,1,5,5,'','','greek yogurt (plain);1;cup;D|yellow peaches;1;ea;P|honey;1;tbsp;G|walnuts;0.5;oz;G','Spoon yogurt into a bowl, top with sliced peach, walnuts and honey.');
+R('md2','Shakshuka with feta','Mediterranean','b',360,20,22,21,2,15,25,'egg,sauce,dice','pan','eggs;2;ea;D|crushed tomatoes;0.75;cup;G|bell pepper;0.5;ea;P|onion;0.25;ea;P|garlic;1;clove;P|feta;0.5;oz;D|pita;0.5;ea;B','Sauté onion, pepper and garlic with cumin and paprika. Add tomatoes and simmer 8 min. Make wells, crack in eggs, cover and cook 5–7 min until whites set. Top with feta; serve with pita.');
+R('md3','Chicken souvlaki bowls with tzatziki','Mediterranean','m',580,48,55,18,2,25,40,'chicken,sear,rice,dice','pan,pot','chicken breast;6;oz;M|white rice;0.33;cup dry;G|persian cucumbers;1;ea;P|greek yogurt (plain);0.25;cup;D|tomato;0.5;ea;P|red onion;0.25;ea;P|lemon;0.5;ea;P|garlic;1;clove;P|olive oil;1;tsp;G','Marinate chicken cubes in lemon, garlic, oregano and oil (15 min–overnight). Sear or grill 8–10 min to 165°F. Grate half the cucumber into yogurt with garlic for tzatziki. Serve over rice with diced tomato, cucumber and onion.');
+R('md4','Baked salmon, lemon potatoes & Greek salad','Mediterranean','m',600,40,45,28,2,20,45,'fish,roast,dice','sheet','salmon fillet;5;oz;M|potato;6;oz;P|persian cucumbers;1;ea;P|tomato;0.5;ea;P|feta;0.5;oz;D|kalamata or black olives;5;ea;G|lemon;0.5;ea;P|olive oil;2;tsp;G','Roast potato wedges with lemon, oregano and oil at 425°F 25 min. Add salmon and roast 10–12 min more. Chop cucumber, tomato and olives; top with feta.');
+R('md5','Lentil & vegetable soup with spinach','Mediterranean','m',420,24,62,9,1,15,40,'simmer,dice','pot','brown lentils (dry);0.33;cup;G|carrot;0.5;ea;P|celery;1;stalk;P|onion;0.33;ea;P|crushed tomatoes;0.33;cup;G|spinach;1;cup;P|garlic;1;clove;P|olive oil;1;tsp;G|feta;0.5;oz;D','Sauté diced onion, carrot, celery and garlic 5 min. Add lentils, tomatoes, 2 cups water/broth per serving and cumin. Simmer 25–30 min until lentils are tender. Stir in spinach; top with feta.');
+R('md6','Shrimp saganaki with orzo','Mediterranean','m',540,38,55,17,2,20,30,'sauce,pasta','pan,pot','shrimp (raw, peeled);5;oz;M|crushed tomatoes;0.5;cup;G|feta;0.75;oz;D|orzo;2;oz;G|garlic;1;clove;P|olive oil;1;tsp;G|parsley;2;tbsp;P','Boil orzo. Sauté garlic, add tomatoes and simmer 8 min. Add shrimp, cook 4 min, crumble feta on top and cover 2 min. Serve over orzo with parsley.');
+R('md7','Greek turkey meatballs with orzo-cucumber salad','Mediterranean','m',560,42,50,20,2,25,40,'bake,dice,pasta','oven,sheet,pot','ground turkey (93% lean);5;oz;M|eggs;0.25;ea;D|panko breadcrumbs;2;tbsp;G|orzo;1.5;oz;G|persian cucumbers;1;ea;P|red onion;0.25;ea;P|feta;0.5;oz;D|lemon;0.5;ea;P|garlic;1;clove;P','Mix turkey, egg, panko, garlic, oregano and mint; roll into balls. Bake at 400°F 18–20 min (165°F). Toss cooked orzo with diced cucumber, onion, feta and lemon.');
+R('md8','Hummus, veggies & pita','Mediterranean','s',230,9,28,10,1,5,5,'','','hummus;0.25;cup;G|pita;0.5;ea;B|carrot;1;ea;P|persian cucumbers;1;ea;P','Slice veggies and pita; dip in hummus.');
+
+/* ---------- Middle Eastern ---------- */
+R('me1','Ful medames with egg','Middle Eastern','b',400,20,50,13,1,15,15,'egg','pan,pot','fava beans (frozen double-peeled or canned);0.75;cup;F|eggs;1;ea;D|olive oil;2;tsp;G|lemon;0.5;ea;P|garlic;1;clove;P|tomato;0.5;ea;P|pita;0.5;ea;B','Simmer fava beans 8–10 min, mash roughly with garlic, cumin, lemon and olive oil. Top with diced tomato and a boiled or fried egg; scoop with pita.');
+R('me2','Labneh & za\u2019atar breakfast plate with eggs','Middle Eastern','b',420,26,30,22,1,10,10,'egg','pan','eggs;2;ea;D|labneh or plain yogurt (strained);0.33;cup;D|persian cucumbers;1;ea;P|tomato;0.5;ea;P|za\u2019atar;1;tsp;G|olive oil;1;tsp;G|pita;0.5;ea;B','Fry or boil eggs. Plate labneh drizzled with oil and za\u2019atar alongside sliced cucumber, tomato and warm pita.');
+R('me3','Sheet-pan chicken shawarma bowls with tahini','Middle Eastern','m',600,48,55,20,2,20,45,'roast,chicken,rice,dice','sheet,pot','chicken thighs (boneless);6;oz;M|white rice;0.33;cup dry;G|tahini;1;tbsp;G|persian cucumbers;1;ea;P|tomato;0.5;ea;P|onion;0.5;ea;P|lemon;0.5;ea;P|garlic;1;clove;P|shawarma spice;1;tsp;G','Toss chicken and sliced onion with shawarma spice, garlic, lemon and oil; marinate 15 min+. Roast at 425°F 22–25 min to 165°F, then slice. Whisk tahini with lemon and water. Serve over rice with chopped salad.');
+R('me4','Beef kofta with hummus, salad & pita','Middle Eastern','m',560,40,35,28,2,25,35,'sear,dice','pan','lean ground beef (90%);5;oz;M|onion;0.25;ea;P|parsley;0.25;bunch;P|hummus;3;tbsp;G|pita;0.5;ea;B|persian cucumbers;1;ea;P|tomato;0.5;ea;P|garlic;1;clove;P','Grate onion; mix with beef, minced parsley, garlic, allspice, cumin and salt. Shape onto skewers or logs. Sear or grill 8–10 min, turning, to 160°F. Serve with hummus, salad and pita.');
+R('me5','Mujadara (lentils, rice & caramelized onions) with yogurt','Middle Eastern','m',480,20,75,12,2,25,50,'rice,simmer,dice','pot,pan','brown lentils (dry);0.25;cup;G|white rice;0.25;cup dry;G|onion;1;ea;P|olive oil;2;tsp;G|plain yogurt;0.33;cup;D|persian cucumbers;1;ea;P','Simmer lentils 15 min. Meanwhile slowly brown sliced onions in oil 20–25 min. Add rice, cumin and water to lentils; cook covered 18 min. Top with onions; serve with yogurt and cucumber.');
+R('me6','Molokhia with chicken & vermicelli rice','Middle Eastern','m',520,42,52,14,2,25,50,'simmer,chicken,rice','pot','molokhia (frozen minced);7;oz;F|chicken breast;5;oz;M|white rice;0.33;cup dry;G|vermicelli pasta (fideo);0.25;oz;G|garlic;3;clove;P|ground coriander;1;tsp;G|lemon;0.5;ea;P','Poach chicken in salted water 15 min to 165°F; keep the broth and shred. Toast fideo in a little oil, add rice and broth, cook 18 min. Simmer molokhia in 1 cup broth 5 min (don\u2019t boil hard); fry garlic and coriander and stir in. Serve over rice with chicken and lemon.');
+R('me7','Samke harra — spicy baked tilapia with tahini','Middle Eastern','m',460,42,35,16,2,15,30,'bake,fish,sauce','oven','tilapia fillet;6;oz;M|tahini;1;tbsp;G|lemon;0.5;ea;P|garlic;2;clove;P|cilantro;0.25;bunch;P|tomato;0.5;ea;P|pita;0.5;ea;B|olive oil;1;tsp;G','Bake seasoned tilapia at 400°F 10–12 min. Sauté garlic, chili flakes and cilantro in oil, stir in tahini, lemon and water to a sauce. Spoon over fish; serve with tomato and pita.');
+R('me8','Bamia — okra & beef stew with rice','Middle Eastern','m',540,40,50,18,2,30,75,'sear,simmer,pressure,rice','pot,pressure','stew meat (beef);5;oz;M|okra (frozen);1;cup;F|tomato paste;1;tbsp;G|garlic;2;clove;P|onion;0.33;ea;P|white rice;0.33;cup dry;G|lemon;0.25;ea;P','Brown beef and onion. Add tomato paste, garlic, 7-spice and water; simmer 60 min (or pressure cook 25 min). Add frozen okra for the last 15 min. Finish with lemon; serve with rice.');
+R('me9','Pistachios & dates','Middle Eastern','s',220,6,28,11,1,1,1,'','','pistachio kernels;0.75;oz;G|medjool dates;2;ea;P','Portion into small containers on prep day.');
+
+/* ---------- Armenian ---------- */
+R('am1','Armenian breakfast plate — eggs, string cheese, lavash & herbs','Armenian','b',410,27,30,20,1,10,10,'egg','pan','eggs;2;ea;D|string cheese;1;ea;D|lavash;0.5;sheet;B|persian cucumbers;1;ea;P|tomato;0.5;ea;P|fresh herbs (tarragon, basil, parsley);0.25;bunch;P','Boil or fry eggs. Plate with pulled string cheese, lavash, cucumber, tomato and a handful of herbs.');
+R('am2','Halebi cheese & spinach omelet with lavash','Armenian','b',420,30,24,22,1,10,15,'egg','pan','eggs;3;ea;D|halebi cheese;0.75;oz;D|spinach;1;cup;P|lavash;0.5;sheet;B','Wilt spinach in a pan, pour in beaten eggs, add crumbled halebi cheese, fold. Serve with lavash.');
+R('am3','Chicken khorovats with bulgur pilaf','Armenian','m',600,45,50,22,2,25,45,'sear,chicken,dice','pan,pot','chicken thighs (boneless);6;oz;M|onion;0.5;ea;P|bell pepper;0.5;ea;P|tomato;1;ea;P|bulgur (#3 coarse);0.33;cup;G|sweet lemon or lemon;0.5;ea;P|olive oil;1;tsp;G','Marinate chicken with grated onion, paprika, salt and pepper (30 min+). Grill or sear with pepper and tomato halves, 10–12 min to 165°F. Toast bulgur in oil, add 2x water, cook 12 min covered. Serve with sliced onion and lemon.');
+R('am4','Harissa — Armenian chicken & wheat porridge (Instant Pot)','Armenian','m',520,40,50,16,2,15,60,'pressure,chicken','pressure','chicken breast;5;oz;M|hulled wheat (korkot) or pearled wheat;0.33;cup;G|butter;1;tsp;D|onion;0.25;ea;P','Rinse wheat. Pressure cook chicken, wheat, salt and 1.5 cups water per serving 35 min, natural release. Shred chicken and beat with a spoon until creamy. Top with butter and a little cumin or paprika.');
+R('am5','Lahmajun-style lavash with lean beef & herbs','Armenian','m',520,36,48,20,2,25,35,'bake,dice','oven,sheet','lean ground beef (90%);4;oz;M|lavash;1;sheet;B|pepper paste (tomato & pepper);1;tbsp;G|onion;0.25;ea;P|tomato;0.5;ea;P|parsley;0.25;bunch;P|lemon;0.5;ea;P|garlic;1;clove;P','Pulse beef, onion, tomato, garlic, parsley, pepper paste, paprika and salt to a paste. Spread thinly on lavash. Bake at 450°F 8–10 min until crisp. Top with parsley and lemon; roll up.');
+R('am6','Beef & rice dolma (grape leaves) with garlic yogurt','Armenian','m',560,35,55,22,3,50,100,'rice,simmer,dice,roll','pot','grape leaves;12;ea;G|lean ground beef (90%);4;oz;M|white rice;0.25;cup dry;G|onion;0.33;ea;P|tomato paste;1;tbsp;G|plain yogurt;0.33;cup;D|garlic;1;clove;P|lemon;0.5;ea;P','Rinse grape leaves. Mix beef, raw rice, minced onion, tomato paste, herbs and spices. Place a spoonful on each leaf, fold in sides and roll tightly. Pack seam-down in a pot, cover with water and lemon, weigh down with a plate and simmer 50–60 min. Serve with garlic yogurt.','Rolling: shiny side down, filling near the stem, fold sides in like a burrito, roll snug but not tight — rice expands.');
+R('am7','Braised lamb shanks with bulgur','Armenian','m',650,48,45,30,3,30,150,'sear,pressure,simmer,dice','pot,pressure','lamb shank;0.5;ea;M|onion;0.5;ea;P|carrot;0.5;ea;P|tomato paste;1;tbsp;G|garlic;2;clove;P|bulgur (#3 coarse);0.33;cup;G','Season shanks and sear deeply on all sides. Sauté onion, carrot, garlic and tomato paste; add water to half-cover. Braise covered at 325°F 2.5 h (or pressure cook 45 min). Serve meat over bulgur with the sauce.','Pat the meat dry and don\u2019t crowd the pot — good browning makes the sauce.');
+R('am8','Baked salmon with walnut-herb sauce & bulgur','Armenian','m',600,40,45,28,2,20,30,'bake,fish,blend','oven,blender','salmon fillet;5;oz;M|walnuts;0.5;oz;G|parsley;0.25;bunch;P|garlic;1;clove;P|lemon;0.5;ea;P|bulgur (#3 coarse);0.33;cup;G|olive oil;1;tsp;G','Bake salmon at 400°F 12 min. Blend walnuts, parsley, garlic, lemon and a little water/oil to a sauce. Cook bulgur (2x water, 12 min). Serve together.');
+R('am9','String cheese & Bartlett pear','Armenian','s',190,8,24,7,1,1,1,'','','string cheese;1;ea;D|bartlett pears;1;ea;P','Grab and go.');
+
+/* ---------- Latin American ---------- */
+R('la1','Arepas with eggs & queso fresco','Latin American','b',450,24,42,20,2,20,30,'dough,egg','pan','pre-cooked corn meal (masarepa);0.33;cup;G|eggs;2;ea;D|queso fresco;1;oz;D|avocado;0.25;ea;P','Mix masarepa with warm salted water to a soft dough; shape 2 discs. Cook on a dry pan 5–6 min per side. Split and fill with scrambled eggs, queso fresco and avocado.','Dough should feel like soft play-dough; add water a spoon at a time if it cracks.');
+R('la2','Papaya-banana licuado with Greek yogurt & oats','Latin American','b',360,24,58,5,1,5,5,'blend','blender','papaya;1;cup;P|banana;0.5;ea;P|greek yogurt (plain);0.5;cup;D|rolled oats;0.25;cup;G|almond milk;0.75;cup;D','Blend everything with ice until smooth.');
+R('la3','Peruvian roast chicken thighs with ají verde & potatoes','Latin American','m',620,45,45,28,2,20,50,'roast,blend,chicken','sheet,blender','chicken thighs (boneless);6;oz;M|potato;6;oz;P|garlic;2;clove;P|lime;0.5;ea;P|cilantro;0.25;bunch;P|jalapeño;0.5;ea;P|greek yogurt (plain);2;tbsp;D|olive oil;1;tsp;G','Rub chicken with garlic, cumin, paprika, lime and oil. Roast with potato wedges at 425°F 30–35 min to 165°F. Blend cilantro, jalapeño, yogurt, lime and garlic for ají verde.');
+R('la4','Cuban picadillo with rice & black beans','Latin American','m',620,38,70,19,2,25,35,'dice,simmer,rice','pan,pot','lean ground beef (90%);5;oz;M|tomato sauce;0.33;cup;G|onion;0.33;ea;P|bell pepper;0.33;ea;P|green olives;4;ea;G|raisins;1;tbsp;G|white rice;0.33;cup dry;G|black beans (canned);0.33;cup;G|garlic;1;clove;P','Sauté diced onion, pepper and garlic. Brown beef, add tomato sauce, cumin, oregano, olives and raisins; simmer 15 min. Serve with rice and beans.');
+R('la5','Lomo saltado (sirloin stir-fry) with rice','Latin American','m',600,40,55,22,3,30,40,'stirfry,sear,dice,roast,rice','wok,sheet,pot','sirloin tip steak;5;oz;M|red onion;0.5;ea;P|tomato;1;ea;P|potato;4;oz;P|soy sauce;1;tbsp;G|red wine vinegar;1;tsp;G|white rice;0.25;cup dry;G|cilantro;2;tbsp;P|avocado oil;2;tsp;G','Roast potato batons at 425°F 25 min. Slice steak thin. In a smoking-hot wok, sear beef in batches 1–2 min; remove. Stir-fry onion wedges 1 min, add tomato wedges, soy, vinegar and beef; toss 30 s. Serve with fries and rice.','High heat + small batches = sear instead of steam. Have everything cut before you start.');
+R('la6','Ropa vieja (Instant Pot shredded beef)','Latin American','m',560,44,48,18,2,20,70,'pressure,dice,rice','pressure,pot','beef chuck roast;5;oz;M|bell pepper;0.5;ea;P|onion;0.5;ea;P|tomato sauce;0.33;cup;G|garlic;2;clove;P|white rice;0.33;cup dry;G','Cut chuck into 3-inch chunks, season with cumin and oregano. Pressure cook with sliced pepper, onion, garlic, tomato sauce and 0.5 cup water 45 min, natural release. Shred in the sauce. Serve with rice.');
+R('la7','Shrimp ceviche tostadas','Latin American','m',420,34,40,13,2,25,40,'dice','pot','shrimp (raw, peeled);5;oz;M|lime;2;ea;P|persian cucumbers;1;ea;P|tomato;0.5;ea;P|red onion;0.25;ea;P|cilantro;0.25;bunch;P|avocado;0.25;ea;P|tostadas;3;ea;B','Poach shrimp 2 min until just pink, chill and chop. Toss with lime juice, diced cucumber, tomato, onion and cilantro; rest 15 min. Pile on tostadas with avocado.','Poaching the shrimp first makes ceviche food-safe while keeping the texture.');
+R('la8','Roasted pumpkin seeds & papaya','Latin American','s',200,8,16,13,1,1,1,'','','pumpkin seeds;0.75;oz;G|papaya;0.5;cup;P','Portion seeds; cube papaya with lime.');
+
+/* ---------- Japanese ---------- */
+R('jp1','Egg & rice bowl with miso soup','Japanese','b',400,22,55,10,1,15,15,'rice,egg','ricecooker,pot','white rice;0.33;cup dry;G|eggs;2;ea;D|white miso;1;tbsp;G|silken tofu;2;oz;D|scallions;1;ea;P|soy sauce;1;tsp;G','Cook rice (batch for the week). Soft-scramble eggs with a splash of soy; serve over hot rice with scallions. Whisk miso into hot (not boiling) water with tofu cubes.');
+R('jp2','Japanese breakfast — broiled salmon, rice & miso soup','Japanese','b',480,32,50,16,2,15,20,'fish,rice','oven,pot','salmon fillet;3.5;oz;M|white rice;0.33;cup dry;G|white miso;1;tbsp;G|silken tofu;2;oz;D|persian cucumbers;0.5;ea;P','Salt salmon and broil 6–8 min. Serve with rice, miso soup and quick-pickled cucumber (rice vinegar + salt).');
+R('jp3','Chicken teriyaki rice bowls with broccoli','Japanese','m',600,46,70,14,1,20,25,'sauce,chicken,rice','pan,ricecooker','chicken breast;6;oz;M|white rice;0.33;cup dry;G|broccoli;1.5;cup;P|soy sauce;1.5;tbsp;G|mirin;1;tbsp;G|honey;1;tsp;G|garlic;1;clove;P|ginger;0.5;inch;P','Pan-cook bite-size chicken 6–8 min to 165°F. Add soy, mirin, honey, garlic and ginger; simmer until glossy. Steam broccoli. Serve over rice.');
+R('jp4','Miso-glazed salmon with rice & cucumber salad','Japanese','m',620,40,60,24,2,15,25,'bake,fish,rice','oven,ricecooker','salmon fillet;5;oz;M|white miso;1;tbsp;G|mirin;1;tbsp;G|white rice;0.33;cup dry;G|persian cucumbers;1;ea;P|rice vinegar;1;tbsp;G|sesame seeds;1;tsp;G','Brush salmon with miso + mirin; broil or bake at 425°F 10–12 min. Toss thin-sliced cucumber with rice vinegar, salt and sesame. Serve with rice.');
+R('jp5','Oyakodon (chicken & egg rice bowl)','Japanese','m',580,42,66,14,2,20,25,'simmer,egg,chicken,rice','pan,ricecooker','chicken thighs (boneless);4;oz;M|eggs;2;ea;D|onion;0.5;ea;P|dashi or chicken broth;0.33;cup;G|soy sauce;1;tbsp;G|mirin;1;tbsp;G|white rice;0.33;cup dry;G|scallions;1;ea;P','Simmer sliced onion in dashi, soy and mirin 3 min. Add bite-size chicken; simmer 6–8 min until cooked through. Drizzle in beaten eggs, cover 1 min until just set. Slide over rice.');
+R('jp6','Beef & vegetable yakisoba','Japanese','m',560,35,65,16,2,20,25,'stirfry','wok','sirloin tip steak;4;oz;M|yakisoba noodles (fresh);5;oz;G|cabbage;1;cup;P|carrot;0.5;ea;P|onion;0.25;ea;P|yakisoba or Worcestershire sauce;2;tbsp;G|avocado oil;1;tsp;G','Slice beef thin; stir-fry 2 min and remove. Stir-fry onion, carrot and cabbage 3 min. Add loosened noodles, sauce and beef; toss 2 min.');
+R('jp7','Japanese chicken curry with rice','Japanese','m',640,38,78,18,2,20,45,'simmer,dice,rice','pot,ricecooker','chicken thighs (boneless);5;oz;M|potato;0.5;ea;P|carrot;0.5;ea;P|onion;0.5;ea;P|Japanese curry roux;1;cube;G|white rice;0.33;cup dry;G','Brown chicken and onion. Add diced potato, carrot and water; simmer 15 min. Turn off heat, dissolve roux, simmer 5 min until thick. Serve with rice.');
+R('jp8','Edamame with sea salt','Japanese','s',190,17,14,8,1,5,5,'','pot','edamame (frozen, shelled);1;cup;F','Microwave or boil 4 min; salt.');
+
+/* ---------- Korean ---------- */
+R('kr1','Gyeran-bap — egg rice with kimchi & sesame','Korean','b',420,20,55,13,1,10,10,'egg,rice','pan','white rice;0.33;cup dry;G|eggs;2;ea;D|kimchi;0.33;cup;D|soy sauce;1;tsp;G|sesame oil;0.5;tsp;G|roasted seaweed snack;1;pack;G','Fry eggs sunny-side up. Put over hot rice with soy and sesame oil; top with kimchi and crumbled seaweed.');
+R('kr2','Kimchi omelet with fruit','Korean','b',330,22,15,20,1,10,10,'egg','pan','eggs;3;ea;D|kimchi;0.25;cup;D|scallions;1;ea;P|green satsuma tangerines;1;ea;P','Sauté chopped kimchi 1 min, pour in eggs, fold into an omelet. Serve with a tangerine.');
+R('kr3','Bibimbap with lean beef & vegetables','Korean','m',620,38,72,18,2,35,40,'rice,sear,egg','pan,ricecooker','lean ground beef (90%);4;oz;M|white rice;0.33;cup dry;G|spinach;1;cup;P|carrot;0.5;ea;P|mushrooms;2;oz;P|eggs;1;ea;D|gochujang;1;tbsp;G|sesame oil;1;tsp;G|garlic;1;clove;P|soy sauce;1;tsp;G','Sauté each vegetable briefly with garlic and a pinch of salt. Brown beef with soy and garlic. Fry an egg. Arrange over rice; top with gochujang thinned with sesame oil.');
+R('kr4','Gochujang chicken with rice & smashed cucumbers','Korean','m',600,46,65,15,1,20,30,'chicken,rice','pan,ricecooker','chicken breast;6;oz;M|gochujang;1.5;tbsp;G|honey;1;tsp;G|soy sauce;1;tsp;G|garlic;1;clove;P|white rice;0.33;cup dry;G|persian cucumbers;1;ea;P|sesame seeds;1;tsp;G','Cook bite-size chicken 6–8 min to 165°F. Stir in gochujang, honey, soy and garlic; cook 1 min to glaze. Smash cucumbers with a knife, season with salt, vinegar and sesame. Serve with rice.');
+R('kr5','Galbi-style marinated flanken ribs with lettuce wraps','Korean','m',590,40,55,22,2,20,40,'marinate,sear,rice','pan,ricecooker','flanken ribs (beef short rib, thin-cut);6;oz;M|soy sauce;1.5;tbsp;G|bartlett pears;0.25;ea;P|garlic;2;clove;P|lettuce leaves;4;ea;P|white rice;0.33;cup dry;G|gochujang;1;tsp;G','Grate pear and garlic into soy with a little sugar; marinate ribs 1 h to overnight. Sear in a hot pan 2–3 min per side. Wrap with rice and a dab of gochujang in lettuce.');
+R('kr6','Kimchi jjigae with tofu & pork','Korean','m',450,38,22,22,2,15,35,'simmer','pot','pork leg (lean, sliced);4;oz;M|firm tofu;4;oz;D|kimchi;0.75;cup;D|gochujang;1;tsp;G|onion;0.25;ea;P|scallions;1;ea;P','Sauté pork and kimchi 5 min. Add gochujang, onion and 1.5 cups water per serving; simmer 15 min. Add tofu cubes, simmer 5 more. Top with scallions.');
+R('kr7','Jeyuk bokkeum — spicy pork stir-fry bowls','Korean','m',600,42,62,18,2,25,40,'stirfry,marinate,rice','wok,ricecooker','pork leg (lean, sliced);5;oz;M|gochujang;1.5;tbsp;G|soy sauce;1;tsp;G|garlic;2;clove;P|ginger;0.5;inch;P|onion;0.5;ea;P|cabbage;1;cup;P|white rice;0.33;cup dry;G','Marinate thin pork with gochujang, soy, garlic and ginger 15 min+. Stir-fry onion and cabbage 2 min; add pork and cook on high 5–6 min until done. Serve with rice.');
+R('kr8','Hard-boiled eggs & roasted seaweed','Korean','s',170,13,2,11,1,12,15,'egg','pot','eggs;2;ea;D|roasted seaweed snack;1;pack;G','Boil eggs 9–10 min, ice bath, peel. Batch-cook for the week.');
+
+/* ---------- Thai ---------- */
+R('th1','Khai jiao — Thai omelet with jasmine rice','Thai','b',450,20,48,19,1,10,10,'egg,rice','pan,ricecooker','eggs;2;ea;D|white rice;0.33;cup dry;G|fish sauce;1;tsp;G|avocado oil;2;tsp;G|sriracha;1;tsp;G','Beat eggs with fish sauce. Pour into very hot oil — it puffs — flip once, 1 min per side. Serve over rice with sriracha.');
+R('th2','Jok — rice porridge with chicken & ginger','Thai','b',380,28,48,7,1,10,35,'simmer,chicken','pot','white rice;0.25;cup dry;G|chicken breast;3.5;oz;M|ginger;1;inch;P|fish sauce;1;tsp;G|scallions;1;ea;P|eggs;0.5;ea;D','Simmer rice in 4x broth/water 30 min, stirring, until creamy. Add thin-sliced or minced chicken and ginger for the last 8 min (165°F). Season with fish sauce; top with scallions and a soft egg.');
+R('th3','Pad krapow gai — basil chicken with rice & fried egg','Thai','m',620,45,62,20,2,15,20,'stirfry,egg,rice','wok,ricecooker','ground chicken;5;oz;M|garlic;3;clove;P|Thai chilies;2;ea;P|Thai basil;0.5;cup;P|soy sauce;1;tsp;G|oyster sauce;1;tbsp;G|fish sauce;1;tsp;G|eggs;1;ea;D|white rice;0.33;cup dry;G','Stir-fry pounded garlic and chilies 30 s, add chicken and cook 4–5 min. Add sauces and a pinch of sugar, then basil until wilted. Serve over rice with a crispy fried egg.');
+R('th4','Thai green curry chicken','Thai','m',590,40,55,24,2,20,30,'simmer,dice,rice','pot,ricecooker','chicken breast;5;oz;M|green curry paste;1;tbsp;G|light coconut milk;0.5;cup;G|bell pepper;0.5;ea;P|zucchini;0.5;ea;P|fish sauce;1;tsp;G|Thai basil;0.25;cup;P|white rice;0.33;cup dry;G','Fry curry paste in a splash of coconut milk 1 min. Add remaining coconut milk, sliced chicken and vegetables; simmer 10 min to 165°F. Season with fish sauce; add basil. Serve with rice.');
+R('th5','Larb gai lettuce wraps with sticky rice','Thai','m',450,40,40,13,1,15,20,'dice','pan','ground chicken;5;oz;M|lime;1;ea;P|fish sauce;1;tbsp;G|shallot or red onion;0.25;ea;P|mint;0.25;bunch;P|cilantro;0.25;bunch;P|lettuce leaves;4;ea;P|glutinous (sticky) rice;0.25;cup dry;G','Cook chicken in a dry pan with a splash of water, breaking up, 5 min. Off heat, add lime, fish sauce, chili flakes, sliced shallot and herbs. Spoon into lettuce; serve with sticky rice.');
+R('th6','Shrimp pad thai (lighter)','Thai','m',620,36,78,18,3,30,40,'stirfry,egg','wok','shrimp (raw, peeled);4;oz;M|rice noodles (pad thai);2.5;oz;G|eggs;1;ea;D|tamarind paste;1;tbsp;G|fish sauce;1;tbsp;G|bean sprouts;0.5;cup;P|peanuts;0.33;oz;G|scallions;1;ea;P|lime;0.5;ea;P|avocado oil;2;tsp;G','Soak noodles in warm water 20 min. Mix tamarind, fish sauce and a little sugar. In a hot wok cook shrimp 2 min, push aside, scramble egg, add drained noodles and sauce; toss 2–3 min. Add sprouts and scallions; top with peanuts and lime.','Pad thai goes fast — make one or two portions per batch so the noodles don\u2019t clump.');
+R('th7','Tom yum shrimp & mushroom soup with rice','Thai','m',400,30,48,8,1,15,25,'simmer','pot','shrimp (raw, peeled);5;oz;M|mushrooms;3;oz;P|lemongrass;1;stalk;P|tomato;0.5;ea;P|lime;1;ea;P|fish sauce;1;tbsp;G|Thai chili paste (nam prik pao);1;tsp;G|white rice;0.25;cup dry;G','Simmer bruised lemongrass in broth 10 min. Add mushrooms, tomato and chili paste, 3 min; add shrimp 3 min. Off heat stir in lime and fish sauce. Serve with rice.');
+R('th8','Quick green papaya salad with peanuts','Thai','s',180,6,24,8,2,15,15,'dice','','green papaya or papaya;1;cup;P|cherry tomatoes;3;ea;P|lime;0.5;ea;P|fish sauce;1;tsp;G|peanuts;0.33;oz;G|garlic;1;clove;P','Shred papaya; pound garlic and chili, toss with papaya, tomatoes, lime, fish sauce and a pinch of sugar. Top with peanuts.');
+
+/* ---------- Indian ---------- */
+R('in1','Masala omelet with whole-wheat toast','Indian','b',400,26,30,19,1,15,15,'egg,dice','pan','eggs;3;ea;D|onion;0.25;ea;P|tomato;0.5;ea;P|cilantro;2;tbsp;P|whole-grain bread;1;slice;B|green chili;0.5;ea;P','Beat eggs with diced onion, tomato, chili, cilantro, turmeric and salt. Cook as a thin omelet, fold. Serve with toast.');
+R('in2','Moong dal chilla with yogurt','Indian','b',380,24,48,10,2,15,20,'blend','blender,pan','split yellow moong dal (dry);0.33;cup;G|plain yogurt;0.5;cup;D|onion;0.25;ea;P|cilantro;2;tbsp;P|ginger;0.5;inch;P','Soak dal 2 h or overnight. Blend with ginger, salt and water to a pancake batter. Stir in diced onion and cilantro. Cook thin crêpes on a lightly oiled pan 2 min per side. Serve with yogurt.');
+R('in3','Sheet-pan chicken tikka with rice & cucumber raita','Indian','m',600,50,60,15,2,20,40,'marinate,roast,chicken,rice','sheet,pot','chicken breast;6;oz;M|plain yogurt;0.5;cup;D|tikka masala spice;1;tbsp;G|garlic;1;clove;P|ginger;0.5;inch;P|white rice;0.33;cup dry;G|persian cucumbers;1;ea;P|red onion;0.25;ea;P','Marinate chicken in half the yogurt with spices, garlic and ginger (30 min–overnight). Roast with onion at 450°F 15–18 min to 165°F. Grate cucumber into remaining yogurt for raita. Serve with rice.');
+R('in4','Chana masala with brown rice','Indian','m',520,20,85,12,1,15,35,'simmer,dice,sauce','pot','chickpeas (canned);1;cup;G|crushed tomatoes;0.5;cup;G|onion;0.5;ea;P|garlic;2;clove;P|ginger;0.5;inch;P|garam masala;1;tsp;G|brown rice;0.25;cup dry;G|avocado oil;1;tsp;G','Sauté diced onion until golden, add garlic, ginger and spices 1 min. Add tomatoes and chickpeas; simmer 20 min, mashing a few chickpeas to thicken. Serve with brown rice.');
+R('in5','Instant Pot butter chicken (lighter)','Indian','m',620,45,55,24,2,15,35,'pressure,sauce,chicken,rice','pressure,blender','chicken thighs (boneless);6;oz;M|crushed tomatoes;0.5;cup;G|butter;1;tsp;D|greek yogurt (plain);0.25;cup;D|garam masala;1;tsp;G|garlic;2;clove;P|ginger;0.5;inch;P|white rice;0.33;cup dry;G','Pressure cook chicken with tomatoes, garlic, ginger and spices 8 min, quick release. Remove chicken; blend sauce with butter, then stir in yogurt off the heat. Return chopped chicken. Serve with rice.');
+R('in6','Red lentil dal with spinach','Indian','m',480,24,72,11,1,10,35,'simmer,pressure','pot','red lentils (dry);0.33;cup;G|spinach;1;cup;P|onion;0.33;ea;P|tomato;0.5;ea;P|garlic;2;clove;P|cumin seeds;0.5;tsp;G|avocado oil;1;tsp;G|brown rice;0.25;cup dry;G','Simmer lentils in 3x water with turmeric 20 min until soft. Fry cumin seeds, onion, garlic and tomato in oil (tadka) and stir in with spinach. Serve with rice.');
+R('in7','Goan-style tilapia curry','Indian','m',500,40,50,15,2,20,30,'simmer,fish,rice','pot','tilapia fillet;6;oz;M|light coconut milk;0.33;cup;G|onion;0.33;ea;P|tomato;0.5;ea;P|garlic;2;clove;P|tamarind paste;1;tsp;G|curry powder;1;tsp;G|white rice;0.33;cup dry;G','Sauté onion, garlic, tomato and spices 5 min. Add coconut milk and tamarind; simmer 5 min. Lay in fish pieces, cover and simmer 6–8 min until it flakes. Serve with rice.');
+R('in8','Masala roasted chickpeas','Indian','s',180,9,24,6,1,5,35,'roast','sheet','chickpeas (canned);0.5;cup;G|avocado oil;0.5;tsp;G|chaat masala;0.5;tsp;G','Pat chickpeas very dry, toss with oil and spices, roast at 400°F 25–30 min, shaking twice.');
+
+/* ---------- Chinese ---------- */
+R('cn1','Chicken & ginger congee','Chinese','b',380,28,50,6,1,10,40,'simmer,pressure,chicken','pot,pressure','white rice;0.25;cup dry;G|chicken breast;3.5;oz;M|ginger;1;inch;P|scallions;1;ea;P|soy sauce;1;tsp;G','Simmer rice in 6x broth 45 min (or pressure cook 20 min). Add sliced chicken and ginger for the last 8 min (165°F). Season; top with scallions and soy.');
+R('cn2','Tomato & egg stir-fry with rice','Chinese','b',430,20,52,16,1,10,10,'egg,stirfry','wok,ricecooker','eggs;3;ea;D|tomato;1.5;ea;P|scallions;1;ea;P|white rice;0.33;cup dry;G|avocado oil;1;tsp;G','Softly scramble eggs and remove. Stir-fry tomato wedges until juicy, add a pinch of sugar and salt, return eggs. Serve over rice.');
+R('cn3','Kung pao chicken with rice','Chinese','m',620,45,62,22,2,20,25,'stirfry,chicken,dice,rice','wok,ricecooker','chicken breast;6;oz;M|peanuts;0.5;oz;G|bell pepper;0.5;ea;P|dried red chilies;4;ea;G|soy sauce;1;tbsp;G|black vinegar or rice vinegar;1;tsp;G|cornstarch;1;tsp;G|garlic;1;clove;P|white rice;0.33;cup dry;G','Toss diced chicken with soy and cornstarch. Stir-fry chilies 20 s, add chicken 5 min, then pepper and garlic. Add vinegar, soy and a pinch of sugar; toss with peanuts. Serve with rice.');
+R('cn4','Beef & broccoli with rice','Chinese','m',600,42,62,18,2,20,25,'stirfry,sear,rice','wok,ricecooker','sirloin tip steak;5;oz;M|broccoli;1.5;cup;P|oyster sauce;1;tbsp;G|soy sauce;1;tsp;G|garlic;1;clove;P|ginger;0.5;inch;P|cornstarch;1;tsp;G|white rice;0.33;cup dry;G','Slice beef thin, toss with soy and cornstarch. Sear in a very hot wok 2 min; remove. Stir-fry broccoli with a splash of water 3 min, add garlic, ginger, sauces and beef; toss. Serve with rice.');
+R('cn5','Steamed ginger-scallion tilapia with bok choy','Chinese','m',480,40,52,12,2,15,25,'fish,steam,rice','pot,ricecooker','tilapia fillet;6;oz;M|ginger;1;inch;P|scallions;2;ea;P|soy sauce;1;tbsp;G|bok choy;2;ea;P|avocado oil;2;tsp;G|white rice;0.33;cup dry;G','Steam fish on a plate over simmering water 8–10 min. Top with julienned ginger and scallion; pour over sizzling-hot oil, then soy. Steam bok choy 3 min. Serve with rice.');
+R('cn6','Shrimp & vegetable fried rice','Chinese','m',560,34,70,16,1,20,20,'stirfry,egg,rice','wok','shrimp (raw, peeled);4;oz;M|white rice (cooked, day-old);1.25;cup;G|eggs;1;ea;D|frozen peas & carrots;0.5;cup;F|scallions;1;ea;P|soy sauce;1;tbsp;G|avocado oil;2;tsp;G','Stir-fry shrimp 2 min; remove. Scramble egg, add veg, then cold rice; press and toss 3–4 min. Add soy, shrimp and scallions.','Use rice cooked a day ahead — fresh rice turns mushy.');
+R('cn7','Mapo tofu with lean pork','Chinese','m',520,32,45,24,2,15,25,'stirfry,sauce,rice','wok,ricecooker','firm tofu;6;oz;D|pork leg (lean, ground or minced);3;oz;M|doubanjiang (chili bean paste);1;tbsp;G|garlic;2;clove;P|ginger;0.5;inch;P|cornstarch;1;tsp;G|scallions;1;ea;P|white rice;0.25;cup dry;G','Brown pork. Add doubanjiang, garlic and ginger 1 min. Add 0.5 cup water and tofu cubes; simmer 5 min. Thicken with cornstarch slurry; top with scallions and Sichuan pepper. Serve with rice.');
+R('cn8','Smashed cucumber salad & edamame','Chinese','s',160,11,12,8,1,10,10,'','','persian cucumbers;1;ea;P|edamame (frozen, shelled);0.5;cup;F|garlic;1;clove;P|rice vinegar;1;tsp;G|soy sauce;1;tsp;G|sesame oil;0.5;tsp;G','Smash cucumber, salt, then toss with garlic, vinegar, soy and sesame oil. Serve with warmed edamame.');
+
+/* ---------- Vietnamese ---------- */
+R('vn1','Bánh mì ốp la — eggs with baguette & herbs','Vietnamese','b',430,22,45,17,1,10,10,'egg','pan','eggs;2;ea;D|baguette;0.33;ea;B|persian cucumbers;0.5;ea;P|cilantro;2;tbsp;P|soy sauce (Maggi);1;tsp;G','Fry eggs in a small pan until edges crisp. Serve with warm baguette, cucumber, cilantro and a dash of Maggi.');
+R('vn2','Quick chicken phở (Instant Pot)','Vietnamese','b',480,38,58,9,2,20,45,'pressure,simmer,chicken','pressure','chicken breast;5;oz;M|rice noodles (phở);2;oz;G|onion;0.5;ea;P|ginger;1;inch;P|star anise & cinnamon;1;pinch;G|fish sauce;1;tbsp;G|bean sprouts;0.5;cup;P|Thai basil;0.25;cup;P|lime;0.5;ea;P','Char onion and ginger. Pressure cook with chicken, spices and 2 cups water per serving 10 min, natural release. Shred chicken, season broth with fish sauce. Pour over soaked noodles; add sprouts, basil, lime.');
+R('vn3','Lemongrass chicken bún (vermicelli bowl)','Vietnamese','m',580,42,70,13,2,25,40,'marinate,sear,chicken','pan,pot','chicken thighs (boneless);5;oz;M|lemongrass;1;stalk;P|garlic;2;clove;P|fish sauce;1.5;tbsp;G|rice vermicelli;2;oz;G|lettuce leaves;3;ea;P|persian cucumbers;1;ea;P|carrot;0.5;ea;P|mint;0.25;bunch;P|lime;0.5;ea;P','Marinate chicken with minced lemongrass, garlic, fish sauce and a little sugar 30 min+. Sear or grill 10 min to 165°F. Cook vermicelli 3 min, rinse cold. Make nước chấm: fish sauce, lime, water, sugar, garlic. Assemble with greens and herbs.');
+R('vn4','Cá kho tộ — caramelized tilapia with rice','Vietnamese','m',480,38,52,12,2,15,35,'simmer,fish,rice','pot,ricecooker','tilapia fillet;6;oz;M|fish sauce;1.5;tbsp;G|brown sugar;1;tbsp;G|garlic;2;clove;P|shallot or red onion;0.25;ea;P|black pepper;0.5;tsp;G|white rice;0.33;cup dry;G|bok choy;1;ea;P','Caramelize sugar with a splash of water until amber, add garlic and shallot, then fish sauce and 0.33 cup water. Add fish, simmer 15 min, spooning sauce over, until glazed. Lots of black pepper. Serve with rice and steamed greens.');
+R('vn5','Bò lúc lắc — shaking beef with watercress & rice','Vietnamese','m',600,40,55,23,3,20,30,'sear,rice','wok,ricecooker','sirloin tip steak;5;oz;M|garlic;2;clove;P|oyster sauce;1;tbsp;G|soy sauce;1;tsp;G|red onion;0.25;ea;P|watercress or salad greens;1.5;cup;P|tomato;0.5;ea;P|lime;0.5;ea;P|white rice;0.33;cup dry;G','Cube steak, marinate in oyster sauce, soy, garlic and pepper 20 min. Sear in a smoking-hot pan in one layer, 1 min per side, shaking the pan; add onion for 30 s. Serve over watercress and tomato with lime-pepper dip and rice.','Cook in batches — a crowded pan won\u2019t sear and the beef will go grey.');
+R('vn6','Gỏi cuốn — shrimp summer rolls with peanut sauce','Vietnamese','m',460,30,58,12,2,30,30,'roll','pot','shrimp (raw, peeled);5;oz;M|rice paper;4;sheet;G|rice vermicelli;1.5;oz;G|lettuce leaves;3;ea;P|mint;0.25;bunch;P|persian cucumbers;0.5;ea;P|peanut butter;1;tbsp;G|hoisin sauce;1;tbsp;G','Poach shrimp 2 min, halve lengthwise. Dip rice paper in warm water 5 s; layer lettuce, noodles, herbs, cucumber and shrimp; roll tightly. Whisk peanut butter, hoisin and warm water for dipping.');
+R('vn7','Thịt nướng — lemongrass pork rice bowls','Vietnamese','m',590,40,62,18,2,20,40,'marinate,sear,rice','pan,ricecooker','pork leg (lean, sliced);5;oz;M|lemongrass;1;stalk;P|fish sauce;1;tbsp;G|garlic;2;clove;P|honey;1;tsp;G|white rice;0.33;cup dry;G|persian cucumbers;1;ea;P|carrot;0.5;ea;P|rice vinegar;1;tbsp;G','Marinate thin pork in lemongrass, garlic, fish sauce and honey 30 min+. Sear in a hot pan 2–3 min per side. Quick-pickle carrot and cucumber in rice vinegar. Serve over rice.');
+R('vn8','Dragon fruit & sweet lemon cup with Greek yogurt','Vietnamese','s',160,9,26,2,1,5,5,'','','dragon fruit;0.5;ea;P|sweet lemon;0.5;ea;P|greek yogurt (plain);0.33;cup;D','Cube dragon fruit and sweet lemon segments; serve over yogurt.');
+
+/* ---------- American ---------- */
+R('us1','Protein oatmeal with banana & peanut butter','American','b',450,28,58,13,1,10,10,'','pot','rolled oats;0.5;cup;G|almond milk;1;cup;D|protein powder;0.5;scoop;G|banana;0.5;ea;P|peanut butter;1;tbsp;G','Cook oats in almond milk 5 min. Stir in protein powder off the heat; top with banana and peanut butter.');
+R('us2','Turkey bacon, egg & cheese English muffin','American','b',380,30,30,15,1,10,10,'egg','pan','english muffin (whole-wheat);1;ea;B|eggs;1;ea;D|egg whites;0.25;cup;D|turkey bacon;2;slice;D|monterey jack;0.5;oz;D','Crisp turkey bacon. Cook egg + whites in a round. Stack on toasted muffin with cheese.');
+R('us3','Chicken Cobb salad','American','m',520,46,15,30,1,20,25,'chicken,egg,dice','pan,pot','chicken breast;5;oz;M|salad greens;3;cup;P|eggs;1;ea;D|turkey bacon;2;slice;D|avocado;0.25;ea;P|cherry tomatoes;0.5;cup;P|blue cheese;0.33;oz;D|red wine vinegar;1;tbsp;G|olive oil;1;tsp;G','Pan-cook seasoned chicken 6–7 min per side to 165°F; slice. Boil an egg 10 min. Crisp bacon. Arrange over greens with avocado, tomato and blue cheese; dress with oil and vinegar.');
+R('us4','Turkey & bean chili','American','m',520,42,50,15,1,20,45,'simmer,dice','pot','ground turkey (93% lean);5;oz;M|kidney beans (canned);0.5;cup;G|crushed tomatoes;0.5;cup;G|onion;0.33;ea;P|bell pepper;0.33;ea;P|anaheim chili;0.5;ea;P|garlic;1;clove;P|chili powder;1;tbsp;G|monterey jack;0.33;oz;D','Brown turkey with diced onion, peppers and garlic. Add chili powder, tomatoes, beans and 0.5 cup water; simmer 25 min. Top with cheese. Freezes great.');
+R('us5','Sheet-pan salmon, sweet potato & green beans','American','m',590,38,50,24,1,15,35,'roast,fish','sheet','salmon fillet;5;oz;M|sweet potato;6;oz;P|green beans;1;cup;P|olive oil;2;tsp;G|lemon;0.5;ea;P','Roast cubed sweet potato at 425°F 15 min. Add green beans and salmon; roast 12 min more until salmon flakes (145°F). Squeeze lemon.');
+R('us6','Lean burger bowls with roasted potatoes','American','m',600,40,45,27,1,20,35,'sear,roast','pan,sheet','lean ground beef (90%);5;oz;M|potato;6;oz;P|salad greens;1.5;cup;P|tomato;0.5;ea;P|pickles;2;spear;G|cheddar;0.5;oz;D|olive oil;1;tsp;G','Roast potato wedges at 425°F 25–30 min. Form a patty and sear 4 min per side to 160°F. Serve over greens with tomato, pickles, cheese and a little mustard.');
+R('us7','Baked BBQ chicken with corn & slaw','American','m',560,48,55,15,1,15,35,'bake,chicken','oven,sheet','chicken breast;6;oz;M|BBQ sauce;2;tbsp;G|corn on the cob;1;ea;P|cabbage;1;cup;P|greek yogurt (plain);2;tbsp;D|apple cider vinegar;1;tsp;G','Brush chicken with BBQ sauce; bake at 400°F 20–25 min to 165°F. Boil or roast corn. Toss shredded cabbage with yogurt, vinegar, salt and pepper.');
+R('us8','Chobani 20 g protein yogurt cup','American','s',140,20,9,2,1,0,0,'','','protein yogurt cup (20 g);1;ea;D','Grab and go.');
+
+/* ---------- Extra beginner-friendly mains ---------- */
+R('mx9','Sheet-pan salsa chicken burrito bowls','Mexican','m',560,46,62,13,1,10,35,'chicken,roast,rice','sheet,pot','chicken breast;6;oz;M|salsa roja;0.33;cup;G|white rice;0.33;cup dry;G|black beans (canned);0.33;cup;G|anaheim chili;0.5;ea;P|lime;0.5;ea;P|queso fresco;0.5;oz;D','Pour salsa over chicken and sliced Anaheim chili in a baking dish; bake at 400°F 25 min to 165°F. Shred in the juices. Serve over rice and beans with lime and queso fresco.');
+R('mx10','One-skillet turkey taco filling with corn tortillas','Mexican','m',540,40,48,20,1,15,20,'dice','pan','ground turkey (93% lean);5;oz;M|corn tortillas;3;ea;B|onion;0.25;ea;P|bell pepper;0.33;ea;P|taco seasoning;1;tsp;G|salad greens;1;cup;P|crema;1;tbsp;D|salsa verde;2;tbsp;G','Brown turkey with diced onion and pepper 8 min; add seasoning and a splash of water. Warm tortillas. Fill with turkey, greens, crema and salsa.');
+R('it9','Tuscan white bean & tuna salad with ciabatta','Italian','m',520,38,50,18,1,10,10,'','','canned tuna (in water);4;oz;G|cannellini beans (canned);0.5;cup;G|cherry tomatoes;0.5;cup;P|red onion;0.25;ea;P|salad greens;1.5;cup;P|olive oil;2;tsp;G|lemon;0.5;ea;P|ciabatta;1;slice;B','Toss drained tuna and beans with tomatoes, sliced onion, greens, olive oil, lemon, salt and pepper. Serve with ciabatta. Keeps 3 days.');
+R('md9','Greek sheet-pan chicken with potatoes & peppers','Mediterranean','m',560,46,42,22,1,10,40,'roast,chicken','sheet','chicken breast;6;oz;M|potato;5;oz;P|bell pepper;0.5;ea;P|red onion;0.25;ea;P|lemon;0.5;ea;P|garlic;1;clove;P|olive oil;2;tsp;G|feta;0.5;oz;D','Toss chunks of chicken, potato, pepper and onion with lemon, garlic, oregano and oil. Roast at 425°F 30–35 min to 165°F. Crumble feta on top.');
+R('md10','Mediterranean tuna, chickpea & cucumber salad','Mediterranean','m',480,38,40,18,1,10,10,'','','canned tuna (in water);4;oz;G|chickpeas (canned);0.5;cup;G|persian cucumbers;1;ea;P|cherry tomatoes;0.5;cup;P|black olives;5;ea;D|feta;0.5;oz;D|olive oil;2;tsp;G|lemon;0.5;ea;P','Chop and toss everything with lemon, oil, oregano, salt and pepper.');
+R('me10','Sheet-pan chicken & vegetable kebab tray with garlic yogurt','Middle Eastern','m',540,48,40,18,1,15,40,'roast,chicken','sheet','chicken breast;6;oz;M|zucchini;0.5;ea;P|bell pepper;0.5;ea;P|onion;0.5;ea;P|plain yogurt;0.33;cup;D|garlic;1;clove;P|pita;0.5;ea;B|olive oil;1;tsp;G|7-spice (baharat);1;tsp;G','Toss chunks of chicken and vegetables with oil and baharat; roast at 425°F 25 min to 165°F. Stir grated garlic into yogurt. Serve with pita.');
+R('me11','Fattoush with sliced chicken breast','Middle Eastern','m',500,44,38,18,1,20,25,'chicken,dice','pan','chicken breast;5;oz;M|persian cucumbers;1;ea;P|tomato;1;ea;P|salad greens;2;cup;P|radishes;3;ea;P|pita;0.5;ea;B|sumac;1;tsp;G|olive oil;2;tsp;G|lemon;0.5;ea;P|mint;0.25;bunch;P','Pan-cook chicken 6–7 min per side to 165°F; slice. Toast pita pieces until crisp. Chop vegetables; toss with greens, mint, sumac, lemon, oil and pita.');
+R('me12','Shorbat adas — red lentil soup with lemon','Middle Eastern','m',430,24,62,10,1,10,35,'simmer,dice','pot','red lentils (dry);0.33;cup;G|onion;0.33;ea;P|carrot;0.5;ea;P|garlic;1;clove;P|cumin;1;tsp;G|olive oil;1;tsp;G|lemon;0.5;ea;P|plain yogurt;0.25;cup;D','Sauté onion, carrot and garlic 5 min. Add lentils, cumin and 2.5 cups water per serving; simmer 20 min. Blend or mash; finish with lemon and a dollop of yogurt.');
+R('am10','Armenian-style chicken, potato & pepper tray bake','Armenian','m',580,45,48,20,1,10,50,'roast,chicken','sheet','chicken thighs (boneless);6;oz;M|potato;6;oz;P|bell pepper;0.5;ea;P|tomato;1;ea;P|onion;0.5;ea;P|pepper paste (tomato & pepper);1;tbsp;G|garlic;1;clove;P','Toss everything with pepper paste, garlic, paprika and a little oil. Bake at 400°F 40 min until potatoes are tender and chicken hits 165°F.');
+R('am11','Vospov abour — red lentil & bulgur soup','Armenian','m',440,22,70,8,1,10,35,'simmer,dice','pot','red lentils (dry);0.33;cup;G|bulgur (#1 fine);2;tbsp;G|onion;0.33;ea;P|tomato paste;1;tbsp;G|butter;1;tsp;D|dried mint;1;tsp;G|lemon;0.5;ea;P|greek yogurt (plain);0.33;cup;D','Sauté onion in butter, add tomato paste. Add lentils, bulgur and water; simmer 25 min until creamy. Finish with dried mint and lemon; serve with yogurt.');
+R('am12','Losh kebab — oven-baked beef patties with tomato & peppers','Armenian','m',560,40,40,26,1,15,35,'bake,dice','oven,sheet','lean ground beef (90%);5;oz;M|onion;0.33;ea;P|parsley;0.25;bunch;P|tomato;1;ea;P|anaheim chili;1;ea;P|lavash;0.5;sheet;B','Mix beef with grated onion, parsley, salt, pepper and paprika; shape oval patties. Bake on a sheet with tomato halves and chilies at 425°F 15–18 min (160°F). Wrap in lavash.');
+R('la9','Sopa de pollo — chicken & vegetable soup','Latin American','m',430,42,40,10,1,15,45,'simmer,chicken,dice','pot','chicken breast;5;oz;M|potato;4;oz;P|carrot;0.5;ea;P|zucchini;0.5;ea;P|corn on the cob;0.5;ea;P|onion;0.25;ea;P|cilantro;0.25;bunch;P|lime;0.5;ea;P','Simmer chicken with onion in salted water 20 min; remove and shred. Add chunks of potato, carrot, corn and zucchini; simmer 15 min. Return chicken; finish with cilantro and lime.');
+R('la10','Sheet-pan chimichurri chicken & sweet potatoes','Latin American','m',580,46,48,22,1,15,35,'roast,chicken','sheet','chicken breast;6;oz;M|sweet potato;6;oz;P|parsley;0.25;bunch;P|garlic;1;clove;P|red wine vinegar;1;tsp;G|olive oil;2;tsp;G','Roast sweet potato cubes at 425°F 10 min; add chicken and roast 18–20 min to 165°F. Finely chop parsley and garlic; mix with oil, vinegar, oregano and chili flakes. Spoon over.');
+R('la11','Cuban mojo roast pork leg with rice & black beans','Latin American','m',600,45,62,17,1,15,180,'roast,rice','oven,pot','pork leg (lean, roast);5;oz;M|sweet lemon or orange;0.5;ea;P|lime;0.5;ea;P|garlic;2;clove;P|white rice;0.33;cup dry;G|black beans (canned);0.33;cup;G|onion;0.25;ea;P','Marinate pork in citrus juice, garlic, cumin and oregano (overnight is best). Roast covered at 325°F about 2.5–3 h until fork-tender (145°F minimum). Slice or shred; serve with rice, beans and sliced onion.');
+R('jp9','Sheet-pan teriyaki salmon rice bowls','Japanese','m',600,38,62,20,1,10,25,'roast,fish,rice','sheet,ricecooker','salmon fillet;5;oz;M|teriyaki sauce;1.5;tbsp;G|broccoli;1;cup;P|white rice;0.33;cup dry;G|edamame (frozen, shelled);0.25;cup;F|sesame seeds;1;tsp;G','Roast broccoli and salmon at 425°F 12 min; brush salmon with teriyaki for the last 3 min. Serve over rice with edamame and sesame.');
+R('jp10','Chicken & vegetable udon soup','Japanese','m',520,40,62,10,1,15,20,'simmer,chicken','pot','chicken breast;4;oz;M|udon noodles (frozen);1;pack;F|dashi or chicken broth;2;cup;G|soy sauce;1;tbsp;G|mushrooms;2;oz;P|spinach;1;cup;P|scallions;1;ea;P|eggs;1;ea;D','Bring broth with soy to a simmer. Add thin-sliced chicken and mushrooms, 6 min. Add udon and spinach 2 min. Crack in an egg or add a soft-boiled half; top with scallions.');
+R('kr9','Easy Korean ground beef rice bowls','Korean','m',600,38,62,20,1,15,15,'rice','pan,ricecooker','lean ground beef (90%);5;oz;M|soy sauce;1.5;tbsp;G|brown sugar;1;tsp;G|garlic;2;clove;P|ginger;0.5;inch;P|sesame oil;1;tsp;G|white rice;0.33;cup dry;G|persian cucumbers;1;ea;P|kimchi;0.25;cup;D','Brown beef with garlic and ginger. Stir in soy, brown sugar and sesame oil; simmer 2 min. Serve over rice with sliced cucumber and kimchi.');
+R('kr10','Sheet-pan gochujang salmon & broccoli','Korean','m',580,38,55,22,1,10,25,'roast,fish,rice','sheet,ricecooker','salmon fillet;5;oz;M|gochujang;1;tbsp;G|honey;1;tsp;G|soy sauce;1;tsp;G|broccoli;1.5;cup;P|white rice;0.33;cup dry;G','Mix gochujang, honey and soy; brush on salmon. Roast with broccoli at 425°F 12–14 min until salmon flakes. Serve with rice.');
+R('th9','Sheet-pan Thai peanut chicken & vegetables','Thai','m',590,46,50,22,1,15,35,'roast,chicken,rice','sheet,ricecooker','chicken breast;6;oz;M|peanut butter;1;tbsp;G|soy sauce;1;tbsp;G|lime;0.5;ea;P|bell pepper;0.5;ea;P|broccoli;1;cup;P|white rice;0.25;cup dry;G|sriracha;1;tsp;G','Whisk peanut butter, soy, lime, sriracha and warm water. Toss chicken and veg with half; roast at 425°F 20 min to 165°F. Drizzle the rest; serve with rice.');
+R('in9','Sheet-pan tandoori salmon & cauliflower','Indian','m',560,40,40,26,1,10,30,'roast,fish,rice','sheet,ricecooker','salmon fillet;5;oz;M|plain yogurt;0.25;cup;D|tandoori masala;1;tbsp;G|cauliflower;1.5;cup;P|avocado oil;1;tsp;G|white rice;0.25;cup dry;G|lemon;0.5;ea;P','Toss cauliflower with oil and half the spice; roast at 425°F 15 min. Coat salmon in yogurt + remaining spice; add to pan and roast 12 min. Squeeze lemon; serve with rice.');
+R('cn9','Sheet-pan honey-garlic chicken & broccoli','Chinese','m',580,46,62,14,1,10,30,'roast,chicken,rice','sheet,ricecooker','chicken breast;6;oz;M|honey;1;tbsp;G|soy sauce;1.5;tbsp;G|garlic;2;clove;P|broccoli;1.5;cup;P|white rice;0.33;cup dry;G|sesame seeds;1;tsp;G','Whisk honey, soy and garlic. Toss with chicken pieces; roast with broccoli at 425°F 18–20 min to 165°F. Serve over rice with sesame.');
+R('cn10','Easy shrimp & broccoli stir-fry','Chinese','m',520,36,62,12,1,15,20,'stirfry,rice','wok,ricecooker','shrimp (raw, peeled);5;oz;M|broccoli;1.5;cup;P|garlic;2;clove;P|oyster sauce;1;tbsp;G|soy sauce;1;tsp;G|cornstarch;1;tsp;G|white rice;0.33;cup dry;G|avocado oil;1;tsp;G','Stir-fry broccoli with 2 tbsp water 3 min. Add garlic and shrimp, 3 min until pink. Add sauce mixed with cornstarch and water; toss until glossy. Serve with rice.');
+R('vn9','Gỏi gà — Vietnamese chicken & cabbage salad','Vietnamese','m',460,44,30,16,1,20,30,'chicken','pot','chicken breast;6;oz;M|cabbage;2;cup;P|carrot;0.5;ea;P|red onion;0.25;ea;P|mint;0.25;bunch;P|fish sauce;1;tbsp;G|lime;1;ea;P|peanuts;0.33;oz;G','Poach chicken 15 min to 165°F; shred. Shred cabbage and carrot, slice onion. Dress with fish sauce, lime, a little sugar and chili; toss with chicken, mint and peanuts.');
+R('vn10','Easy lemongrass ground pork rice bowls','Vietnamese','m',580,38,62,18,1,15,15,'rice','pan,ricecooker','ground pork (lean);5;oz;M|lemongrass paste;1;tbsp;G|fish sauce;1;tbsp;G|garlic;2;clove;P|white rice;0.33;cup dry;G|persian cucumbers;1;ea;P|cilantro;2;tbsp;P|lime;0.5;ea;P','Brown pork with lemongrass and garlic 6–8 min. Season with fish sauce and a pinch of sugar. Serve over rice with cucumber, cilantro and lime.');
+R('vn11','Canh chua — sweet & sour shrimp soup with rice','Vietnamese','m',420,32,52,8,1,15,25,'simmer','pot','shrimp (raw, peeled);5;oz;M|tamarind paste;1;tbsp;G|tomato;1;ea;P|pineapple chunks;0.33;cup;P|bean sprouts;0.5;cup;P|fish sauce;1;tbsp;G|Thai basil;0.25;cup;P|white rice;0.25;cup dry;G','Bring broth with tamarind to a simmer. Add tomato and pineapple 3 min, then shrimp 3 min. Season with fish sauce and a little sugar; add sprouts and herbs. Serve with rice.');
+
+
+/* ---------- Stretch-level mains ---------- */
+R('it10','Mushroom & chicken risotto','Italian','m',590,42,62,18,3,40,45,'simmer,sauce,dice,chicken','pot,pan','chicken breast;4;oz;M|arborio rice;0.33;cup dry;G|mushrooms;3;oz;P|onion;0.25;ea;P|garlic;1;clove;P|chicken broth;1.5;cup;G|parmesan;0.5;oz;D|butter;1;tsp;D','Pan-cook diced chicken to 165°F; set aside. Sauté onion, garlic and mushrooms. Toast rice 2 min, then add hot broth one ladle at a time, stirring, letting each absorb (18–20 min) until creamy and al dente. Stir in butter, parmesan and chicken.','Keep the broth hot in a second pot and add it gradually — that slow absorption is what makes it creamy.');
+R('md11','Chicken & spinach spanakopita triangles with salad','Mediterranean','m',560,42,45,22,3,45,70,'bake,dough,dice','oven,sheet','chicken breast;4;oz;M|fillo dough sheets;3;sheet;F|spinach;2;cup;P|feta;1;oz;D|eggs;0.25;ea;D|onion;0.25;ea;P|olive oil;2;tsp;G|salad greens;1.5;cup;P','Cook and finely chop chicken; wilt spinach with onion, squeeze dry, mix with chicken, feta and egg. Brush fillo strips with oil, add a spoonful of filling and fold into triangles like a flag. Bake at 375°F 20–25 min until golden. Serve with salad.','Keep fillo you\u2019re not using under a damp towel — it dries out in minutes. Tears are fine; the layers hide them.');
+R('me13','Baked kibbeh with yogurt-cucumber salad','Middle Eastern','m',600,40,55,24,3,45,85,'bake,dice','oven','lean ground beef (90%);5;oz;M|bulgur (#1 fine);0.33;cup;G|onion;0.5;ea;P|pine nuts;0.25;oz;G|7-spice (baharat);1;tsp;G|plain yogurt;0.5;cup;D|persian cucumbers;1;ea;P|olive oil;1;tsp;G','Soak bulgur 15 min, squeeze dry, knead with 2/3 of the beef, grated onion and spices. Brown the rest of the beef with onion and pine nuts for the filling. Press half the shell into a pan, add filling, top with remaining shell; score into diamonds, drizzle oil. Bake at 400°F 30–35 min. Serve with yogurt-cucumber salad.','Wet your hands to press the shell layer evenly — about ½ inch thick.');
+R('jp11','Chicken katsu with shredded cabbage & rice','Japanese','m',640,46,70,18,3,35,40,'chicken,sear,rice','pan,ricecooker','chicken breast;6;oz;M|panko breadcrumbs;0.5;cup;G|eggs;0.5;ea;D|all-purpose flour;2;tbsp;G|avocado oil;1;tbsp;G|cabbage;1.5;cup;P|tonkatsu sauce;1;tbsp;G|white rice;0.33;cup dry;G','Butterfly and pound chicken to ½ inch. Dredge in flour, egg, then panko. Shallow-fry in ¼ inch oil over medium heat 4–5 min per side until golden and 165°F. Rest on a rack; slice. Serve with finely shredded cabbage, rice and tonkatsu sauce.','Medium heat, not high — the crust browns before the inside cooks if the oil is too hot. Use a thermometer.');
+R('kr11','Galbi-jjim — braised beef with radish & carrots (Instant Pot)','Korean','m',620,44,50,24,3,30,75,'sear,pressure,marinate,rice','pressure,ricecooker','beef chuck roast;5;oz;M|soy sauce;2;tbsp;G|bartlett pears;0.25;ea;P|garlic;2;clove;P|ginger;0.5;inch;P|korean radish (mu) or daikon;3;oz;P|carrot;0.5;ea;P|white rice;0.33;cup dry;G','Blend soy, pear, garlic, ginger and a little sugar. Sear beef chunks; pressure cook in the sauce with 0.5 cup water 35 min. Add radish and carrot chunks and pressure cook 5 min more. Reduce sauce on Sauté until glossy. Serve with rice.');
+R('in10','Chicken dum biryani (layered rice)','Indian','m',650,45,75,18,3,45,90,'rice,marinate,sauce,dice,chicken','pot','chicken thighs (boneless);5;oz;M|basmati rice;0.33;cup dry;G|plain yogurt;0.33;cup;D|onion;0.75;ea;P|biryani masala;1;tbsp;G|ginger;0.5;inch;P|garlic;2;clove;P|mint;0.25;bunch;P|cilantro;0.25;bunch;P|butter;1;tsp;D','Marinate chicken in yogurt, spices, ginger and garlic 1 h+. Fry sliced onions until deep golden. Par-boil soaked rice in salted water 5 min (70% done). Cook chicken in a heavy pot 10 min, layer onions, herbs and rice, dot with butter, seal tightly and cook on lowest heat 25 min. Fluff gently.','Par-cook the rice only until it breaks with some resistance — it finishes in the steam.');
+R('cn11','Pork & cabbage dumplings (jiaozi)','Chinese','m',560,34,60,18,3,60,75,'dough,steam,dice','pan','pork leg (lean, ground or minced);4;oz;M|dumpling wrappers;12;ea;D|napa cabbage;1.5;cup;P|ginger;0.5;inch;P|scallions;1;ea;P|soy sauce;1;tbsp;G|sesame oil;1;tsp;G|black vinegar or rice vinegar;1;tbsp;G','Salt minced cabbage 10 min, squeeze dry. Mix with pork, ginger, scallions, soy and sesame oil. Fill wrappers, wet the edge, fold and pleat. Pan-fry potsticker style: brown bottoms 2 min, add ¼ cup water, cover and steam 6 min. Dip in vinegar-soy. Freeze extras on a tray.','Don\u2019t overfill — about 2 tsp per wrapper. Pleating is optional; a simple half-moon works.');
+R('us9','Lighter shrimp & grits','American','m',560,38,55,20,2,25,30,'sear,simmer','pot,pan','shrimp (raw, peeled);5;oz;M|quick grits;0.33;cup dry;G|cheddar;0.5;oz;D|turkey bacon;2;slice;D|bell pepper;0.33;ea;P|garlic;1;clove;P|scallions;1;ea;P|lemon;0.25;ea;P','Simmer grits in water/milk 5–7 min, stir in cheddar. Crisp chopped turkey bacon, sauté pepper and garlic, add shrimp 3–4 min until pink; finish with lemon and scallions. Spoon over grits.');
+R('us10','Pan-seared sirloin with pan sauce, mashed potatoes & green beans','American','m',620,44,45,26,3,30,35,'sear,sauce','pan,pot','sirloin tip steak;6;oz;M|potato;6;oz;P|green beans;1;cup;P|garlic;1;clove;P|beef broth;0.33;cup;G|butter;2;tsp;D|dijon mustard;1;tsp;G|almond milk;0.25;cup;D','Boil potatoes until tender; mash with warm milk and a little butter. Sear dried, salted steak 3–4 min per side to 130–135°F for medium-rare; rest. In the same pan add garlic, deglaze with broth, scrape, whisk in mustard and butter. Steam green beans. Slice steak against the grain.','Rest the steak 5 min before slicing so it stays juicy; the pan sauce comes together in that time.');
+
+if (typeof module !== 'undefined') module.exports = { RAW };
+
+/* Super King Markets weekly ad — transcribed verbatim from https://www.superkingmarkets.com/weekly-ad on 2026-10-17.
+   Ad text: "Prices valid 10/12/26 through 10/18/26". Site source notes Culver City uses the main Weekly Deals ad.
+   Food items only (alcohol, soda, household omitted). kw = lowercase substrings matched against recipe ingredient names. */
+const SK_SPECIALS = {
+  store: 'superking-culvercity',
+  validFrom: '2026-10-12', validTo: '2026-10-18',
+  source: 'https://www.superkingmarkets.com/weekly-ad',
+  fetched: '2026-10-17',
+  items: [
+    ['Persian Cucumbers', '69¢ lb', 'P', ['persian cucumber']],
+    ['Strawberries 1 lb pkg', '2 for $3', 'P', ['strawberr']],
+    ['Mexican Papaya', '69¢ lb', 'P', ['papaya']],
+    ['Bartlett Pears', '79¢ lb', 'P', ['pear']],
+    ['Green Satsuma Tangerines', '99¢ lb', 'P', ['tangerine', 'satsuma']],
+    ['Sweet Lemons', '$1.49 lb', 'P', ['sweet lemon']],
+    ['Dragon Fruit', '$1.49 lb', 'P', ['dragon fruit']],
+    ['Yellow Peaches', '$1.99 lb', 'P', ['peach']],
+    ['Anaheim Chili', '69¢ lb', 'P', ['anaheim']],
+    ['Garlic 5 ct pkg', '2 for $3', 'P', ['garlic']],
+    ['Mushrooms 8 oz pkg', '2 for $3', 'P', ['mushroom']],
+    ['Organic Salads 5 oz pkg', '$1.99 ea', 'P', ['salad greens']],
+    ['Beef Sirloin Tip Steak or Roast (USDA Choice)', '$4.99 lb', 'M', ['sirloin']],
+    ['Salmon Fillet', '$7.99 lb', 'M', ['salmon']],
+    ['Beef Shanks', '$3.99 lb', 'M', ['beef shank']],
+    ['Chicken Breast Steak or Milanesa, regular or marinated', '$1.99 lb', 'M', ['chicken breast', 'milanesa']],
+    ['Beef Chuck Tender Roast or Stew Meat (USDA Choice)', '$5.99 lb', 'M', ['beef chuck', 'stew meat']],
+    ['Chicken Wings', '$1.79 lb', 'M', ['chicken wing']],
+    ['Pork Leg Roast or Picnic', '$1.49 lb', 'M', ['pork leg']],
+    ['Pork Short Ribs or Riblets', '$3.49 lb', 'M', ['pork short rib']],
+    ['Lamb Shanks', '$6.99 lb', 'M', ['lamb shank']],
+    ['Beef Short Ribs or Flanken Ribs (USDA Choice)', '$6.99 lb', 'M', ['flanken']],
+    ['Whole Cleaned Tilapia', '$1.99 lb', 'M', ['whole tilapia']],
+    ['Tilapia Fillet', '$2.99 lb', 'M', ['tilapia fillet']],
+    ['Headless Raw Shrimp 36/40 ct, 4 lb box', '$3.99 lb', 'M', ['shrimp']],
+    ['SK EZ Peel Raw White Shrimp 16/20 ct, 2 lb bag', '$5.99 lb', 'M', ['shrimp']],
+    ['Mozzarella or Pepper Jack Cheese', '$2.49 lb', 'D', ['mozzarella', 'pepper jack']],
+    ['Joseph Farms Mozzarella / Monterey Jack blocks or shredded, 2 lb', '$6.99', 'D', ['monterey jack']],
+    ['Karoun or Gopi Plain Yogurt 64 oz', '$4.99', 'D', ['plain yogurt']],
+    ['Chobani Greek Yogurt 5.3 oz (selected)', '99¢', 'D', ['greek yogurt']],
+    ['Chobani 20 g Protein Yogurt Cups 6.7 oz', '2 for $3', 'D', ['protein yogurt']],
+    ['Ranchero Queso Fresco 10 oz or Cacique Crema 15 oz', '2 for $5', 'D', ['crema']],
+    ['Los Altos Queso Fresco or Sigma Oaxaca Cheese (service deli)', '$4.49 lb', 'D', ['queso fresco', 'oaxaca']],
+    ['Domestic Feta or Aiello Black Low-Salt Olives (service deli)', '$2.99 lb', 'D', ['feta', 'black olives']],
+    ['Karoun Halebi Cheese (service deli)', '$4.99 lb', 'D', ['halebi']],
+    ['Karoun String Cheese 13 oz', '$4.99', 'D', ['string cheese']],
+    ['Abali Yogurt Drinks 16 oz', '4 for $5', 'D', ['yogurt drink']],
+    ['Jennie-O Turkey Bacon 12 oz', '$2.99', 'D', ['turkey bacon']],
+    ['Almond Breeze 64 oz', '$2.99', 'D', ['almond milk']],
+    ['Imported Parma Prosciutto or Eureka Flat Beef Soujuk', '$16.99 lb', 'D', ['prosciutto', 'soujuk']],
+    ['Free 12 ct medium eggs w/ purchase of Hatfield Bacon 12 oz + Heritage Milk 64 oz', 'FREE eggs w/ purchase', 'D', []],
+    ['Montana Frozen Okra 14 oz or Double-Peeled Fava Beans 14 oz', '$1.99', 'F', ['okra', 'fava']],
+    ['Montana Frozen Molokhia Minced 14 oz', '2 for $3', 'F', ['molokhia']],
+    ['Guerrero Corn Tortilla 100 ct / Riquisima Flour 24 ct / Mission Estilo Casero 70 ct', '$2.99 (must buy 2)', 'B', ['corn tortilla', 'flour tortilla']],
+    ['Bimbo Sandwich Bread 24 oz / buns', '$2.99', 'B', ['sandwich bread']],
+    ['Monte Italian Ciabatta 16 oz or Sandwich Bread 16 oz', '$2.49', 'B', ['ciabatta']],
+    ['Zergut Puff Pastry 8 ct or Indo Fillo Dough / Kataifi 16 oz', '2 for $5', 'F', ['fillo']],
+    ['Diamond G Calrose Rice 15 lb', '$7.99', 'G', ['white rice']],
+    ['Aleppo Castle Extra Virgin Olive Oil 2.85 L or Zergut Honey 5 lb', '$19.99', 'G', ['olive oil', 'honey']],
+    ['Valhalla Pure Avocado Oil 2 L', '$11.99', 'G', ['avocado oil']],
+    ['Yergat Grape Leaves 16 oz', '$7.99', 'G', ['grape leaves']],
+    ['Indo European Tomato and Pepper Paste 660 g', '$2.99', 'G', ['pepper paste', 'tomato paste']],
+    ['Al Wadi Tahini 32 oz', '$6.99', 'G', ['tahini']],
+    ['Gold Medal Flour 5 lb', '$2.49', 'G', ['all-purpose flour']],
+    ['La Moderna Pasta 7 oz (selected)', '6 for $2 (must buy 6)', 'G', ['pasta', 'fideo']],
+    ['Cashews raw or roasted & salted', '$4.99 lb', 'G', ['cashew']],
+    ['Pumpkin Seeds roasted & salted', '$2.99 lb', 'G', ['pumpkin seeds']],
+    ['Pistachio Kernels', '$12.99 lb', 'G', ['pistachio']],
+  ].map(([name, price, sec, kw]) => ({ name, price, sec, kw })),
+};
+if (typeof module !== 'undefined') module.exports = { SK_SPECIALS };
+</script>
+<script id="logic">/* ===== Pure planning logic (testable in Node) ===== */
+const CUISINES = ['Mexican', 'Italian', 'Mediterranean', 'Middle Eastern', 'Armenian', 'Latin American', 'Japanese', 'Korean', 'Thai', 'Indian', 'Chinese', 'Vietnamese', 'American'];
+const LEVELS = ['', 'Beginner', 'Intermediate', 'Advanced'];
+const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const SECTIONS = { P: 'Produce', M: 'Meat & seafood', D: 'Dairy, eggs & deli', B: 'Bakery & tortillas', F: 'Frozen', G: 'Pantry & international' };
+const PROTEIN_SNACKS = ['us8', 'kr8', 'jp8', 'am9'];
+
+const TECH = {
+  rice: { label: 'Cooking rice', tip: 'Rinse rice until the water runs mostly clear. Stovetop: 1 cup rice + 1¼ cups water (jasmine/Calrose), boil, cover, lowest heat 15 min, rest 10 min off heat — don\u2019t lift the lid. A rice cooker makes this foolproof.' },
+  pasta: { label: 'Boiling pasta', tip: 'Use a big pot of water salted like the sea. Start tasting 2 min before the package time; drain at "al dente" (slight bite) and save a mug of pasta water to loosen sauces.' },
+  egg: { label: 'Cooking eggs', tip: 'Medium-low heat and a little fat keep eggs tender. Hard-boiled: into boiling water 9–10 min, then an ice bath for easy peeling.' },
+  chicken: { label: 'Chicken to a safe temp', tip: 'Chicken is done at 165°F (74°C) in the thickest part — a $15 instant-read thermometer removes all guesswork. Cut pieces evenly so they finish together; rest 5 min.' },
+  dice: { label: 'Knife skills / dicing', tip: 'Onion: halve through the root, peel, lay flat, slice toward (not through) the root, then cross-cut. Curl your guiding fingertips under ("claw"). A sharp knife is safer than a dull one.' },
+  roast: { label: 'Roasting / sheet-pan', tip: 'Hot oven (400–425°F), a little oil, and space between pieces — crowded pans steam instead of browning. Line with foil or parchment for easy cleanup.' },
+  sear: { label: 'Searing meat & fish', tip: 'Pat protein dry, salt it, heat the pan until oil shimmers, lay it in and don\u2019t move it for 2–3 min until it releases on its own. Cook in batches.' },
+  sauce: { label: 'Making a sauce', tip: 'Build in layers: soften aromatics (onion, garlic), bloom spices 30 s, add liquid, simmer to thicken. Taste at the end and adjust salt and acid (lemon/vinegar).' },
+  simmer: { label: 'Simmering soups & stews', tip: 'A simmer is small, lazy bubbles — not a rolling boil. Stir occasionally and keep the lid ajar. Most soups taste better on day 2.' },
+  bake: { label: 'Baking', tip: 'Preheat fully (10–15 min) and use the middle rack. Oven temps vary — start checking a few minutes early.' },
+  dough: { label: 'Doughs & flatbreads', tip: 'Add water a spoonful at a time until the dough is soft and doesn\u2019t crack at the edges when pressed. Let it rest 5 min before shaping.' },
+  pressure: { label: 'Pressure cooker / Instant Pot', tip: 'Always have at least the minimum liquid (usually 1 cup). "Natural release" = wait until the pin drops; "quick release" = turn the valve with a towel, hand away from the steam.' },
+  stirfry: { label: 'Stir-frying', tip: 'Cut everything before you turn on the heat (mise en place). Very hot pan, small batches, keep things moving. Total cook time is often under 8 minutes.' },
+  marinate: { label: 'Marinating', tip: 'Marinate in a zip bag in the fridge: 30 min is enough for flavor; acidic marinades max ~12 h for chicken. Discard used marinade.' },
+  fish: { label: 'Cooking fish', tip: 'Fish is done at 145°F or when it flakes easily with a fork. Thin fillets (tilapia) take 8–10 min; thicker salmon 12–15 min at 400–425°F.' },
+  blend: { label: 'Blending sauces & smoothies', tip: 'Liquid goes in first, then soft items, then hard/frozen. Vent the lid with a towel when blending anything hot.' },
+  steam: { label: 'Steaming', tip: 'Set a plate on a rack (or a small upturned bowl) in a pot with 1 inch of simmering water; cover. Thin fish fillets steam in about 8 min.' },
+  roll: { label: 'Rolling (dolma, summer rolls)', tip: 'Work on a damp towel, keep fillings small, and roll snug. First few are always ugly — they still taste great.' },
+};
+
+const QUIZ = [
+  { id: 'freq', short: 'How often do you cook?', q: 'How often do you cook a meal from scratch?', opts: [['Rarely', 0], ['Sometimes', 1], ['Most weeks', 2]] },
+  { id: 'rice', short: 'Cook fluffy rice', q: 'Can you cook rice on the stove or in a rice cooker so it comes out fluffy, not mushy?', tech: 'rice' },
+  { id: 'pasta', short: 'Boil pasta al dente', q: 'Can you boil pasta to al dente without it going soft or sticking?', tech: 'pasta' },
+  { id: 'egg', short: 'Scramble, fry & boil eggs', q: 'Can you scramble, fry and hard-boil eggs reliably?', tech: 'egg' },
+  { id: 'chicken', short: 'Cook chicken to a safe 165°F', q: 'Do you cook chicken to a safe 165°F (e.g. with a meat thermometer) without drying it out?', tech: 'chicken' },
+  { id: 'dice', short: 'Dice an onion', q: 'Can you safely dice an onion with a chef\u2019s knife?', tech: 'dice' },
+  { id: 'roast', short: 'Roast veggies / sheet-pan dinner', q: 'Have you roasted vegetables or a sheet-pan dinner in the oven?', tech: 'roast' },
+  { id: 'sear', short: 'Sear meat or fish', q: 'Can you get a good brown sear on meat or fish in a hot pan?', tech: 'sear' },
+  { id: 'sauce', short: 'Make a sauce from scratch', q: 'Can you make a sauce from scratch (pan sauce, tomato sauce, curry)?', tech: 'sauce' },
+  { id: 'bake', short: 'Bake bread or dough', q: 'Do you bake from scratch (bread, dough, flatbreads)?', tech: 'bake' },
+  { id: 'pressure', short: 'Use an Instant Pot', q: 'Have you used a pressure cooker / Instant Pot?', tech: 'pressure' },
+];
+const TECH_IMPLIED = { sauce: ['simmer'], sear: ['stirfry', 'marinate'], bake: ['dough'], roast: ['fish'], chicken: ['marinate'], egg: ['steam'] };
+
+function scoreQuiz(ans) {
+  let score = 0; const max = 12; const known = [];
+  for (const q of QUIZ) {
+    const a = ans[q.id];
+    if (q.opts) score += +(a || 0);
+    else if (a === 'yes') { score += 1; known.push(q.tech, ...(TECH_IMPLIED[q.tech] || [])); }
+  }
+  const level = score <= 5 ? 1 : score <= 9 ? 2 : 3;
+  return { score, max, level, known: [...new Set(known)] };
+}
+
+/* ---- utils ---- */
+function hashStr(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function rng(seed) { let a = hashStr(String(seed)); return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const iso = d => { const z = new Date(d); return `${z.getFullYear()}-${String(z.getMonth() + 1).padStart(2, '0')}-${String(z.getDate()).padStart(2, '0')}`; };
+const parseISO = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const addDays = (s, n) => { const d = parseISO(s); d.setDate(d.getDate() + n); return iso(d); };
+function mondayOf(s) { const d = parseISO(s); const wd = (d.getDay() + 6) % 7; d.setDate(d.getDate() - wd); return iso(d); }
+/** Default planning week: on Sat/Sun plan next week, otherwise this week. */
+function defaultWeek(todayISO) { const wd = (parseISO(todayISO).getDay() + 6) % 7; return wd >= 5 ? addDays(mondayOf(todayISO), 7) : mondayOf(todayISO); }
+
+/* ---- targets ---- */
+function macroTargets({ kcal, protein, fatPct }) {
+  const f = Math.round(kcal * (fatPct / 100) / 9);
+  const c = Math.max(0, Math.round((kcal - protein * 4 - f * 9) / 4));
+  return { kcal: Math.round(kcal), p: Math.round(protein), f, c, fatPct };
+}
+/* same formulas as FitPlan's calcPlan (Mifflin-St Jeor + timeline deficit/surplus, safety floor) */
+function fitplanTargets(o) {
+  if (!o) return null;
+  const cm = o.hunit === 'metric' ? +o.cm : ((+o.ft) * 12 + (+o.inch)) * 2.54;
+  const toLb = x => o.wunit === 'kg' ? x * 2.20462 : x;
+  const cur = toLb(+o.cur), goal = toLb(+o.goal);
+  let weeks = +o.weeks; if (o.tmode === 'date' && o.date) weeks = (parseISO(o.date) - new Date()) / (7 * 864e5);
+  if (!(cm > 0 && cur > 0 && goal > 0 && weeks > 0 && +o.age > 0)) return null;
+  const kg = cur / 2.20462, B = 10 * kg + 6.25 * cm - 5 * (+o.age) + (o.sex === 'male' ? 5 : -161), tdee = B * (+o.activity || 1.55);
+  const floor = o.sex === 'male' ? 1500 : 1200; const ch = goal - cur; let t = tdee;
+  if (Math.abs(ch) >= 1) t = tdee + ch * 3500 / (Math.max(weeks, 0.5) * 7);
+  if (ch < 0) { const maxDef = Math.min(Math.min(2, 0.01 * cur) * 500, Math.max(tdee - floor, 0)); t = Math.max(t, tdee - maxDef); }
+  if (ch > 0) t = Math.min(t, tdee + 500);
+  return { kcal: Math.round(t / 10) * 10, protein: Math.round(0.85 * goal), from: 'FitPlan' };
+}
+
+/* ---- specials ---- */
+function specialsActive(sp, shopISO) { return !!(sp && sp.items && sp.items.length && (!sp.validFrom || shopISO >= sp.validFrom) && (!sp.validTo || shopISO <= sp.validTo)); }
+function matchSpecial(ingName, sp) {
+  if (!sp) return null; const n = ingName.toLowerCase();
+  return sp.items.find(it => (it.kw || []).some(k => k && n.includes(k.toLowerCase()))) || null;
+}
+function saleHits(r, sp) { if (!sp) return []; const s = new Set(); r.ing.forEach(i => { const m = matchSpecial(i.n, sp); if (m) s.add(m.name); }); return [...s]; }
+
+/* ---- recommendation ---- */
+const STORE_STRENGTHS = { superking: ['Middle Eastern', 'Armenian', 'Mediterranean', 'Latin American', 'Mexican'] };
+function recentCuisines(history, weekISO, n = 2) {
+  return Object.keys(history || {}).filter(w => w < weekISO).sort().slice(-n).map(w => history[w].cuisine).filter(Boolean);
+}
+function recommendCuisine({ recipes, history, weekISO, targets, level, specials, storeFamily }) {
+  const recent = recentCuisines(history, weekISO, 2);
+  const tgtPct = targets.p * 4 / targets.kcal;
+  const r = rng('rec' + weekISO);
+  const ranked = CUISINES.map(c => {
+    const mains = recipes.filter(x => x.cuisine === c && x.meal === 'm' && x.diff <= level);
+    const all = recipes.filter(x => x.cuisine === c && x.diff <= level);
+    const pPct = mains.reduce((s, x) => s + x.p * 4 / x.kcal, 0) / Math.max(mains.length, 1);
+    const fPct = mains.reduce((s, x) => s + x.f * 9 / x.kcal, 0) / Math.max(mains.length, 1);
+    const sale = new Set(); all.forEach(x => saleHits(x, specials).forEach(h => sale.add(h)));
+    const strong = (STORE_STRENGTHS[storeFamily] || []).includes(c);
+    const fit = 1 - Math.min(1, Math.abs(pPct - Math.max(tgtPct, 0.25)) / 0.15);
+    let score = 2 * fit + 0.12 * Math.min(sale.size, 10) + 0.08 * Math.min(mains.length, 6) + (strong ? 0.35 : 0) + 0.25 * r();
+    if (recent.includes(c)) score -= 10;
+    return { cuisine: c, score, pPct, fPct, sale: [...sale], mains: mains.length, strong, recent: recent.includes(c) };
+  }).sort((a, b) => b.score - a.score);
+  const best = ranked[0];
+  const reasons = [
+    `Mains average ${Math.round(best.pPct * 100)}% of calories from protein (your target: ${Math.round(tgtPct * 100)}% — ${targets.p} g of ${targets.kcal} kcal) and ${Math.round(best.fPct * 100)}% from fat.`,
+    `${best.mains} main dishes at or below your ${LEVELS[level]} level.`,
+  ];
+  if (best.sale.length) reasons.push(`Uses ${best.sale.length} item${best.sale.length > 1 ? 's' : ''} from this week\u2019s specials: ${best.sale.slice(0, 6).map(n => n.split(/ or | \(|, | \d/)[0]).join(', ')}${best.sale.length > 6 ? '…' : ''}.`);
+  if (best.strong) reasons.push('Your store is strong in this cuisine\u2019s ingredients.');
+  reasons.push(recent.length ? `Rotating away from recent weeks (${recent.join(', ')}).` : 'No recent weeks to rotate from yet.');
+  return { cuisine: best.cuisine, reasons, ranked, recent };
+}
+
+/* ---- week builder ---- */
+function pickRecipes(pool, n, scoreFn) {
+  const s = pool.map(x => ({ x, s: scoreFn(x) })).sort((a, b) => b.s - a.s).map(o => o.x);
+  return s.slice(0, n);
+}
+const ROUND = x => Math.round(x * 4) / 4;
+
+function buildWeekPlan({ recipes, cuisine, weekISO, targets, level, known, stretch, specials, seed }) {
+  const R = rng(`${seed || ''}|${weekISO}|${cuisine}`);
+  const knownSet = new Set(known || []);
+  const byId = Object.fromEntries(recipes.map(x => [x.id, x]));
+  const tgtPct = targets.p * 4 / targets.kcal;
+  const score = x => {
+    const pPct = x.p * 4 / x.kcal;
+    const techKnown = x.tech.length ? x.tech.filter(t => knownSet.has(t)).length / x.tech.length : 1;
+    return 3 * (1 - Math.min(1, Math.abs(pPct - Math.max(tgtPct, 0.25)) / 0.2)) + 0.25 * Math.min(saleHits(x, specials).length, 4) + 0.6 * techKnown - 0.004 * x.active + 1.2 * R();
+  };
+  const C = recipes.filter(x => x.cuisine === cuisine);
+  const notes = [];
+  // breakfasts
+  let bPool = C.filter(x => x.meal === 'b' && x.diff <= level);
+  if (bPool.length < 2) bPool = bPool.concat(pickRecipes(C.filter(x => x.meal === 'b' && x.diff > level), 2 - bPool.length, x => -x.diff));
+  const B = pickRecipes(bPool, 2, score); if (B.length === 1) B.push(B[0]);
+  // mains
+  const mPool = C.filter(x => x.meal === 'm' && x.diff <= level);
+  let U = pickRecipes(mPool, 6, score);
+  let stretchR = null;
+  if (stretch && level < 3) stretchR = pickRecipes(C.filter(x => x.meal === 'm' && x.diff === level + 1), 1, score)[0] || null;
+  if (stretchR && U.length >= 6) U = U.slice(0, 5);
+  if (U.length < (stretchR ? 5 : 6)) notes.push(`Only ${U.length} ${LEVELS[level]} ${cuisine} mains, so a few repeat.`);
+  // slots: L1 Mon-Wed, D1 Mon-Tue, D2 Wed-Thu, L2 Thu-Sat, D3 Fri-Sun lunch, D4 Sun dinner; same-day pairs must differ
+  const S = {}; const uses = new Map(U.map(x => [x.id, 0]));
+  const clash = { D1: ['L1'], D2: ['L1'], L2: ['D2'], D3: ['L2'], D4: ['D3'] };
+  for (const slot of ['L1', 'D1', 'D2', 'L2', 'D3', 'D4']) {
+    if (slot === 'D4' && stretchR) { S.D4 = stretchR; break; }
+    const bad = new Set((clash[slot] || []).map(k => S[k] && S[k].id));
+    const cand = U.filter(x => !bad.has(x.id)).sort((a, b) => uses.get(a.id) - uses.get(b.id) || U.indexOf(a) - U.indexOf(b));
+    S[slot] = cand[0] || U[0]; uses.set(S[slot].id, uses.get(S[slot].id) + 1);
+  }
+  const stretchId = stretchR ? stretchR.id : null;
+  const { L1, L2, D1, D2, D3, D4 } = S;
+  const snackC = C.find(x => x.meal === 's');
+  const snackP = byId[PROTEIN_SNACKS.find(id => id !== (snackC && snackC.id) && byId[id] && byId[id].cuisine !== cuisine) || 'us8'];
+  const lunch = [L1, L1, L1, L2, L2, L2, D3], dinner = [D1, D1, D2, D2, D3, D3, D4];
+  const days = DAYS.map((dn, i) => {
+    const b = B[i % 2], l = lunch[i], d = dinner[i];
+    let best = null;
+    for (const sb of [0.75, 1, 1.25, 1.5, 2]) for (const sm of [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5]) for (const sd of [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5]) for (const sn of [[], [snackC], [snackP], [snackC, snackP], [snackP, snackP]]) {
+      const items = [[b, sb], [l, sm], [d, sd], ...sn.filter(Boolean).map(s => [s, 1])];
+      const t = items.reduce((a, [r, k]) => ({ kcal: a.kcal + r.kcal * k, p: a.p + r.p * k, c: a.c + r.c * k, f: a.f + r.f * k }), { kcal: 0, p: 0, c: 0, f: 0 });
+      const cost = Math.abs(t.kcal - targets.kcal) / targets.kcal + 1.5 * Math.max(0, targets.p - t.p) / targets.p + 0.3 * Math.max(0, t.p - 1.5 * targets.p) / targets.p + 0.01 * sn.length + 0.02 * Math.abs(sm - sd);
+      if (!best || cost < best.cost) best = { cost, t, sb, sm, sd, sn: sn.filter(Boolean) };
+    }
+    const meals = [{ slot: 'Breakfast', id: b.id, sv: best.sb }, { slot: 'Lunch', id: l.id, sv: best.sm }, { slot: 'Dinner', id: d.id, sv: best.sd }]
+      .concat(best.sn.map(s => ({ slot: 'Snack', id: s.id, sv: 1 })));
+    const tot = { kcal: Math.round(best.t.kcal), p: Math.round(best.t.p), c: Math.round(best.t.c), f: Math.round(best.t.f) };
+    return { day: dn, date: addDays(weekISO, i), meals, tot };
+  });
+  // cook schedule: who cooks what, when
+  const sum = id => days.reduce((s, d) => s + d.meals.filter(m => m.id === id && m.slot !== 'Snack').reduce((a, m) => a + m.sv, 0), 0);
+  const cook = [];
+  const push = (when, r, covers) => { if (!r) return; const ex = cook.find(c => c.when === when && c.id === r.id); const sv = ROUND(covers.reduce((s, [di, slot]) => s + (days[di].meals.find(m => m.slot === slot && m.id === r.id) || { sv: 0 }).sv, 0)); if (ex) ex.sv += sv; else cook.push({ when, id: r.id, sv, covers: covers.map(([di, slot]) => `${DAYS[di]} ${slot.toLowerCase()}`) }); };
+  const prep = addDays(weekISO, -1);
+  B.forEach((b, k) => { if (k === 1 && b.id === B[0].id) return; cook.push({ when: prep, id: b.id, sv: ROUND(sum(b.id)), covers: ['breakfasts (' + days.filter(d => d.meals[0].id === b.id).map(d => d.day).join(', ') + ')'], note: 'Batch-cook or prep components; assemble fresh if it\u2019s an egg dish.' }); });
+  push(prep, L1, [[0, 'Lunch'], [1, 'Lunch'], [2, 'Lunch']]);
+  push(addDays(weekISO, 0), D1, [[0, 'Dinner'], [1, 'Dinner']]);
+  push(addDays(weekISO, 2), D2, [[2, 'Dinner'], [3, 'Dinner']]);
+  push(addDays(weekISO, 2), L2, [[3, 'Lunch'], [4, 'Lunch'], [5, 'Lunch']]);
+  push(addDays(weekISO, 4), D3, [[4, 'Dinner'], [5, 'Dinner'], [6, 'Lunch']]);
+  push(addDays(weekISO, 6), D4, [[6, 'Dinner']]);
+  return { cuisine, weekISO, targets, level, stretchId, notes, days, cook, created: new Date().toISOString(), seed: seed || '' };
+}
+
+/* ---- grocery list ---- */
+function groceryList(plan, recipes, specials) {
+  const byId = Object.fromEntries(recipes.map(x => [x.id, x]));
+  const agg = {};
+  plan.days.forEach(d => d.meals.forEach(m => { const r = byId[m.id]; if (!r) return; r.ing.forEach(i => {
+    const k = i.n.toLowerCase() + '|' + i.u; const a = agg[k] || (agg[k] = { n: i.n, u: i.u, sec: i.sec, q: 0, rec: new Set() });
+    a.q += i.q * m.sv; a.rec.add(r.name);
+  }); }));
+  const out = {};
+  Object.values(agg).forEach(a => { const sp = matchSpecial(a.n, specials); (out[a.sec] = out[a.sec] || []).push({ n: a.n, u: a.u, q: a.q, qty: fmtQty(a.q, a.u, a.sec), rec: [...a.rec], special: sp ? { name: sp.name, price: sp.price } : null }); });
+  Object.values(out).forEach(l => l.sort((x, y) => (!!y.special - !!x.special) || x.n.localeCompare(y.n)));
+  return out;
+}
+function fmtQty(q, u, sec) {
+  const r = Math.ceil(q * 4) / 4;
+  if (u === 'oz' && (sec === 'M' || q >= 16)) return `${Math.round(q)} oz (≈${(Math.ceil(q / 16 * 4) / 4).toFixed(2).replace(/\.?0+$/, '')} lb)`;
+  if (u === 'ea' || u === 'clove' || u === 'slice' || u === 'link' || u === 'sheet' || u === 'leaf' || u === 'stalk' || u === 'spear' || u === 'pack' || u === 'cube') return `${Math.ceil(q - 0.01)} ${u}`;
+  return `${r.toFixed(2).replace(/\.?0+$/, '')} ${u}`;
+}
+
+/* ---- prep guide ---- */
+function prepGuide(plan, recipes, { level, known }) {
+  const byId = Object.fromEntries(recipes.map(x => [x.id, x]));
+  const used = [...new Set(plan.days.flatMap(d => d.meals.map(m => m.id)))].map(id => byId[id]).filter(Boolean);
+  const techs = [...new Set(used.flatMap(r => r.tech))];
+  const knownSet = new Set(known || []);
+  const tips = techs.filter(t => TECH[t] && (level === 1 || !knownSet.has(t))).map(t => ({ tech: t, label: TECH[t].label, tip: TECH[t].tip, recipes: used.filter(r => r.tech.includes(t)).map(r => r.name) }));
+  const riceCups = plan.days.reduce((s, d) => s + d.meals.reduce((a, m) => { const r = byId[m.id]; const ri = r && r.ing.find(i => /white rice|brown rice/.test(i.n) && /dry/.test(i.u)); return a + (ri ? ri.q * m.sv : 0); }, 0), 0);
+  const eggsBoil = plan.days.reduce((s, d) => s + d.meals.filter(m => m.id === 'kr8').length * 2, 0);
+  const prepDay = [];
+  if (riceCups > 0) prepDay.push(`Cook rice: about ${(Math.ceil(riceCups * 2) / 2)} cups dry for the week (cook half on prep day, half on Wednesday; cool fast, refrigerate within 1 h, use within 4 days).`);
+  if (eggsBoil) prepDay.push(`Hard-boil ${eggsBoil} eggs for snacks (9–10 min + ice bath).`);
+  prepDay.push('Wash and chop produce for the first half of the week; store in containers lined with a paper towel.');
+  prepDay.push('Portion snacks (nuts, fruit, yogurt) into grab-and-go containers.');
+  const stretch = plan.stretchId && byId[plan.stretchId];
+  const stretchTips = stretch ? { name: stretch.name, tip: stretch.tip, techs: stretch.tech.filter(t => TECH[t]).map(t => ({ label: TECH[t].label, tip: TECH[t].tip })) } : null;
+  const safety = ['Safe internal temps: chicken & turkey 165°F · ground beef/pork 160°F · fish 145°F · whole cuts of beef/pork/lamb 145°F + 3 min rest.', 'Cooked leftovers keep 3–4 days in the fridge. Freeze anything you won\u2019t eat by then.', 'Reheat leftovers to 165°F (steaming hot all the way through).'];
+  return { prepDay, cook: plan.cook.map(c => ({ ...c, name: byId[c.id] && byId[c.id].name })), recipes: used.filter(r => r.meal !== 's' || r.steps.length > 25), tips, stretch: stretchTips, safety, level };
+}
+
+if (typeof module !== 'undefined') module.exports = { CUISINES, LEVELS, DAYS, SECTIONS, TECH, QUIZ, scoreQuiz, macroTargets, fitplanTargets, specialsActive, matchSpecial, saleHits, recommendCuisine, recentCuisines, buildWeekPlan, groceryList, prepGuide, mondayOf, defaultWeek, addDays, iso, parseISO };
+</script>
+<script>/* ===== UI ===== */
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const KEY = 'fitplan.meals.v1';
+const RECIPES = RAW; const BY = Object.fromEntries(RECIPES.map(r => [r.id, r]));
+const EMOJI = { Mexican: '🌮', Italian: '🍝', Mediterranean: '🫒', 'Middle Eastern': '🧆', Armenian: '🍇', 'Latin American': '🫓', Japanese: '🍱', Korean: '🥘', Thai: '🥥', Indian: '🍛', Chinese: '🥟', Vietnamese: '🍜', American: '🍔' };
+const SLOT_IC = { Breakfast: '☀️', Lunch: '🥗', Dinner: '🍽️', Snack: '🍎' };
+const STORES = {
+  'superking-culvercity': { name: 'Super King', full: 'Super King Markets', city: 'Culver City, CA', addr: '5587 Sepulveda Blvd · 7am–9pm', family: 'superking', ad: 'https://www.superkingmarkets.com/weekly-ad' },
+  'heb-austin': { name: 'H-E-B', full: 'H-E-B', city: 'Austin, TX', family: 'heb', ad: 'https://www.heb.com/weekly-ad' },
+  'centralmarket-austin': { name: 'Central Market', full: 'Central Market', city: 'Austin, TX', family: 'centralmarket', ad: 'https://www.centralmarket.com' },
+  'wholefoods-austin': { name: 'Whole Foods', full: 'Whole Foods Market', city: 'Austin, TX', family: 'wholefoods', ad: 'https://www.wholefoodsmarket.com/sales-flyer' },
+  'custom': { name: 'Other', full: 'Other store', city: '', family: 'custom' },
+};
+const today = iso(new Date());
+const fresh = () => ({ v: 1, onboarded: false, targets: { kcal: 2100, protein: 160, fatPct: 30, src: 'default' }, skill: { answers: {}, taken: false, quizLevel: 1, known: [], override: 'auto', stretch: true },
+  store: { id: 'superking-culvercity', customName: '', customCity: '' }, specials: { 'superking-culvercity': JSON.parse(JSON.stringify(SK_SPECIALS)) }, weeks: {}, cur: defaultWeek(today), checks: {}, draft: {} });
+let S; try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) {} if (!S || S.v !== 1) S = fresh();
+if (S.onboarded == null) S.onboarded = !!S.skill.taken;
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+let tab = 'plan';
+
+const level = () => S.skill.override !== 'auto' ? +S.skill.override : (S.skill.taken ? S.skill.quizLevel : 1);
+const targets = () => macroTargets(S.targets);
+const store = () => S.store.id === 'custom' ? { ...STORES.custom, name: S.store.customName || 'Other store', full: S.store.customName || 'Other store', city: S.store.customCity } : STORES[S.store.id];
+const spAll = () => S.specials[S.store.id] || null;
+const week = () => S.weeks[S.cur] || null;
+const shopDate = () => (week() && week().shop) || (S.draft[S.cur] && S.draft[S.cur].shop) || addDays(S.cur, -1);
+const spActive = () => specialsActive(spAll(), shopDate()) ? spAll() : null;
+const fmtD = (s, o) => parseISO(s).toLocaleDateString(undefined, o || { month: 'short', day: 'numeric' });
+const dl = d => `<span class="pill d${d}">${LEVELS[d]}</span>`;
+const short = n => n.split(/ or | \(|, | \d/)[0];
+function setTab(t) { tab = t; document.querySelectorAll('#tabs button').forEach(x => x.classList.toggle('on', x.dataset.t === t)); renderOut(); window.scrollTo({ top: 0 }); }
+
+/* ---------- header chips ---------- */
+function renderChips() {
+  const t = targets();
+  $('chips').innerHTML = `<button class="chip" data-go="targets">${t.kcal} kcal · ${t.p} g protein</button><button class="chip" data-go="skill">👩‍🍳 ${LEVELS[level()]}</button><button class="chip" data-go="store">🛒 ${esc(store().name)}</button>`;
+  $('chips').querySelectorAll('[data-go]').forEach(b => b.onclick = () => { setTab('settings'); const el = $('set-' + b.dataset.go); if (el) el.scrollIntoView({ behavior: 'smooth' }); });
+}
+
+/* ---------- recommendation ---------- */
+function computeRec() {
+  const h = { ...S.weeks }; delete h[S.cur];
+  const r = recommendCuisine({ recipes: RECIPES, history: h, weekISO: S.cur, targets: targets(), level: level(), specials: spActive(), storeFamily: store().family });
+  const b = r.ranked[0];
+  const bits = [`${Math.round(b.pPct * 100)}% protein`]; if (b.sale.length) bits.push(`${b.sale.length} deals`); if (r.recent.length) bits.push(`new vs. last ${r.recent.length} wk`);
+  return { cuisine: r.cuisine, reasons: r.reasons, line: bits.join(' · '), runnerUp: r.ranked.slice(1, 4).map(x => x.cuisine) };
+}
+
+/* ---------- week bar ---------- */
+function renderWeekBar() {
+  const list = [...new Set([...Object.keys(S.weeks), S.cur, defaultWeek(today), mondayOf(today)])].sort();
+  $('weekSel').innerHTML = list.map(w => `<option value="${w}">${fmtD(w)}–${fmtD(addDays(w, 6), { day: 'numeric' })}${S.weeks[w] ? ' · ' + esc(S.weeks[w].cuisine) : ''}</option>`).join('');
+  $('weekSel').value = S.cur;
+  const w = week(), dr = S.draft[S.cur] || {};
+  const pick = dr.pick || (w ? (w.mode === 'rec' ? '__rec' : w.cuisine) : '__rec');
+  $('cuisineSel').innerHTML = `<option value="__rec">✨ Surprise me</option>` + CUISINES.map(c => `<option value="${c}">${EMOJI[c]} ${c}</option>`).join('');
+  $('cuisineSel').value = pick;
+  $('gen').textContent = w ? '↻ Remake week' : 'Make my week';
+  const rec = pick === '__rec' ? (w && w.mode === 'rec' && !dr.pick ? w.rec : computeRec()) : null;
+  $('recBox').innerHTML = rec ? `<div class="rec">✨ <b>${EMOJI[rec.cuisine] || ''} ${esc(rec.cuisine)}</b> <span class="muted small">${esc(rec.line || '')}</span>
+    <details><summary>Why?</summary><ul>${rec.reasons.map(r => `<li>${esc(r)}</li>`).join('')}</ul></details></div>` : '';
+  let notes = '';
+  if (w && w.plan.notes.length) notes += `<div class="note small">${w.plan.notes.map(esc).join('<br>')}</div>`;
+  if (w && (w.plan.targets.kcal !== targets().kcal || w.plan.targets.p !== targets().p || w.plan.level !== level())) notes += `<div class="note warn small">Targets or level changed. Tap “Remake week” to update.</div>`;
+  $('weekNotes').innerHTML = notes;
+}
+$('weekSel').addEventListener('change', e => { S.cur = e.target.value; save(); renderAll(); });
+$('wPrev').addEventListener('click', () => { S.cur = addDays(S.cur, -7); save(); renderAll(); });
+$('wNext').addEventListener('click', () => { S.cur = addDays(S.cur, 7); save(); renderAll(); });
+$('cuisineSel').addEventListener('change', e => { (S.draft[S.cur] = S.draft[S.cur] || {}).pick = e.target.value; save(); renderWeekBar(); });
+function build(pick, shuffle) {
+  let cuisine = pick, rec = null;
+  if (pick === '__rec') { rec = computeRec(); cuisine = rec.cuisine; }
+  const prev = week(); const seed = shuffle ? String(Date.now()) : (prev && prev.cuisine === cuisine ? prev.plan.seed : '');
+  const plan = buildWeekPlan({ recipes: RECIPES, cuisine, weekISO: S.cur, targets: targets(), level: level(), known: S.skill.known, stretch: S.skill.stretch, specials: spActive(), seed });
+  S.weeks[S.cur] = { cuisine, mode: pick === '__rec' ? 'rec' : 'pick', rec, plan, shop: shopDate(), store: store().full, specialsUsed: !!spActive() };
+  if (S.draft[S.cur]) delete S.draft[S.cur].pick;
+  save();
+}
+$('gen').addEventListener('click', () => { const w = week(); const pick = $('cuisineSel').value; const same = w && (pick === '__rec' ? w.mode === 'rec' : w.cuisine === pick); build(pick, !!same); setTab('plan'); renderAll(); });
+$('tabs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setTab(b.dataset.t); });
+
+/* ---------- outputs ---------- */
+function badges(r, p, sp) { const s = saleHits(r, sp); return `${r.id === p.stretchId ? ' <span class="pill stretch">⭐</span>' : ''}${s.length ? ` <span class="pill sale" title="On sale: ${esc(s.map(short).join(', '))}">🏷 ${s.length}</span>` : ''}`; }
+function renderOut() {
+  if (tab === 'history') return renderHistory();
+  if (tab === 'settings') return renderSettings();
+  const w = week();
+  if (!w) { $('out').innerHTML = `<div style="text-align:center;padding:30px 10px"><div style="font-size:40px">🍳</div><p><b>No plan for ${fmtD(S.cur)} yet.</b></p><button class="btn big" type="button" id="emptyGo">Make my week</button></div>`; $('emptyGo').onclick = () => $('gen').click(); return; }
+  const p = w.plan, sp = specialsActive(spAll(), w.shop) ? spAll() : null;
+  if (tab === 'plan') {
+    const avg = k => Math.round(p.days.reduce((s, d) => s + d.tot[k], 0) / 7);
+    $('out').innerHTML = `<div class="sum"><span>${EMOJI[w.cuisine] || ''} <b>${esc(w.cuisine)}</b></span><span>avg <b>${avg('kcal')}</b> / ${p.targets.kcal} kcal</span><span><b>${avg('p')}</b> g protein</span><span>${LEVELS[p.level]}</span></div>
+    <div class="grid7">${p.days.map(d => { const ok = Math.abs(d.tot.kcal - p.targets.kcal) / p.targets.kcal <= 0.05 && d.tot.p >= p.targets.p * 0.95;
+      return `<div class="day"><div class="hd"><b>${d.day}</b><span class="muted small">${fmtD(d.date)}</span></div>${d.meals.map(m => { const r = BY[m.id]; return `<div class="meal"><span class="ic" title="${m.slot}">${SLOT_IC[m.slot]}</span><span class="nm"><a href="#" data-r="${r.id}">${esc(r.name)}</a>${badges(r, p, sp)}</span><span class="kc">${Math.round(r.kcal * m.sv)}${m.sv !== 1 ? `<br>${m.sv}×` : ''}</span></div>`; }).join('')}
+      <div class="tot ${ok ? 'good' : 'off'}">${d.tot.kcal} kcal · ${d.tot.p} g P</div></div>`; }).join('')}</div>
+    <details><summary>How this works</summary><p class="hint">Lunches are batch-cooked (Mon–Wed, Thu–Sat). Dinners make leftovers. 🏷 = uses sale items · ⭐ = stretch recipe · green = on target. Tap a dish for the recipe.</p></details>`;
+    $('out').querySelectorAll('[data-r]').forEach(a => a.onclick = e => { e.preventDefault(); showRecipe(a.dataset.r, p); });
+  } else if (tab === 'grocery') {
+    const g = groceryList(p, RECIPES, sp); const ck = S.checks[S.cur] = S.checks[S.cur] || {};
+    const nSale = Object.values(g).flat().filter(x => x.special).length;
+    $('out').innerHTML = `<div class="sum"><span>🛒 <b>${esc(w.store || store().full)}</b></span><span>${fmtD(w.shop, { weekday: 'short', month: 'short', day: 'numeric' })}</span>${nSale ? `<span class="pill sale" style="padding:6px 12px">🏷 ${nSale} on sale</span>` : ''}<button class="btn sm sec" id="glCopy" type="button">Copy</button></div>
+    <div class="gl">${Object.keys(SECTIONS).filter(s => g[s]).map(s => `<section><h4>${SECTIONS[s]}</h4>${g[s].map(x => { const k = x.n + '|' + x.u; return `<label class="it"><input type="checkbox" data-k="${esc(k)}" ${ck[k] ? 'checked' : ''}><span class="${ck[k] ? 'done' : ''}">${esc(x.n)}${x.special ? ` <span class="pill sale" title="${esc(x.special.name)}">${esc(x.special.price)}</span>` : ''}</span><span class="q">${esc(x.qty)}</span></label>`; }).join('')}</section>`).join('')}</div>`;
+    $('out').querySelectorAll('input[type=checkbox]').forEach(c => c.onchange = () => { ck[c.dataset.k] = c.checked; save(); c.nextElementSibling.classList.toggle('done', c.checked); });
+    $('glCopy').onclick = e => { const txt = Object.keys(SECTIONS).filter(s => g[s]).map(s => SECTIONS[s].toUpperCase() + '\n' + g[s].map(x => `- ${x.n}, ${x.qty}${x.special ? ' [SALE ' + x.special.price + ']' : ''}`).join('\n')).join('\n\n'); navigator.clipboard && navigator.clipboard.writeText(txt).catch(() => {}); e.target.textContent = 'Copied ✓'; };
+  } else if (tab === 'prep') {
+    const pg = prepGuide(p, RECIPES, { level: p.level, known: S.skill.known });
+    $('out').innerHTML = `<div class="prep">
+      <h3>🧺 ${fmtD(addDays(p.weekISO, -1), { weekday: 'long' })} prep</h3><ul>${pg.prepDay.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
+      <h3>🍳 Cook days</h3><ul>${pg.cook.map(c => `<li><b>${fmtD(c.when, { weekday: 'short' })}</b> · ${esc(c.name)} ×${c.sv}${c.id === p.stretchId ? ' <span class="pill stretch">⭐ stretch</span>' : ''}</li>`).join('')}</ul>
+      ${pg.stretch ? `<details class="sec" open><summary>⭐ Stretch: ${esc(pg.stretch.name)}</summary>${pg.stretch.tip ? `<div class="tip">${esc(pg.stretch.tip)}</div>` : ''}${pg.stretch.techs.map(t => `<div class="tip"><b>${esc(t.label)}</b>: ${esc(t.tip)}</div>`).join('')}</details>` : ''}
+      ${pg.tips.length ? `<details class="sec"${p.level === 1 ? ' open' : ''}><summary>💡 ${p.level === 1 ? 'Beginner tips' : 'Skill tips'} (${pg.tips.length})</summary>${pg.tips.map(t => `<div class="tip"><b>${esc(t.label)}</b>: ${esc(t.tip)}</div>`).join('')}</details>` : ''}
+      <details class="sec"><summary>🌡️ Food safety</summary><ul>${pg.safety.map(x => `<li>${esc(x)}</li>`).join('')}</ul></details>
+      <h3>📖 Recipes</h3>${pg.recipes.map(r => `<details class="sec rc"><summary>${esc(r.name)} ${dl(r.diff)}${r.id === p.stretchId ? ' <span class="pill stretch">⭐</span>' : ''}</summary>${recipeBody(r)}</details>`).join('')}</div>`;
+  }
+}
+function recipeBody(r) {
+  const w = week(), sp = w && specialsActive(spAll(), w.shop) ? spAll() : null, sale = saleHits(r, sp);
+  return `${sale.length ? `<div class="note small" style="background:var(--salebg);color:var(--sale)">🏷 On sale: ${esc(sale.map(short).join(', '))}</div>` : ''}<div class="meta">⏱ ${r.active} min${r.total > r.active ? ` (${r.total} total)` : ''} · ${r.kcal} kcal · ${r.p}P ${r.c}C ${r.f}F per serving</div>
+  <p><b>You need:</b> ${r.ing.map(i => `${esc(i.n)} ${i.q} ${esc(i.u)}`).join(' · ')}</p><p>${esc(r.steps)}</p>${r.tip ? `<div class="tip">💡 ${esc(r.tip)}</div>` : ''}
+  <details><summary>Techniques & equipment</summary><p class="hint">${r.tech.map(t => TECH[t] ? TECH[t].label : t).join(', ') || 'None'}${r.equip.length ? ' · ' + r.equip.join(', ') : ''}</p></details>`;
+}
+function showRecipe(id, p) { const r = BY[id]; openModal(`<h2>${esc(r.name)} ${dl(r.diff)}${r.id === p.stretchId ? ' <span class="pill stretch">⭐ stretch</span>' : ''}</h2>${recipeBody(r)}<div style="text-align:right;margin-top:14px"><button class="btn" type="button" id="mClose">Done</button></div>`); $('mClose').onclick = closeModal; }
+function renderHistory() {
+  const ws = Object.keys(S.weeks).sort().reverse();
+  if (!ws.length) { $('out').innerHTML = '<p class="muted">No saved weeks yet.</p>'; return; }
+  $('out').innerHTML = `<table class="hist"><tr><th>Week</th><th>Cuisine</th><th>Avg</th><th></th></tr>${ws.map(w => { const x = S.weeks[w], d = x.plan.days; const a = k => Math.round(d.reduce((s, y) => s + y.tot[k], 0) / 7);
+    return `<tr><td><a href="#" data-go="${w}">${fmtD(w)}</a></td><td>${EMOJI[x.cuisine] || ''} ${esc(x.cuisine)}${x.mode === 'rec' ? ' ✨' : ''}</td><td class="small">${a('kcal')} kcal · ${a('p')} g</td><td><button class="btn sm ghost" data-rm="${w}" type="button" aria-label="Delete week">🗑</button></td></tr>`; }).join('')}</table>`;
+  $('out').querySelectorAll('[data-go]').forEach(a => a.onclick = e => { e.preventDefault(); S.cur = a.dataset.go; save(); setTab('plan'); renderAll(); });
+  $('out').querySelectorAll('[data-rm]').forEach(b => b.onclick = () => { if (confirm('Delete this week?')) { delete S.weeks[b.dataset.rm]; save(); renderAll(); } });
+}
+
+/* ---------- settings ---------- */
+function targetsForm(pre) {
+  const t = targets();
+  return `<div class="row3"><div><label for="${pre}K">Calories</label><input id="${pre}K" type="number" inputmode="numeric" value="${S.targets.kcal}"></div><div><label for="${pre}P">Protein g</label><input id="${pre}P" type="number" inputmode="numeric" value="${S.targets.protein}"></div><div><label for="${pre}F">Fat %</label><input id="${pre}F" type="number" inputmode="numeric" value="${S.targets.fatPct}"></div></div>
+  <div class="stats"><div class="stat"><div class="k">KCAL</div><div class="v">${t.kcal}</div></div><div class="stat"><div class="k">PROTEIN</div><div class="v">${t.p}g</div></div><div class="stat"><div class="k">CARBS</div><div class="v">${t.c}g</div></div><div class="stat"><div class="k">FAT</div><div class="v">${t.f}g</div></div></div>
+  <button class="btn sm sec" style="margin-top:12px" type="button" id="${pre}Fp">↧ Import from FitPlan</button>${S.targets.src === 'FitPlan' ? ' <span class="pill">from FitPlan</span>' : ''}`;
+}
+function bindTargets(pre, after) {
+  ['K', 'P', 'F'].forEach(k => $(pre + k).addEventListener('change', () => { S.targets = { kcal: +$(pre + 'K').value || 2000, protein: +$(pre + 'P').value || 120, fatPct: Math.min(45, Math.max(15, +$(pre + 'F').value || 30)), src: 'manual' }; save(); after(); }));
+  $(pre + 'Fp').onclick = () => { let o = null; try { o = JSON.parse(localStorage.getItem('fitplan.v1')); } catch (e) {} const t = fitplanTargets(o);
+    if (!t) { alert('No FitPlan data in this browser yet. Build a plan in FitPlan first.'); return; } S.targets = { kcal: t.kcal, protein: t.protein, fatPct: S.targets.fatPct, src: 'FitPlan' }; save(); after(); };
+}
+function storeForm(pre) {
+  const st = store();
+  return `<select id="${pre}Store">${Object.entries(STORES).map(([k, v]) => `<option value="${k}">${esc(v.full)}${v.city ? ' · ' + esc(v.city) : ''}</option>`).join('')}</select>
+  <div class="row ${S.store.id === 'custom' ? '' : 'hidden'}"><div><label for="${pre}Cn">Name</label><input id="${pre}Cn" value="${esc(S.store.customName)}"></div><div><label for="${pre}Cc">City</label><input id="${pre}Cc" value="${esc(S.store.customCity)}"></div></div>
+  <p class="hint">${st.addr ? esc(st.addr) + ' · ' : ''}${st.ad ? `<a href="${st.ad}" target="_blank" rel="noopener">weekly ad</a>` : ''}</p>`;
+}
+function bindStore(pre, after) {
+  $(pre + 'Store').value = S.store.id;
+  $(pre + 'Store').onchange = e => { S.store.id = e.target.value; save(); after(); };
+  [pre + 'Cn', pre + 'Cc'].forEach(id => $(id).onchange = () => { S.store.customName = $(pre + 'Cn').value.trim(); S.store.customCity = $(pre + 'Cc').value.trim(); save(); after(); });
+}
+function renderSettings() {
+  const sk = S.skill, sp = spAll(), n = sp && sp.items ? sp.items.length : 0, act = specialsActive(sp, shopDate());
+  const usedNames = new Set(); const w = week(); if (w && n) Object.values(groceryList(w.plan, RECIPES, sp)).flat().forEach(x => x.special && usedNames.add(x.special.name));
+  const secOrder = Object.keys(SECTIONS);
+  const items = n ? [...sp.items].map((it, i) => ({ ...it, i })).sort((a, b) => (usedNames.has(b.name) - usedNames.has(a.name)) || secOrder.indexOf(a.sec) - secOrder.indexOf(b.sec)) : [];
+  $('out').innerHTML = `<div class="set">
+   <div class="card" id="set-targets"><h2>🎯 Daily targets</h2>${targetsForm('st')}</div>
+   <div class="card" id="set-skill"><h2>👩‍🍳 Cooking level</h2><div class="level">${LEVELS[level()]}</div>
+     <p class="hint">${sk.taken ? `Quiz ${sk.score}/${sk.max}${sk.override !== 'auto' ? ' · set manually' : ''}` : 'Quiz not taken yet'}</p>
+     <div class="row"><div><label for="lvlOv">Level</label><select id="lvlOv"><option value="auto">From quiz</option><option value="1">Beginner</option><option value="2">Intermediate</option><option value="3">Advanced</option></select></div>
+     <div><label for="stretch">Stretch recipe</label><select id="stretch"><option value="1">1 per week</option><option value="0">Off</option></select></div></div>
+     <button class="btn sm sec" style="margin-top:12px" type="button" id="retake">${sk.taken ? 'Retake quiz' : 'Take quiz'}</button></div>
+   <div class="card" id="set-store"><h2>🛒 Store</h2>${storeForm('st')}
+     <label for="shopDate">Shopping day</label><input id="shopDate" type="date" value="${shopDate()}"></div>
+   <div class="card" id="set-specials"><h2>🏷 Deals <span class="pill sale">${n || 'none'}</span></h2>
+     ${n ? `<div class="note ${act ? 'ok' : 'warn'} small">${act ? '✓ ' : ''}Valid ${sp.validFrom ? fmtD(sp.validFrom) + '–' + fmtD(sp.validTo) : '(no dates)'}${act ? '' : ' · not valid on your shopping day'}</div>` : `<p class="hint">No deals for this store yet. Add some below.</p>`}
+     ${n ? `<details><summary>See all ${n} deals</summary><div class="sp"><table>${items.map(it => `<tr class="${usedNames.has(it.name) ? 'used' : ''}"><td>${usedNames.has(it.name) ? '✓ ' : ''}${esc(it.name)}</td><td class="pr">${esc(it.price)}</td><td><button class="btn sm ghost" data-del="${it.i}" type="button" aria-label="Remove">✕</button></td></tr>`).join('')}</table></div>${sp.source ? `<p class="hint">Source: <a href="${esc(sp.source)}" target="_blank" rel="noopener">store ad</a>${sp.fetched ? ', ' + fmtD(sp.fetched) : ''}</p>` : ''}</details>` : ''}
+     <details><summary>Edit deals</summary>
+       <div class="row"><div><label for="spFrom">From</label><input id="spFrom" type="date" value="${(sp && sp.validFrom) || ''}"></div><div><label for="spTo">To</label><input id="spTo" type="date" value="${(sp && sp.validTo) || ''}"></div></div>
+       <label for="spPaste">Add: item | price | match words</label><textarea id="spPaste" rows="3" placeholder="Chicken thighs | $1.99 lb | chicken thigh"></textarea>
+       <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn sm" id="spAdd" type="button">Add</button>${S.store.id === 'superking-culvercity' ? '<button class="btn sm sec" id="spReset" type="button">Restore ad</button>' : ''}<button class="btn sm danger" id="spClear" type="button">Clear</button></div></details></div>
+  </div>`;
+  const re = () => { renderAll(); };
+  bindTargets('st', re); bindStore('st', re);
+  $('lvlOv').value = sk.override; $('stretch').value = sk.stretch ? '1' : '0';
+  $('lvlOv').onchange = e => { S.skill.override = e.target.value; save(); re(); };
+  $('stretch').onchange = e => { S.skill.stretch = e.target.value === '1'; save(); re(); };
+  $('retake').onclick = () => openQuiz(false);
+  $('shopDate').onchange = e => { (S.draft[S.cur] = S.draft[S.cur] || {}).shop = e.target.value; if (week()) week().shop = e.target.value; save(); re(); };
+  const ensureSp = () => S.specials[S.store.id] || (S.specials[S.store.id] = { store: S.store.id, validFrom: '', validTo: '', source: '', items: [] });
+  $('out').querySelectorAll('[data-del]').forEach(b => b.onclick = () => { sp.items.splice(+b.dataset.del, 1); save(); re(); });
+  $('spFrom').onchange = e => { ensureSp().validFrom = e.target.value; save(); re(); };
+  $('spTo').onchange = e => { ensureSp().validTo = e.target.value; save(); re(); };
+  $('spAdd').onclick = () => { const s = ensureSp(); $('spPaste').value.split('\n').map(l => l.trim()).filter(Boolean).forEach(l => { const [name, price, kw] = l.split('|').map(x => (x || '').trim()); if (name) s.items.push({ name, price: price || '', sec: 'G', kw: (kw || name).toLowerCase().split(',').map(x => x.trim()).filter(Boolean) }); }); save(); re(); };
+  if ($('spReset')) $('spReset').onclick = () => { S.specials['superking-culvercity'] = JSON.parse(JSON.stringify(SK_SPECIALS)); save(); re(); };
+  $('spClear').onclick = () => { if (confirm('Remove all deals for this store?')) { ensureSp().items = []; save(); re(); } };
+}
+
+/* ---------- modal, quiz & onboarding wizard ---------- */
+function openModal(html) { $('mbox').innerHTML = html; $('modal').classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+function closeModal() { $('modal').classList.add('hidden'); document.body.style.overflow = ''; }
+$('modal').addEventListener('click', e => { if (e.target.id === 'modal' && S.onboarded) closeModal(); });
+const stepBar = n => `<div class="steps">${[1, 2, 3, 4].map(i => `<i class="${i <= n ? 'on' : ''}"></i>`).join('')}</div>`;
+function quizHTML(ans) { return QUIZ.map(q => `<div class="q"><div>${esc(q.short || q.q)}</div><div class="opts">${(q.opts || [['Yes', 'yes'], ['No', 'no']]).map(([l, v]) => `<button type="button" data-q="${q.id}" data-v="${v}" class="${String(ans[q.id]) === String(v) ? 'on' : ''}">${l}</button>`).join('')}</div></div>`).join(''); }
+function openQuiz(wizard) {
+  const ans = { ...S.skill.answers };
+  const draw = () => {
+    const done = QUIZ.filter(q => ans[q.id] != null).length;
+    openModal(`<div class="wz">${wizard ? stepBar(1) : ''}<h2>Can you…?</h2><p class="hint">${done}/${QUIZ.length} answered</p>${quizHTML(ans)}
+      <div class="foot">${wizard ? '<span></span>' : '<button class="btn sec" id="qCancel" type="button">Cancel</button>'}<button class="btn big" id="qDone" type="button" ${done < QUIZ.length ? 'disabled style="opacity:.5"' : ''}>${wizard ? 'Next' : 'Save'}</button></div></div>`);
+    $('mbox').querySelectorAll('.opts button').forEach(b => b.onclick = () => { ans[b.dataset.q] = b.dataset.v; const y = $('mbox').scrollTop; draw(); $('mbox').scrollTop = y; });
+    if ($('qCancel')) $('qCancel').onclick = closeModal;
+    $('qDone').onclick = () => { if (QUIZ.some(q => ans[q.id] == null)) return; const r = scoreQuiz(ans); Object.assign(S.skill, { answers: ans, taken: true, quizLevel: r.level, known: r.known, score: r.score, max: r.max }); save();
+      if (wizard) wzProfile(); else { closeModal(); renderAll(); } };
+  };
+  draw();
+}
+function wzProfile() {
+  const draw = () => {
+    openModal(`<div class="wz">${stepBar(2)}<h2>You're ${/^[AEIOU]/.test(LEVELS[level()]) ? 'an' : 'a'} ${LEVELS[level()]} cook 👩‍🍳</h2><p class="hint">Now your daily targets and store.</p>
+      ${targetsForm('wz')}<label for="wzStore">Store</label>${storeForm('wz')}
+      <div class="foot"><button class="btn sec" id="wzBack" type="button">Back</button><button class="btn big" id="wzNext" type="button">Next</button></div></div>`);
+    bindTargets('wz', draw); bindStore('wz', draw);
+    $('wzBack').onclick = () => openQuiz(true); $('wzNext').onclick = wzCuisine;
+  };
+  draw();
+}
+function wzCuisine() {
+  const rec = computeRec(); let pick = '__rec';
+  const draw = () => {
+    openModal(`<div class="wz">${stepBar(3)}<h2>What sounds good this week?</h2><p class="hint">Pick one, or let us choose.</p>
+      <div class="tiles"><button class="tile rec ${pick === '__rec' ? 'on' : ''}" data-c="__rec" type="button"><span class="e">✨</span>Surprise me: <b>${esc(rec.cuisine)}</b><br><span class="small muted">${esc(rec.line)}</span></button>
+      ${CUISINES.map(c => `<button class="tile ${pick === c ? 'on' : ''}" data-c="${c}" type="button"><span class="e">${EMOJI[c]}</span>${c}</button>`).join('')}</div>
+      <div class="foot"><button class="btn sec" id="wzBack" type="button">Back</button><button class="btn big" id="wzNext" type="button">Make my week</button></div></div>`);
+    $('mbox').querySelectorAll('[data-c]').forEach(b => b.onclick = () => { pick = b.dataset.c; draw(); });
+    $('wzBack').onclick = wzProfile; $('wzNext').onclick = () => { build(pick, false); wzDone(); };
+  };
+  draw();
+}
+function wzDone() {
+  const w = week(); const d = w.plan.days; const a = k => Math.round(d.reduce((s, y) => s + y.tot[k], 0) / 7);
+  const nSale = Object.values(groceryList(w.plan, RECIPES, spActive())).flat().filter(x => x.special).length;
+  openModal(`<div class="wz" style="text-align:center">${stepBar(4)}<div style="font-size:48px">${EMOJI[w.cuisine] || '🎉'}</div><h2>Your ${esc(w.cuisine)} week is ready</h2>
+    <p class="muted">~${a('kcal')} kcal · ${a('p')} g protein a day${nSale ? ` · ${nSale} items on sale` : ''}</p>
+    <div class="foot" style="justify-content:center"><button class="btn big" id="wzGo" type="button">See my plan</button></div></div>`);
+  $('wzGo').onclick = () => { S.onboarded = true; save(); closeModal(); setTab('plan'); renderAll(); };
+}
+
+function renderAll() { renderChips(); renderWeekBar(); renderOut(); }
+renderAll();
+if (!S.onboarded && !/demo/.test(location.hash)) openQuiz(true);
+if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => {});
+</script>
+</body></html>
