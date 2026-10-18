@@ -181,6 +181,12 @@ header h1{display:flex;align-items:center;gap:8px}header h1 .logo{width:34px;hei
 .tip.flav{background:#fff4e6;border-left:3px solid #ea580c}
 .gl section.pantry{opacity:.85}
 .gl section.pantry .q::after{content:' · probably have';color:#9a3412;font-size:.75em}
+.card.cost{margin-top:16px;border:2px solid #fed7aa;background:#fffaf5}
+.card.cost h3{margin:0 0 8px}.card.cost h4{margin:12px 0 4px;font-size:.9em;color:#7c2d12}
+.cbig{display:flex;flex-direction:column;gap:2px;margin-bottom:8px}.cbig b{font-size:2em;color:#c2410c}
+.csave{background:#dcfce7;color:#14532d;border-radius:8px;padding:6px 10px;margin:6px 0}
+.ctab{width:100%;border-collapse:collapse;font-size:.92em}.ctab td{padding:4px 2px;border-bottom:1px solid #f1e4d8}.ctab td.num{text-align:right;font-variant-numeric:tabular-nums}
+.ctab tr.sub td{font-weight:700;border-bottom:0}.ctab.opt{color:#57534e}
 </style></head><body>
 <header><div class="wrap"><h1><img class="logo" src="logo.svg" alt="" width="34" height="36"> Chef Momo</h1><div class="chips" id="chips"></div></div></header>
 <main>
@@ -471,7 +477,7 @@ function seasonRecipe(r) {
 RAW.forEach(seasonRecipe);
 // pantry staples → "Spices & pantry (probably have)"
 const PANTRY_RX = /\bsalt\b|black pepper|white pepper|ground |dried |oregano|paprika|chili powder|cumin|coriander|garam|masala|curry powder|za.atar|sumac|baharat|7-spice|shawarma spice|cinnamon|star anise|turmeric|red pepper flakes|gochugaru|aleppo|sichuan|fajita|taco seasoning|tikka|tandoori|biryani|chaat|vanilla|olive oil|avocado oil|sesame oil|vinegar|cornstarch|honey|brown sugar|garlic powder|thyme|dried red chilies|hot sauce/i;
-RAW.forEach(r => r.ing.forEach(i => { if (i.sec === 'G' && PANTRY_RX.test(i.n) && !/seaweed|tahini|rice\b/i.test(i.n)) i.sec = 'S'; }));
+RAW.forEach(r => r.ing.forEach(i => { if (i.sec === 'G' && PANTRY_RX.test(i.n) && !/seaweed|tahini|\brice\b(?! vinegar)/i.test(i.n)) i.sec = 'S'; }));
 
 /* ---------- Storage tags for one-day batch cooking ----------
    fd = days it keeps in the fridge once cooked (USDA: most cooked leftovers 3–4 days); fz = freezes well; fresh = needs day-of cooking (excluded from batch plans).
@@ -1118,6 +1124,70 @@ function fmtQty(q, u, sec, units) {
   return `${r.toFixed(2).replace(/\.?0+$/, '')} ${u}`;
 }
 
+
+/* ---- cost estimate: regular shelf prices (LA area, typical 2026) per recipe unit; weekly-ad sale prices override where matched ---- */
+const PRICE = [ // [regex, {unit: $ per unit}] — first match wins; oz entries are $/oz
+  [/chicken breast milanesa/i, { oz: 5.49 / 16 }], [/chicken breast/i, { oz: 4.49 / 16 }], [/chicken thigh/i, { oz: 3.99 / 16 }], [/ground chicken/i, { oz: 5.99 / 16 }],
+  [/sirloin/i, { oz: 8.99 / 16 }], [/shrimp/i, { oz: 9.99 / 16 }], [/salmon/i, { oz: 11.99 / 16 }], [/ground turkey/i, { oz: 6.49 / 16 }], [/ground beef/i, { oz: 6.99 / 16 }],
+  [/tilapia/i, { oz: 5.99 / 16 }], [/stew meat/i, { oz: 7.99 / 16 }], [/chuck/i, { oz: 7.49 / 16 }], [/flanken|short rib/i, { oz: 9.99 / 16 }], [/ground pork|pork leg \(lean, ground/i, { oz: 4.99 / 16 }], [/pork/i, { oz: 3.49 / 16 }],
+  [/lamb shank/i, { ea: 9 }], [/sausage/i, { link: 1.5 }], [/canned tuna/i, { oz: 0.4 }],
+  [/parmesan/i, { oz: 1.0 }], [/prosciutto/i, { oz: 1.5 }], [/tofu/i, { oz: 0.15 }], [/feta|queso|halebi|mozzarella|jack|cheddar|blue cheese/i, { oz: 0.45 }],
+  [/ricotta|labneh/i, { cup: 2.5 }], [/greek yogurt/i, { cup: 1.75, tbsp: 0.11 }], [/plain yogurt/i, { cup: 1.0 }], [/almond milk/i, { cup: 0.45 }], [/kimchi/i, { cup: 2.5 }], [/egg whites/i, { cup: 2.0 }],
+  [/\beggs?\b/i, { ea: 0.35 }], [/string cheese/i, { ea: 0.5 }], [/protein yogurt/i, { ea: 1.75 }], [/olives/i, { ea: 0.1 }], [/dumpling/i, { ea: 0.1 }], [/crema/i, { tbsp: 0.15 }], [/turkey bacon/i, { slice: 0.35 }], [/butter/i, { tsp: 0.05 }],
+  [/molokhia/i, { oz: 0.2 }], [/udon/i, { pack: 1.25 }], [/fillo/i, { sheet: 0.25 }],
+  [/coconut milk/i, { cup: 1.6 }], [/salsa/i, { cup: 1.5, tbsp: 0.1 }], [/hummus/i, { cup: 2.0, tbsp: 0.12 }], [/broth|dashi/i, { cup: 0.6 }], [/rolled oats|masarepa|grits/i, { cup: 0.4, 'cup dry': 0.5 }],
+  [/arborio/i, { 'cup dry': 1.5 }], [/basmati|glutinous/i, { 'cup dry': 0.8 }], [/rice \(cooked/i, { cup: 0.3 }], [/\brice\b(?! (vinegar|paper|noodle|vermicelli))/i, { 'cup dry': 0.5 }],
+  [/pine nuts/i, { oz: 1.8 }], [/pistachio/i, { oz: 0.9 }], [/walnut/i, { oz: 0.6 }], [/pumpkin seeds/i, { oz: 0.5 }], [/peanuts/i, { oz: 0.3 }], [/noodle|vermicelli|pasta|orzo/i, { oz: 0.2 }],
+  [/pesto/i, { tbsp: 0.4 }], [/curry paste|miso|tahini|chipotle|doubanjiang/i, { tbsp: 0.22 }], [/flour/i, { tbsp: 0.02 }], [/protein powder/i, { scoop: 1.2 }], [/seaweed/i, { pack: 1.0 }],
+  [/rice paper/i, { sheet: 0.1 }], [/pickles/i, { spear: 0.25 }], [/roux/i, { cube: 0.6 }], [/grape leaves/i, { ea: 0.15 }],
+  [/avocado/i, { ea: 1.5 }], [/sweet potato/i, { oz: 0.1 }], [/potato/i, { ea: 0.8, oz: 0.06 }], [/red onion|^onion/i, { ea: 0.8 }], [/bell pepper/i, { ea: 1.25 }], [/^lemon|sweet lemon/i, { ea: 0.6 }], [/^lime/i, { ea: 0.3 }],
+  [/scallion/i, { ea: 0.15 }], [/jalape|green chili|thai chil/i, { ea: 0.12 }], [/medjool/i, { ea: 0.4 }], [/cucumber/i, { ea: 0.4 }], [/bok choy|zucchini/i, { ea: 0.9 }], [/dragon fruit/i, { ea: 3 }],
+  [/banana|carrot/i, { ea: 0.3 }], [/lettuce leaves|radishes/i, { ea: 0.1 }], [/shallot/i, { ea: 0.5 }], [/strawberr|thai basil/i, { cup: 1.75 }], [/mushroom/i, { oz: 0.3 }], [/radish/i, { oz: 0.1 }],
+  [/garlic/i, { clove: 0.1 }], [/ginger/i, { inch: 0.25 }], [/celery/i, { stalk: 0.2 }], [/lemongrass/i, { stalk: 0.5, tbsp: 0.2 }],
+  [/corn tortilla/i, { ea: 0.08 }], [/flour tortillas \(10/i, { ea: 0.35 }], [/flour tortilla/i, { ea: 0.2 }], [/pita|english muffin/i, { ea: 0.55 }], [/tostada/i, { ea: 0.15 }], [/baguette/i, { ea: 3 }], [/lavash/i, { sheet: 1 }], [/ciabatta/i, { slice: 0.4 }], [/bread/i, { slice: 0.25 }],
+  [/kosher salt/i, { tsp: 0.01 }], [/oil/i, { tsp: 0.06, tbsp: 0.18 }], [/honey/i, { tsp: 0.1, tbsp: 0.3 }],
+];
+const DEF_PRICE = { M: { oz: 0.4 }, D: { oz: 0.4, cup: 1.5, ea: 0.5, tbsp: 0.1 }, P: { ea: 0.6, cup: 1.0, bunch: 1.5, tbsp: 0.1, leaf: 0.05, oz: 0.15, inch: 0.25, stalk: 0.3 }, F: { cup: 1.0 }, B: { ea: 0.4, slice: 0.3 },
+  G: { cup: 0.9, 'cup dry': 0.5, oz: 0.25, tbsp: 0.12, tsp: 0.05, ea: 0.2 }, S: { tsp: 0.08, tbsp: 0.2, ea: 0.1, pinch: 0.05 } };
+const EA_LB = { cucumber: 0.25, peach: 0.4, pear: 0.45, anaheim: 0.15, tangerine: 0.2, 'sweet lemon': 0.3, 'dragon fruit': 0.9 };
+function regUnitPrice(n, u, sec) { for (const [re, m] of PRICE) if (re.test(n) && m[u] != null) return m[u]; const d = DEF_PRICE[sec] || {}; return d[u] != null ? d[u] : 0.1; }
+/** sale price per recipe unit from the ad text ('$4.99 lb', '69¢ lb', '2 for $3', '$1.99 ea') — null when it can't be mapped honestly */
+function saleUnitPrice(n, u, sp) {
+  if (!sp || !sp.price) return null; const s = sp.price;
+  const m = s.match(/(\d+) for \$(\d+(?:\.\d+)?)/), d = s.match(/\$(\d+(?:\.\d+)?)/), c = s.match(/(\d+)¢/);
+  const unitP = m ? +m[2] / +m[1] : d ? +d[1] : c ? +c[1] / 100 : null; if (unitP == null) return null;
+  if (/\blb\b/.test(s) && !m) { if (u === 'oz') return unitP / 16; const k = Object.keys(EA_LB).find(x => n.toLowerCase().includes(x)); if (k && u === 'ea') return unitP * EA_LB[k]; if (u === 'cup' && /papaya/i.test(n)) return unitP * 0.33; return null; }
+  if (u === 'ea' && m && /cup|yogurt/i.test(n)) return unitP;
+  const pk = sp.name.match(/(\d+(?:\.\d+)?) ?(oz|lb|ct|L)\b/); if (!pk) return null; const amt = +pk[1], pu = pk[2].toLowerCase();
+  if (pu === 'l' && (u === 'tsp' || u === 'tbsp')) return unitP / (amt * 1000 / (u === 'tsp' ? 5 : 15));
+  if (u === 'cup dry' && pu === 'lb') return unitP / (amt * 2.4);
+  if (u === 'tbsp' && pu === 'oz' && /tahini/i.test(n)) return unitP / (amt * 2);
+  if (u === 'cup' && pu === 'oz' && /frozen|fava|okra/i.test(n)) return unitP / (amt / 5);
+  if (u === 'cup' && pu === 'oz' && /salad|greens/i.test(n)) return unitP / amt;
+  if (u === 'oz' && pu === 'oz') return unitP / amt; if (u === 'oz' && pu === 'lb') return unitP / (amt * 16);
+  if (u === 'cup' && pu === 'lb' && /strawberr/i.test(n)) return unitP / (amt * 3);
+  if (u === 'clove' && pu === 'ct') return unitP / (amt * 10); // garlic: 5 heads × ~10 cloves
+  if (u === 'cup' && pu === 'oz' && /yogurt|almond/i.test(n)) return unitP / (amt / 8);
+  if (u === 'ea' && pu === 'ct' && /egg|tortilla/i.test(n)) return unitP / amt;
+  return null;
+}
+const money = x => '$' + (Math.round(x * 100) / 100).toFixed(2);
+/** cost summary over a grocery list (output of groceryList, optional K section with q) */
+function costSummary(g, plan) {
+  const sec = {}, opt = { pantry: 0, kitchen: 0 }; let total = 0, reg = 0, save = 0, nSaleP = 0;
+  for (const s of Object.keys(g)) for (const x of g[s]) {
+    let c, rc;
+    if (s === 'K') { c = rc = 1.25 * (x.q || 0); opt.kitchen += c; x.cost = c; continue; }
+    rc = Math.max(0.05, x.q * regUnitPrice(x.n, x.u, x.sec || s)); c = rc;
+    const su = x.special ? saleUnitPrice(x.n, x.u, x.special) : null;
+    if (su != null && su * x.q < rc) { c = su * x.q; x.saved = rc - c; nSaleP++; }
+    x.cost = c; x.reg = rc;
+    if (s === 'S') { opt.pantry += c; continue; }
+    sec[s] = (sec[s] || 0) + c; total += c; reg += rc; if (x.saved) save += x.saved;
+  }
+  const days = (plan && plan.days || []).length || 7, meals = (plan && plan.days || []).reduce((a, d) => a + d.meals.length, 0) || days * 3;
+  return { total, regular: reg, savings: save, nSalePriced: nSaleP, bySection: sec, optional: opt, optTotal: opt.pantry + opt.kitchen, perDay: total / days, perMeal: total / meals, days, meals };
+}
 /* ---- prep guide: one Sunday cook day ---- */
 function laneOf(r, eq) { if (eq) { const p = equipPlan(r, eq); if (p.lane) return p.lane; if (r.nocook || !r.equip.length) return 'counter'; if (r.equip.every(q => q === 'ricecooker')) return eq.rice ? 'counter' : 'stove'; return eq.burners > 0 ? 'stove' : (eq.ip ? 'pressure' : 'counter'); }
   if (r.tech.includes('pressure') && r.equip.includes('pressure')) return 'pressure'; if (r.equip.some(e => e === 'oven' || e === 'sheet')) return 'oven'; if (r.nocook || !r.equip.length) return 'counter'; return 'stove'; }
@@ -1198,7 +1268,7 @@ function prepGuide(plan, recipes, { level, known, startMin = 600, equip }) {
     cook: plan.cook.map(c => ({ ...c, name: byId[c.id] && byId[c.id].name })), riceCups, warn, needContainers: needC, nFreeze, equip: eq };
 }
 
-if (typeof module !== 'undefined') module.exports = { CUISINES, LEVELS, DAYS, SECTIONS, TECH, QUIZ, scoreQuiz, macroTargets, fitplanTargets, specialsActive, matchSpecial, saleHits, recommendCuisine, recentCuisines, buildWeekPlan, groceryList, calcMacros, dietFilter, specialSafe, asList, amountText, batchList, inlineAmounts, equipPlan, equipFilter, EQUIP_DEFAULT, FREEZER_CAP, laneOf, servWords, servInfo, portionText, portionVol, macroLine, qtrs, metricText, qtyText, fmtQty, wt, wu, LB_KG, swapCandidates, swapRecipe, finalizeDays, swapName, SWAPS, cuisineFeasible, progressInfo, PACE, prepGuide, mondayOf, defaultWeek, defaultShop, laneOf, reheatOf, addDays, iso, parseISO };
+if (typeof module !== 'undefined') module.exports = { costSummary, regUnitPrice, saleUnitPrice, money, CUISINES, LEVELS, DAYS, SECTIONS, TECH, QUIZ, scoreQuiz, macroTargets, fitplanTargets, specialsActive, matchSpecial, saleHits, recommendCuisine, recentCuisines, buildWeekPlan, groceryList, calcMacros, dietFilter, specialSafe, asList, amountText, batchList, inlineAmounts, equipPlan, equipFilter, EQUIP_DEFAULT, FREEZER_CAP, laneOf, servWords, servInfo, portionText, portionVol, macroLine, qtrs, metricText, qtyText, fmtQty, wt, wu, LB_KG, swapCandidates, swapRecipe, finalizeDays, swapName, SWAPS, cuisineFeasible, progressInfo, PACE, prepGuide, mondayOf, defaultWeek, defaultShop, laneOf, reheatOf, addDays, iso, parseISO };
 </script>
 <script>/* ===== UI ===== */
 const $ = id => document.getElementById(id);
@@ -1371,12 +1441,13 @@ function renderOut() {
   } else if (tab === 'grocery') {
     const g = gList(p, sp); const ck = S.checks[S.cur] = S.checks[S.cur] || {};
     const pgc = p.v === 2 ? prepGuide(p, RECIPES, { level: p.level, known: S.skill.known, equip: S.equip }) : null;
-    if (pgc && pgc.needContainers > 0) g.K = [{ n: 'Meal-prep containers (optional)', u: 'ea', qty: `${pgc.needContainers} ea`, opt: true }];
+    if (pgc && pgc.needContainers > 0) g.K = [{ n: 'Meal-prep containers (optional)', u: 'ea', q: pgc.needContainers, qty: `${pgc.needContainers} ea`, opt: true }];
     const nSale = Object.values(g).flat().filter(x => x.special).length;
     $('out').innerHTML = `<div class="sum"><span>🛒 <b>${esc(w.store || store().full)}</b></span><span>${fmtD(w.shop, { weekday: 'short', month: 'short', day: 'numeric' })}</span>${nSale ? `<span class="pill sale" style="padding:6px 12px">🏷 ${nSale} on sale</span>` : ''}<button class="btn sm sec" id="glCopy" type="button">Copy</button></div>
     ${safeNote()}${pgc && pgc.needContainers > 0 ? `<div class="note warn small">🥡 Low on containers: you need ${pgc.nContainers}, you have ${S.equip.containers ? S.equip.nCont : 0}. Added ${pgc.needContainers} to the list (optional).</div>` : ''}<div class="gl">${[...Object.keys(SECTIONS), 'K'].filter(s => g[s]).map(s => `<section${s === 'S' ? ' class="pantry"' : ''}><h4>${SECTIONS[s] || '🥡 Kitchen (optional)'}</h4>${s === 'S' ? '<p class="small muted">Staples you probably have. Check the cupboard before buying.</p>' : ''}${g[s].map(x => { const k = x.n + '|' + x.u; return `<label class="it"><input type="checkbox" data-k="${esc(k)}" ${ck[k] ? 'checked' : ''}><span class="${ck[k] ? 'done' : ''}">${esc(x.n)}${x.special ? ` <span class="pill sale" title="${esc(x.special.name)}">${esc(x.special.price)}</span>` : ''}</span><span class="q">${esc(x.qty)}</span></label>`; }).join('')}</section>`).join('')}</div>`;
-    $('out').querySelectorAll('input[type=checkbox]').forEach(c => c.onchange = () => { ck[c.dataset.k] = c.checked; save(); c.nextElementSibling.classList.toggle('done', c.checked); });
-    $('glCopy').onclick = e => { const txt = [...Object.keys(SECTIONS), 'K'].filter(s => g[s]).map(s => (SECTIONS[s] || 'Kitchen (optional)').toUpperCase() + '\n' + g[s].map(x => `- ${x.n}, ${x.qty}${x.special ? ' [SALE ' + x.special.price + ']' : ''}`).join('\n')).join('\n\n'); navigator.clipboard && navigator.clipboard.writeText(txt).catch(() => {}); e.target.textContent = 'Copied ✓'; };
+        $('out').insertAdjacentHTML('beforeend', costCard(costSummary(g, p), w));
+$('out').querySelectorAll('input[type=checkbox]').forEach(c => c.onchange = () => { ck[c.dataset.k] = c.checked; save(); c.nextElementSibling.classList.toggle('done', c.checked); });
+    $('glCopy').onclick = e => { const cs = costSummary(g, p); const txt = [...Object.keys(SECTIONS), 'K'].filter(s => g[s]).map(s => (SECTIONS[s] || 'Kitchen (optional)').toUpperCase() + '\n' + g[s].map(x => `- ${x.n}, ${x.qty}${x.special ? ' [SALE ' + x.special.price + ']' : ''}`).join('\n')).join('\n\n') + `\n\nESTIMATED TOTAL: ${money(cs.total)} (${money(cs.perDay)}/day, ${money(cs.perMeal)}/meal)${cs.savings > 0.005 ? `, saves ${money(cs.savings)} with specials` : ''}`; navigator.clipboard && navigator.clipboard.writeText(txt).catch(() => {}); e.target.textContent = 'Copied ✓'; };
   } else if (tab === 'prep') {
     if (p.v !== 2) { $('out').innerHTML = '<div class="note warn">This week was made with the old planner. Tap “Remake week” to get a Sunday cook-day plan.</div>'; return; }
     const pg = prepGuide(p, RECIPES, { level: p.level, known: S.skill.known, equip: S.equip });
@@ -1729,5 +1800,18 @@ function renderAll() { document.body.dataset.tab = tab; renderChips(); renderWee
 renderAll();
 if (!S.onboarded && !/demo/.test(location.hash)) openQuiz(true);
 if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => {});
+
+/* cost summary card at the end of the Groceries tab */
+function costCard(cs, w) {
+  const SN = { P: 'Produce', M: 'Meat & seafood', D: 'Dairy, eggs & deli', B: 'Bakery & tortillas', F: 'Frozen', G: 'Pantry & international' };
+  const rows = Object.keys(SN).filter(s => cs.bySection[s]).map(s => `<tr><td>${SN[s]}</td><td class="num">${money(cs.bySection[s])}</td></tr>`).join('');
+  const opt = [cs.optional.pantry > 0.005 ? `<tr><td>🧂 Spices & pantry (probably have)</td><td class="num">${money(cs.optional.pantry)}</td></tr>` : '', cs.optional.kitchen > 0.005 ? `<tr><td>🥡 Meal-prep containers</td><td class="num">${money(cs.optional.kitchen)}</td></tr>` : ''].join('');
+  return `<div class="card cost" id="costCard"><h3>💵 Estimated cost this week</h3>
+    <div class="cbig"><b id="costTotal">${money(cs.total)}</b><span>${money(cs.perDay)} per day · ${money(cs.perMeal)} per meal <span class="muted">(${cs.meals} meals &amp; snacks over ${cs.days} days)</span></span></div>
+    ${cs.savings > 0.005 ? `<div class="csave">🏷 You save <b id="costSave">${money(cs.savings)}</b> with this week’s specials <span class="muted">(regular ${money(cs.regular)})</span></div>` : '<div class="small muted">No sale items matched this week.</div>'}
+    <table class="ctab"><tbody>${rows}<tr class="sub"><td>Groceries total</td><td class="num">${money(cs.total)}</td></tr></tbody></table>
+    ${opt ? `<h4>Optional, not in the total</h4><table class="ctab opt"><tbody>${opt}<tr class="sub"><td>If you buy them all</td><td class="num">${money(cs.total + cs.optTotal)}</td></tr></tbody></table>` : ''}
+    <p class="small muted">Prices are estimates for the amounts used in your plan; packages may round up. Sale prices come from the ${esc((w && w.store) || 'store')} weekly ad where an item matches; everything else uses typical regular prices.</p></div>`;
+}
 </script>
 </body></html>
