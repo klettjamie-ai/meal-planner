@@ -194,6 +194,9 @@ header h1{display:flex;align-items:center;gap:8px}header h1 .logo{width:34px;hei
 .stc .okc{color:#166534}.stsug{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.stsug .chip{font-size:13px}
 .stgrp{margin:14px 0}.stgrp h3{margin:6px 0;font-size:1.05em}
 .stsug .chip{background:#fff7ed;color:#7c2d12;border:1.5px solid #fed7aa;border-radius:999px;padding:6px 12px;min-height:40px;font:inherit;font-size:13px;cursor:pointer}
+
+.vegd{font-size:12.5px;color:#15803d;font-weight:600;margin:6px 0 2px}
+.vegseg button{flex:1 1 30%;min-height:44px}
 </style></head><body>
 <header><div class="wrap"><h1><img class="logo" src="logo.svg" alt="" width="34" height="36"> Chef Momo</h1><div class="chips" id="chips"></div></div></header>
 <main>
@@ -585,6 +588,39 @@ RAW.forEach(seasonRecipe);
 const PANTRY_RX = /\bsalt\b|black pepper|white pepper|ground |dried |oregano|paprika|chili powder|cumin|coriander|garam|masala|curry powder|za.atar|sumac|baharat|7-spice|shawarma spice|cinnamon|star anise|turmeric|red pepper flakes|gochugaru|aleppo|sichuan|fajita|taco seasoning|tikka|tandoori|biryani|chaat|vanilla|olive oil|avocado oil|sesame oil|vinegar|cornstarch|honey|brown sugar|garlic powder|thyme|dried red chilies|hot sauce/i;
 RAW.forEach(r => r.ing.forEach(i => { if (i.sec === 'G' && PANTRY_RX.test(i.n) && !/seaweed|tahini|\brice\b(?! vinegar)/i.test(i.n)) i.sec = 'S'; }));
 
+/* ---------- Veggie sides (meal 'v'): simple, cuisine-fitting, batch-friendly; added by the Veggies preference ---------- */
+const SIDE_FIT = {
+  vs1: ['Italian', 'Mediterranean', 'American', 'Middle Eastern', 'Armenian', 'Polish', 'Latin American'], vs2: ['Chinese', 'Japanese', 'Korean', 'Vietnamese', 'Thai'],
+  vs3: ['Chinese', 'Vietnamese', 'Thai', 'Japanese', 'Korean'], vs4: ['Mexican', 'Latin American'], vs5: ['Indian', 'Middle Eastern', 'Mediterranean', 'Armenian'],
+  vs6: ['Mediterranean', 'Italian', 'Armenian', 'Polish', 'American', 'Middle Eastern'], vs7: ['Korean', 'Japanese', 'Chinese'], vs8: ['Polish', 'American', 'Mediterranean'],
+  vs9: ['Chinese', 'Thai', 'Vietnamese', 'Korean', 'Japanese', 'Indian'], vs10: ['Mexican', 'Latin American', 'American'], vs11: ['Indian', 'Thai', 'Vietnamese'],
+};
+R('vs1','Garlic-lemon roasted broccoli','Side','v',95,5,10,4,1,5,25,'roast','sheet','broccoli florets;1.5;cup;P|garlic;1;clove;P|lemon;0.25;ea;P|olive oil;1;tsp;S|red pepper flakes;0.125;tsp;S|black pepper;0.125;tsp;S|kosher salt;0.25;tsp;S','Toss broccoli with oil, sliced garlic, pepper flakes, black pepper and the kosher salt. Roast at 425°F 18–20 min until the edges char. Pack lemon wedges separately and squeeze over after reheating.');
+R('vs2','Smashed cucumber salad','Side','v',55,2,7,2.5,1,8,10,'dice','','persian cucumbers;2;ea;P|garlic;1;clove;P|rice vinegar;2;tsp;S|soy sauce;1;tsp;G|toasted sesame oil;0.5;tsp;S|red pepper flakes;0.125;tsp;S|kosher salt;0.125;tsp;S','Smash cucumbers with the flat of a knife and cut into bite-size pieces. Salt and drain 10 min. Toss with grated garlic, rice vinegar, soy sauce, sesame oil and pepper flakes. Keeps crunchy 3 days.');
+R('vs3','Garlic sautéed bok choy','Side','v',70,3,6,4.5,1,8,10,'stirfry','pan','baby bok choy;2;ea;P|garlic;2;clove;P|ginger;0.25;inch;P|neutral oil;1;tsp;S|oyster sauce;1;tsp;G|white pepper;0.0625;tsp;S|kosher salt;0.125;tsp;S','Halve bok choy and rinse well. Sizzle garlic and ginger in hot oil 30 s, add bok choy and a splash of water, cover 2 min. Toss with oyster sauce, white pepper and the kosher salt.');
+R('vs4','Calabacitas — zucchini, tomato & chile sauté','Side','v',80,3,10,3.5,1,10,20,'dice','pan','zucchini;1;ea;P|tomato;0.5;ea;P|onion;0.25;ea;P|jalapeño;0.25;ea;P|garlic;1;clove;P|olive oil;1;tsp;S|ground cumin;0.25;tsp;S|Mexican oregano;0.25;tsp;S|kosher salt;0.25;tsp;S|lime;0.25;ea;P','Cook onion, jalapeño and garlic in oil 3 min. Add diced zucchini, cumin, oregano and the kosher salt; cook 5 min, then the tomato 3 min more until just tender. Squeeze lime over at serving.');
+R('vs5','Cumin-turmeric roasted cauliflower','Side','v',92,4,11,3.5,1,5,30,'roast','sheet','cauliflower florets;1.5;cup;P|olive oil;1;tsp;S|ground cumin;0.5;tsp;S|ground turmeric;0.25;tsp;S|Kashmiri chili powder;0.125;tsp;S|garlic;1;clove;P|kosher salt;0.25;tsp;S|lemon;0.125;ea;P|cilantro;1;tbsp;P','Toss cauliflower with oil, cumin, turmeric, chili, minced garlic and the kosher salt. Roast at 425°F 25 min, turning once, until golden. Finish with lemon and cilantro at serving.');
+R('vs6','Lemon-oregano green beans','Side','v',75,3,9,3.5,1,5,15,'simmer','pot,pan','green beans;1;cup;P|garlic;1;clove;P|olive oil;1;tsp;S|dried oregano;0.25;tsp;S|black pepper;0.125;tsp;S|kosher salt;0.25;tsp;S|lemon;0.125;ea;P','Blanch beans in salted boiling water 4 min, drain. Toss in a hot pan with oil and garlic 2 min, then oregano, pepper and the rest of the salt. Squeeze lemon over at serving.');
+R('vs7','Sigeumchi namul — sesame spinach','Side','v',60,4,5,2.5,1,8,10,'simmer','pot','spinach;4;cup;P|garlic;1;clove;P|toasted sesame oil;0.5;tsp;S|sesame seeds;0.5;tsp;G|soy sauce;1;tsp;G|scallions;0.5;ea;P|kosher salt;0.0625;tsp;S','Blanch spinach 30 s, rinse cold and squeeze dry. Toss with grated garlic, soy sauce, sesame oil, scallion, sesame seeds and a pinch of salt.');
+R('vs8','Surówka — cabbage & carrot slaw with dill','Side','v',70,2,10,3,1,10,10,'dice','','cabbage;1.5;cup;P|carrot;1;ea;P|lemon;0.25;ea;P|dill;1;tbsp;P|olive oil;1;tsp;S|caraway seeds;0.125;tsp;S|black pepper;0.125;tsp;S|kosher salt;0.25;tsp;S','Shred cabbage, grate carrot, and massage with the kosher salt 1 min. Toss with lemon juice, oil, caraway, pepper and dill. Gets better by day 2.');
+R('vs9','Garlic stir-fried green beans','Side','v',75,3,9,3.5,1,8,12,'stirfry','pan','green beans;1;cup;P|garlic;2;clove;P|ginger;0.25;inch;P|neutral oil;1;tsp;S|soy sauce;1;tsp;G|red pepper flakes;0.125;tsp;S|kosher salt;0.0625;tsp;S','Stir-fry beans in hot oil 5–6 min until blistered. Add garlic, ginger and pepper flakes 1 min, then soy sauce and a pinch of salt. Freezes fine; reheat in a hot pan.');
+R('vs10','Rajas — roasted peppers & onions','Side','v',80,2,12,3,1,5,25,'roast','sheet','bell pepper;1;ea;P|onion;0.5;ea;P|poblano pepper;0.5;ea;P|olive oil;1;tsp;S|ground cumin;0.25;tsp;S|smoked paprika;0.25;tsp;S|kosher salt;0.25;tsp;S|lime;0.25;ea;P','Slice peppers and onion into strips, toss with oil, cumin, paprika and the kosher salt. Roast at 425°F 20 min. Squeeze lime over at serving.');
+R('vs11','Cabbage & pea thoran-style stir-fry','Side','v',85,4,11,3.5,1,10,15,'stirfry','pan','cabbage;1.5;cup;P|frozen peas;0.25;cup;F|neutral oil;1;tsp;S|black mustard seeds;0.25;tsp;S|ground turmeric;0.25;tsp;S|green chili;0.25;ea;P|garlic;1;clove;P|kosher salt;0.25;tsp;S|lime;0.125;ea;P','Pop mustard seeds in hot oil, add garlic and chili 30 s, then shredded cabbage, peas, turmeric and the kosher salt. Cook 6 min until just tender. Squeeze lime over at serving.');
+const SIDE_STORE = { vs1: { fd: 4, fz: true }, vs2: { fd: 3, fz: false }, vs3: { fd: 3, fz: false }, vs4: { fd: 4, fz: false }, vs5: { fd: 4, fz: true }, vs6: { fd: 4, fz: true }, vs7: { fd: 3, fz: false }, vs8: { fd: 4, fz: false }, vs9: { fd: 4, fz: true }, vs10: { fd: 4, fz: true }, vs11: { fd: 4, fz: false } };
+RAW.filter(r => r.meal === 'v').forEach(r => { const t = SIDE_STORE[r.id]; r.fresh = false; r.fd = t.fd; r.fz = t.fz; r.nocook = false; r.side = true; r.fit = SIDE_FIT[r.id];
+  r.note = r.fz ? 'Freezes OK; reheat in a hot pan or oven to keep some bite.' : 'Fridge only; doesn\u2019t freeze well.'; r.sweet = false; r.seasonAdded = [];
+  r.flavor = 'Sides lose punch in the fridge: salt them a touch more and add the citrus or herbs after reheating.'; });
+
+/* ---------- Veggie servings per portion (1 serving ≈ ½ cup chopped / 1 cup raw leafy ≈ 80 g) ---------- */
+const VEG_RX = /broccoli|cauliflower|spinach|kale|cabbage|bok choy|lettuce(?! leaves)|greens|arugula|zucchini|squash|pumpkin|eggplant|bell pepper|poblano|anaheim|tomato(?!.*(paste|sauce|powder))|tomatillo|cucumber|carrot|celery|\bonion|mushroom|green beans|\bpeas\b|okra|asparagus|bean sprouts|radish|daikon|beet|leek|jicama|chard|collard|watercress|morning glory|bamboo|artichoke|fennel bulb|sauerkraut|kimchi|molokhia|napa|cabbage|edamame|corn kernels|mixed veg|stir-fry veg|peppers|chayote|nopal|bean sprout|banana blossom|lotus/i;
+const VEG_NO = /powder|paste|broth|stock|juice|seed|dried|oil|sauce(?! .*tomato)|ketchup|flakes|soup mix|pickled ginger|green onion|scallion|cucumber pickle|onion rings/i;
+const LEAFY = /spinach|kale|lettuce|greens|arugula|chard|collard|watercress|morning glory|bean sprouts|bean sprout|cabbage|napa|molokhia/i;
+const VEG_EA_G = [[/eggplant/, 450], [/zucchini|squash/, 200], [/bell pepper|poblano/, 120], [/tomato(?!illo)/, 120], [/cucumber/, 110], [/\bonion/, 110], [/bok choy/, 100], [/leek/, 90], [/beet/, 80], [/carrot/, 60], [/anaheim/, 60], [/tomatillo/, 35], [/radish/, 10], [/celery/, 40], [/.*/, 80]];
+function vegG(i) { const n = i.n.toLowerCase(); if (!['P', 'F', 'G'].includes(i.sec) || !VEG_RX.test(n) || VEG_NO.test(n)) return 0;
+  if (i.u === 'cup') return i.q * (LEAFY.test(n) ? 80 : 160); if (i.u === 'oz') return i.q * 28.35; if (i.u === 'ea') return i.q * VEG_EA_G.find(([re]) => re.test(n))[1];
+  if (i.u === 'stalk') return i.q * 40; if (i.u === 'tbsp') return i.q * 8; if (i.u === 'leaf') return i.q * 10; return 0; }
+RAW.forEach(r => { r.vegG = Math.round(r.ing.reduce((s, i) => s + vegG(i), 0)); r.veg = Math.round(r.vegG / 80 * 10) / 10; });
+
 
 /* ---------- Allergen & protein tags (keyword rules on ingredient names; conservative) ---------- */
 const ALLERGENS = [['peanut', 'Peanuts'], ['treenut', 'Tree nuts'], ['dairy', 'Milk / dairy'], ['egg', 'Eggs'], ['wheat', 'Wheat / gluten'], ['soy', 'Soy'], ['fish', 'Fish'], ['shellfish', 'Shellfish'], ['sesame', 'Sesame']];
@@ -618,7 +654,7 @@ RAW.forEach(r => { let g = 0; r.ing.forEach(i => { const n = i.n.toLowerCase(), 
   if (!r.ing.some(i => i.u === 'cup' && /broth|water|stock|milk/.test(i.n)) && /\bsoup|stew|jjigae|pho|ramen|congee|jok|chá|chili\b|dal|curry|caldo|pozole|molokhia/i.test(r.name)) g *= 1.35;
   r.portionG = Math.max(40, Math.round(g / 10) * 10); });
 
-if (typeof module !== 'undefined') module.exports = { RAW, ALLERGENS, PROTEINS, tagIngredient };
+if (typeof module !== 'undefined') module.exports = { RAW, ALLERGENS, PROTEINS, tagIngredient, vegG };
 
 /* Super King Markets weekly ad — transcribed verbatim from https://www.superkingmarkets.com/weekly-ad on 2026-10-17.
    Ad text: "Prices valid 10/12/26 through 10/18/26". Site source notes Culver City uses the main Weekly Deals ad.
@@ -942,7 +978,7 @@ function amountText(q, u, units) {
   const n = t(q); return `${n} ${u}${q > 1.125 && !/s$/.test(u) && ['clove', 'slice', 'link', 'leaf', 'stalk', 'sheet', 'spear', 'pack', 'cube', 'bunch', 'scoop', 'pinch'].includes(u) ? (u === 'leaf' ? '' : u === 'bunch' || u === 'pinch' ? 'es' : 's') : ''}`;
 }
 /** every ingredient of r scaled to sv total servings */
-function batchList(r, sv, units, diet) { return r.ing.map(i => ({ n: swapName(i.n, diet), amt: amountText(i.q * sv, i.u, units), sec: i.sec })); }
+function batchList(r, sv, units, diet) { return r.ing.map(i => ({ n: swapName(i.n, diet) + (i.vegUp ? ' 🥦' : ''), amt: amountText(i.q * sv, i.u, units) + (i.trimmed ? ' (trimmed)' : ''), sec: i.sec, vegUp: !!i.vegUp, trimmed: !!i.trimmed })); }
 const STOP = new Set(['and', 'with', 'the', 'fresh', 'large', 'small', 'canned', 'frozen', 'dried', 'ground', 'boneless', 'skinless', 'lean', 'light', 'plain', 'whole', 'low', 'sodium', 'raw', 'cooked', 'white', 'red', 'green', 'or']);
 /** put batch amounts into step text before the first mention of each ingredient ("season 3.2 lb chicken with 2 tbsp cumin") */
 function inlineAmounts(text, r, sv, units, diet) {
@@ -1046,6 +1082,42 @@ function recommendCuisine({ recipes, history, weekISO, targets, level, specials,
   return { cuisine: best.cuisine, reasons, ranked, recent, combo, comboWhy };
 }
 
+
+/* ---- Veggies preference: normal / more / lots ---- */
+const VEG_MODES = { normal: { label: 'Normal', vx: 1, target: 0, w: 0 }, more: { label: 'More veggies', vx: 1.5, target: 7, w: 0.3 }, lots: { label: 'Lots of veggies', vx: 2, target: 10, w: 0.5 } };
+const VEG_KCAL = 25, VEG_C = 5, VEG_P = 1.5;          // per ½-cup serving of mixed cooked veg
+// starch kcal per recipe unit (only continuous units get trimmed; whole tortillas/slices stay whole)
+const STARCH = [[/rice \(cooked|cooked rice/i, { cup: 205 }], [/\brice\b(?! (vinegar|paper|wine))|basmati|arborio|jasmine/i, { 'cup dry': 680 }], [/quinoa/i, { 'cup dry': 625 }], [/couscous|bulgur|freekeh/i, { 'cup dry': 600 }],
+  [/barley/i, { 'cup dry': 700 }], [/buckwheat|kasha/i, { 'cup dry': 570 }], [/rolled oats|\boats\b/i, { 'cup dry': 300, cup: 300 }], [/noodle|vermicelli|pasta|orzo|spaghetti|udon|soba|ramen|fideo/i, { oz: 100 }],
+  [/sweet potato/i, { oz: 25 }], [/potato/i, { oz: 22 }], [/masarepa|grits|polenta|cornmeal/i, { cup: 420, 'cup dry': 420 }]];
+const starchK = i => { for (const [re, m] of STARCH) if (re.test(i.n)) return m[i.u] || 0; return 0; };
+const _vegG = typeof vegG === 'function' ? vegG : (typeof require === 'function' ? require('./recipes.js').vegG : () => 0);
+/** clone recipes with veggies scaled up and starch trimmed so calories stay about the same */
+function vegBoost(recipes, mode) {
+  const M = VEG_MODES[mode] || VEG_MODES.normal; if (M.vx === 1) return recipes;
+  return recipes.map(r => {
+    const vx = r.meal === 'm' ? M.vx : r.meal === 'b' && r.veg >= 0.5 ? 1 + (M.vx - 1) / 2 : 1;
+    if (vx === 1 || !(r.veg > 0)) return r;
+    const addV = r.veg * (vx - 1), addK = addV * VEG_KCAL;
+    const sK = r.ing.reduce((s, i) => s + i.q * starchK(i), 0);
+    const trimK = sK > 0 ? Math.min(addK, 0.35 * sK) : 0, tf = sK > 0 ? 1 - trimK / sK : 1;
+    const ing = r.ing.map(i => _vegG(i) > 0 ? { ...i, q: +(i.q * vx).toFixed(3), vegUp: true } : starchK(i) > 0 && tf < 1 ? { ...i, q: +(i.q * tf).toFixed(3), trimmed: true } : i);
+    const dk = addK - trimK;
+    return { ...r, ing, veg: Math.round(r.veg * vx * 10) / 10, vegG: Math.round(r.vegG * vx), kcal: Math.round(r.kcal + dk), c: Math.round(r.c + addV * VEG_C - trimK * 0.85 / 4), p: Math.round(r.p + addV * VEG_P),
+      vegBoost: { vx, trim: +(1 - tf).toFixed(2), mode } };
+  });
+}
+const vegNote = r => r && r.vegBoost ? `🥦 ${r.vegBoost.vx}× veggies${r.vegBoost.trim > 0.01 ? `, ${Math.round(r.vegBoost.trim * 100)}% less rice/noodles/potato` : ''} to keep calories on target.` : '';
+const dayVeg = (d, by) => Math.round(d.meals.reduce((s, m) => s + ((by[m.id] && by[m.id].veg) || 0) * m.sv, 0) * 2) / 2;
+/** choose up to 2 veggie sides for the week's cuisines: one fridge side for early days, one freezer-friendly for later */
+function pickSides(recipes, CU, R) {
+  const all = recipes.filter(r => r.meal === 'v'); const fits = all.filter(r => (r.fit || []).some(c => CU.includes(c)));
+  const sc = r => r.veg + (R ? R() : 0) + ((r.fit || []).some(c => c === CU[0]) ? 0.5 : 0);
+  const fz = (fits.filter(r => r.fz).sort((a, b) => sc(b) - sc(a))[0]) || all.filter(r => r.fz).sort((a, b) => sc(b) - sc(a))[0] || null;
+  const fr = fits.filter(r => r !== fz && !r.fz).sort((a, b) => sc(b) - sc(a))[0] || fits.filter(r => r !== fz).sort((a, b) => sc(b) - sc(a))[0] || null;
+  return { early: fr || fz, late: fz || fr };
+}
+
 /* ---- week builder ---- */
 function pickRecipes(pool, n, scoreFn) {
   const s = pool.map(x => ({ x, s: scoreFn(x) })).sort((a, b) => b.s - a.s).map(o => o.x);
@@ -1053,7 +1125,8 @@ function pickRecipes(pool, n, scoreFn) {
 }
 const ROUND = x => Math.round(x * 4) / 4;
 
-function buildWeekPlan({ recipes, cuisine, weekISO, targets, level, known, maybe, stretch, specials, seed, favs }) {
+function buildWeekPlan({ recipes, cuisine, weekISO, targets, level, known, maybe, stretch, specials, seed, favs, veg }) {
+  const VM = VEG_MODES[veg] || VEG_MODES.normal; veg = VEG_MODES[veg] ? veg : 'normal';
   const FAV = new Set(favs || []);
   const R = rng(`${seed || ''}|${weekISO}|${cuisine}`);
   const knownSet = new Set(known || []), maybeSet = new Set(maybe || []);
@@ -1062,7 +1135,7 @@ function buildWeekPlan({ recipes, cuisine, weekISO, targets, level, known, maybe
   const score = x => {
     const pPct = x.p * 4 / x.kcal;
     const techKnown = x.tech.length ? x.tech.reduce((a, t) => a + (knownSet.has(t) ? 1 : maybeSet.has(t) ? 0.5 : 0), 0) / x.tech.length : 1;
-    return 3 * (1 - Math.min(1, Math.abs(pPct - Math.max(tgtPct, 0.25)) / 0.2)) + 0.25 * Math.min(saleHits(x, specials).length, 4) + 0.6 * techKnown + (x.fz ? 0.8 : 0) + 0.1 * Math.min(x.fd, 5) - 0.004 * x.active + 1.2 * R() + (FAV.has(x.id) ? 1.5 : 0);
+    return 3 * (1 - Math.min(1, Math.abs(pPct - Math.max(tgtPct, 0.25)) / 0.2)) + 0.25 * Math.min(saleHits(x, specials).length, 4) + 0.6 * techKnown + (x.fz ? 0.8 : 0) + 0.1 * Math.min(x.fd, 5) - 0.004 * x.active + 1.2 * R() + (FAV.has(x.id) ? 1.5 : 0) + VM.w * Math.min(x.veg || 0, 4);
   };
   const CU = asList(cuisine); const multi = CU.length > 1; cuisine = CU.join(' + ');
   const C = recipes.filter(x => CU.includes(x.cuisine) && !x.fresh);
@@ -1123,7 +1196,7 @@ function buildWeekPlan({ recipes, cuisine, weekISO, targets, level, known, maybe
     let best = null;
     for (const a of M) for (const b of M) {
       if (a === b && M.length > 1) continue; if (!ok(a, k) || !ok(b, k)) continue;
-      const sc = [a, b].reduce((s, r) => s - 2 * Math.max(0, uses.get(r.id) + 1 - q) - 0.3 * uses.get(r.id) + (k <= r.fd ? 1 : 0) + (!r.fz ? 2 : 0), 0) + (a === b ? -20 : 0);
+      const sc = [a, b].reduce((s, r) => s - 2 * Math.max(0, uses.get(r.id) + 1 - q) - 0.3 * uses.get(r.id) + (k <= r.fd ? 1 : 0) + (!r.fz ? 2 : 0), 0) + (a === b ? -20 : 0) - 8 * Math.max(0, Math.max(tgtPct, 0.25) - (a.p * 4 / a.kcal + b.p * 4 / b.kcal) / 2);
       if (!best || sc > best.sc) best = { sc, a, b };
     }
     if (!best) { best = { a: M[0], b: M[1] || M[0] }; notes.push(`${DAYS[k - 1]}: nothing keeps that long, so eat the oldest portions first.`); }
@@ -1132,26 +1205,33 @@ function buildWeekPlan({ recipes, cuisine, weekISO, targets, level, known, maybe
     uses.set(bc.id, uses.get(bc.id) + 1);
     daysPlan.push({ k, b: bc, l: best.a, d: best.b, sn: SN.filter(r => ok(r, k) || r.nocook), must: snack4 ? snack4.id : null });
   }
+  // veggies: add a simple cuisine-fitting side on days that fall short of the target (servings re-fit macros below)
+  if (VM.target) { const sides = pickSides(recipes, CU, R); const used = new Set();
+    for (const dp of daysPlan) { const base = (dp.b.veg || 0) + (dp.l.veg || 0) + (dp.d.veg || 0); const need = VM.target - base; if (need <= 0.25) continue;
+      const side = [dp.k <= 3 ? sides.early : sides.late, sides.late, sides.early].find(r => r && ok(r, dp.k)); if (!side) continue;
+      dp.vs = [side, Math.min(2, Math.max(1, Math.ceil(need / side.veg * 2) / 2))]; used.add(side.name); }
+    notes.push(`🥦 ${VM.label}: vegetables in the mains are scaled up ×${VM.vx} (a little less rice/noodles/potato to stay on target)${used.size ? `, plus ${[...used].join(' / ')} on the side` : ''}. Aim: ${VM.target}+ servings a day.`); }
   const { days, cook } = finalizeDays(daysPlan, weekISO, targets);
-  return { v: 2, cuisine, cuisines: CU, weekISO, cookDay: addDays(weekISO, -1), targets, level, stretchId: stretchR ? stretchR.id : null, notes, days, cook, snacks: SN.map(x => x.id), created: new Date().toISOString(), seed: seed || '' };
+  return { v: 2, veg, cuisine, cuisines: CU, weekISO, cookDay: addDays(weekISO, -1), targets, level, stretchId: stretchR ? stretchR.id : null, notes, days, cook, snacks: SN.map(x => x.id), created: new Date().toISOString(), seed: seed || '' };
 }
 
 /* ---- grocery list ---- */
 
 /** daysPlan: [{k, b, l, d, sn:[recipes]}] → scaled days + Sunday cook list */
 function finalizeDays(daysPlan, weekISO, targets) {
-  const days = daysPlan.map(({ k, b, l, d, sn, must }, i) => {
+  const days = daysPlan.map(({ k, b, l, d, sn, must, vs }, i) => {
     let best = null;
-    for (const sb of [0.75, 1, 1.25, 1.5, 2]) for (const sm of [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5]) for (const sd of [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5]) for (const s of [[], ...sn.map(x => [x]), sn.length > 1 ? sn : null, sn.length ? [sn[sn.length - 1], sn[sn.length - 1]] : null].filter(Boolean).filter(s => !must || !sn.some(x => x.id === must) || s.some(x => x.id === must))) {
-      const items = [[b, sb], [l, sm], [d, sd], ...s.map(x => [x, 1])];
+    for (const sv of vs ? [...new Set([vs[1], Math.max(0.5, vs[1] - 0.5), 0.5])] : [0]) for (const sb of [0.75, 1, 1.25, 1.5, 2]) for (const sm of [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5]) for (const sd of [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5]) for (const s of [[], ...sn.map(x => [x]), sn.length > 1 ? sn : null, sn.length ? [sn[sn.length - 1], sn[sn.length - 1]] : null].filter(Boolean).filter(s => !must || !sn.some(x => x.id === must) || s.some(x => x.id === must))) {
+      const items = [[b, sb], [l, sm], [d, sd], ...(vs ? [[vs[0], sv]] : []), ...s.map(x => [x, 1])];
       const t = items.reduce((a, [r, m]) => ({ kcal: a.kcal + r.kcal * m, p: a.p + r.p * m, c: a.c + r.c * m, f: a.f + r.f * m }), { kcal: 0, p: 0, c: 0, f: 0 });
-      const cost = Math.abs(t.kcal - targets.kcal) / targets.kcal + 1.5 * Math.max(0, targets.p - t.p) / targets.p + 0.3 * Math.max(0, t.p - 1.5 * targets.p) / targets.p + 0.01 * s.length + 0.02 * Math.abs(sm - sd);
-      if (!best || cost < best.cost) best = { cost, t, sb, sm, sd, s };
+      const cost = Math.abs(t.kcal - targets.kcal) / targets.kcal + 1.5 * Math.max(0, targets.p - t.p) / targets.p + 0.3 * Math.max(0, t.p - 1.5 * targets.p) / targets.p + 0.01 * s.length + 0.02 * Math.abs(sm - sd) + (vs ? 0.03 * (vs[1] - sv) : 0);
+      if (!best || cost < best.cost) best = { cost, t, sb, sm, sd, s, sv };
     }
     const st = r => r.nocook ? 'grab' : (k <= r.fd ? 'fridge' : 'freezer');
     const meals = [{ slot: 'Breakfast', id: b.id, sv: best.sb, st: st(b) }, { slot: 'Lunch', id: l.id, sv: best.sm, st: st(l) }, { slot: 'Dinner', id: d.id, sv: best.sd, st: st(d) }]
-      .concat(best.s.map(x => ({ slot: 'Snack', id: x.id, sv: 1, st: st(x) })));
-    return { day: DAYS[i], date: addDays(weekISO, i), meals, tot: { kcal: Math.round(best.t.kcal), p: Math.round(best.t.p), c: Math.round(best.t.c), f: Math.round(best.t.f) } };
+      .concat(vs ? [{ slot: 'Side', id: vs[0].id, sv: best.sv, st: st(vs[0]) }] : []).concat(best.s.map(x => ({ slot: 'Snack', id: x.id, sv: 1, st: st(x) })));
+    const veg = Math.round(meals.reduce((a, m) => a + ([b, l, d, vs && vs[0], ...best.s].find(r => r && r.id === m.id).veg || 0) * m.sv, 0) * 2) / 2;
+    return { day: DAYS[i], date: addDays(weekISO, i), meals, veg, tot: { kcal: Math.round(best.t.kcal), p: Math.round(best.t.p), c: Math.round(best.t.c), f: Math.round(best.t.f) } };
   });
   const ids = [...new Set(days.flatMap(d => d.meals.map(m => m.id)))];
   const cook = ids.map(id => ({ when: addDays(weekISO, -1), id, sv: ROUND(days.reduce((s, d) => s + d.meals.filter(m => m.id === id).reduce((a, m) => a + m.sv, 0), 0)),
@@ -1174,7 +1254,7 @@ function swapCandidates({ plan, fromId, recipes, all, level, known, favs, anyCui
   const pp = x => x.p * 4 / x.kcal;
   const out = recipes.filter(x => x.meal === r0.meal && x.id !== fromId && !inPlan.has(x.id) && !x.fresh && ks.every(k => keepsFor(x, k)) && x.diff <= maxDiff &&
       (equip ? equipPlan(x, equip).ok : x.equip.every(e => BASIC_EQUIP.has(e) || (e === 'pressure' && (K.has('pressure') || [...inPlan].some(id => by[id] && by[id].equip.includes('pressure')))))) &&
-      (q ? (x.name + ' ' + x.cuisine).toLowerCase().includes(q) : (anyCuisine || r0.meal === 's' || asList(plan.cuisines || plan.cuisine).includes(x.cuisine))))
+      (q ? (x.name + ' ' + x.cuisine).toLowerCase().includes(q) : (anyCuisine || r0.meal === 's' || r0.meal === 'v' || asList(plan.cuisines || plan.cuisine).includes(x.cuisine))))
     .map(x => ({ r: x, fit: Math.abs(x.kcal - r0.kcal) / r0.kcal + 3 * Math.abs(pp(x) - pp(r0)) + (asList(plan.cuisines || plan.cuisine).includes(x.cuisine) ? 0 : 0.15) - (FAV.has(x.id) ? 0.4 : 0) - 0.05 * Math.min(saleHits(x, specials).length, 3) }))
     .sort((a, b) => a.fit - b.fit);
   return out.slice(0, limit || (q ? 20 : 5)).map(o => ({ ...o.r, fit: +o.fit.toFixed(3), fav: FAV.has(o.r.id), sale: saleHits(o.r, specials).length }));
@@ -1184,7 +1264,7 @@ function swapRecipe(plan, fromId, toId, all) {
   const by = Object.fromEntries(all.map(x => [x.id, x])); const to = by[toId];
   const sn0 = planSnacks(plan).map(id => id === fromId ? toId : id);
   const daysPlan = plan.days.map((d, i) => { const g = s => { const m = d.meals.find(x => x.slot === s); const id = m.id === fromId ? toId : m.id; return by[id]; };
-    const k = i + 1; return { k, b: g('Breakfast'), l: g('Lunch'), d: g('Dinner'), sn: sn0.map(id => by[id]).filter(r => r && keepsFor(r, k)) }; });
+    const k = i + 1; const sm = d.meals.find(x => x.slot === 'Side'); return { k, b: g('Breakfast'), l: g('Lunch'), d: g('Dinner'), vs: sm ? [by[sm.id === fromId ? toId : sm.id], sm.sv] : null, sn: sn0.map(id => by[id]).filter(r => r && keepsFor(r, k)) }; });
   const { days, cook } = finalizeDays(daysPlan, plan.weekISO, plan.targets);
   return { ...plan, days, cook, snacks: sn0, stretchId: plan.stretchId === fromId ? null : plan.stretchId, swaps: (plan.swaps || []).concat([{ from: fromId, to: toId, at: new Date().toISOString() }]),
     notes: plan.notes.filter(n => !n.includes(by[fromId].name)) , edited: true, _swapName: to.name };
@@ -1368,15 +1448,17 @@ function prepGuide(plan, recipes, { level, known, maybe, startMin = 600, equip }
     cook: plan.cook.map(c => ({ ...c, name: byId[c.id] && byId[c.id].name })), riceCups, warn, needContainers: needC, nFreeze, equip: eq, flags, maybe: [...maybeSet] };
 }
 
-if (typeof module !== 'undefined') module.exports = { mergeSpecials, slugify, PRICE, costSummary, regUnitPrice, saleUnitPrice, money, CUISINES, LEVELS, DAYS, SECTIONS, TECH, QUIZ, scoreQuiz, macroTargets, fitplanTargets, specialsActive, matchSpecial, saleHits, recommendCuisine, recentCuisines, buildWeekPlan, groceryList, calcMacros, dietFilter, specialSafe, asList, amountText, batchList, inlineAmounts, equipPlan, equipFilter, EQUIP_DEFAULT, FREEZER_CAP, laneOf, servWords, servInfo, portionText, portionVol, macroLine, qtrs, metricText, qtyText, fmtQty, wt, wu, LB_KG, swapCandidates, swapRecipe, finalizeDays, swapName, SWAPS, cuisineFeasible, progressInfo, PACE, prepGuide, mondayOf, defaultWeek, defaultShop, laneOf, reheatOf, addDays, iso, parseISO };
+if (typeof module !== 'undefined') module.exports = { VEG_MODES, vegBoost, vegNote, dayVeg, pickSides, starchK, mergeSpecials, slugify, PRICE, costSummary, regUnitPrice, saleUnitPrice, money, CUISINES, LEVELS, DAYS, SECTIONS, TECH, QUIZ, scoreQuiz, macroTargets, fitplanTargets, specialsActive, matchSpecial, saleHits, recommendCuisine, recentCuisines, buildWeekPlan, groceryList, calcMacros, dietFilter, specialSafe, asList, amountText, batchList, inlineAmounts, equipPlan, equipFilter, EQUIP_DEFAULT, FREEZER_CAP, laneOf, servWords, servInfo, portionText, portionVol, macroLine, qtrs, metricText, qtyText, fmtQty, wt, wu, LB_KG, swapCandidates, swapRecipe, finalizeDays, swapName, SWAPS, cuisineFeasible, progressInfo, PACE, prepGuide, mondayOf, defaultWeek, defaultShop, laneOf, reheatOf, addDays, iso, parseISO };
 </script>
 <script>/* ===== UI ===== */
 const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const KEY = 'fitplan.meals.v1';
-const RECIPES = RAW; const BY = Object.fromEntries(RECIPES.map(r => [r.id, r]));
+let RECIPES = RAW, BY = Object.fromEntries(RAW.map(r => [r.id, r])), POOL_MODE = 'normal';
+/* recipes as cooked under a Veggies setting (more veg, a little less starch); the shown week uses the mode it was made with */
+function usePool(mode) { mode = VEG_MODES[mode] ? mode : 'normal'; if (mode === POOL_MODE) return; POOL_MODE = mode; RECIPES = vegBoost(RAW, mode); BY = Object.fromEntries(RECIPES.map(r => [r.id, r])); }
 const EMOJI = { Mexican: '🌮', Italian: '🍝', Mediterranean: '🫒', 'Middle Eastern': '🧆', Armenian: '🍇', 'Latin American': '🫓', Japanese: '🍱', Korean: '🥘', Thai: '🥥', Indian: '🍛', Chinese: '🥟', Vietnamese: '🍜', American: '🍔', Polish: '🥬' };
-const SLOT_IC = { Breakfast: '☀️', Lunch: '🥗', Dinner: '🍽️', Snack: '🍎' };
+const SLOT_IC = { Breakfast: '☀️', Lunch: '🥗', Dinner: '🍽️', Side: '🥦', Snack: '🍎' };
 const STORES = {
   'superking-culvercity': { name: 'Super King', full: 'Super King Markets', city: 'Culver City, CA', addr: '5587 Sepulveda Blvd · 7am–9pm', family: 'superking', ad: 'https://www.superkingmarkets.com/weekly-ad' },
   'heb-austin': { name: 'H-E-B', full: 'H-E-B', city: 'Austin, TX', family: 'heb', ad: 'https://www.heb.com/weekly-ad' },
@@ -1401,6 +1483,7 @@ if (S.onboarded == null) S.onboarded = !!S.skill.taken;
 if (!S.profile) S.profile = { sex: 'female', age: '', ft: '', inch: '', activity: '1.375', curLb: '', goalLb: '', plan: 'pace', pace: 'moderate', date: '', fatPct: 27, auto: true };
 if (!S.weighins) S.weighins = [];
 if (!S.units) S.units = 'us';
+if (!S.veg) S.veg = 'normal';
 if (!S.equip) S.equip = { ...EQUIP_DEFAULT, set: false };
 if (!S.favs) S.favs = []; if (!S.never) S.never = [];
 if (!S.diet) S.diet = { allergens: [], allergyOther: '', dislikes: [], dislikeOther: '', set: false };
@@ -1513,6 +1596,7 @@ function renderWeekBar() {
   if (w && w.plan.v !== 2) notes += `<div class="note warn small">Made with the old planner. Tap “Remake week” for a one-day cook plan.</div>`;
   if (w && w.plan.notes.length) notes += `<div class="note small">${w.plan.notes.map(esc).join('<br>')}</div>`;
   if (w && (w.plan.targets.kcal !== targets().kcal || w.plan.targets.p !== targets().p || w.plan.level !== level())) notes += `<div class="note warn small">Targets or level changed. Tap “Remake week” to update.</div>`;
+  if (w && w.plan.v === 2 && (w.plan.veg || 'normal') !== S.veg) notes += `<div class="note warn small">🥦 Veggies set to “${esc(VEG_MODES[S.veg].label)}”. Tap “Remake week” to apply.</div>`;
   $('weekNotes').innerHTML = notes;
   if ($('useCombo')) $('useCombo').onclick = () => { (S.draft[S.cur] = S.draft[S.cur] || {}).pick = '__combo'; save(); renderWeekBar(); };
 }
@@ -1543,7 +1627,8 @@ function build(pick, shuffle) {
   const label = asList(cuisine).join(' + ');
   const prev = week(); const seed = shuffle ? String(Date.now()) : (prev && prev.cuisine === label ? prev.plan.seed : '');
   if (!cuisine) return false;
-  const plan = buildWeekPlan({ recipes: allowed(), cuisine, weekISO: S.cur, targets: targets(), level: level(), known: S.skill.known, maybe: S.skill.maybe || [], stretch: S.skill.stretch, specials: spActive(), seed, favs: S.favs });
+  usePool(S.veg);
+  const plan = buildWeekPlan({ veg: S.veg, recipes: allowed(), cuisine, weekISO: S.cur, targets: targets(), level: level(), known: S.skill.known, maybe: S.skill.maybe || [], stretch: S.skill.stretch, specials: spActive(), seed, favs: S.favs });
   if (plan.error) return false;
   S.weeks[S.cur] = { cuisine: label, cuisines: asList(cuisine), mode: pick === '__rec' ? 'rec' : pick === '__combo' ? 'combo' : 'pick', rec, plan, shop: shopDate(), store: S.stores.map(st => stInfo(st).full).join(' + '), specialsUsed: !!spActive() };
   if (S.draft[S.cur]) delete S.draft[S.cur].pick;
@@ -1567,11 +1652,11 @@ function renderOut() {
   if (tab === 'plan') {
     const avg = k => Math.round(p.days.reduce((s, d) => s + d.tot[k], 0) / 7);
     const pgx = p.v === 2 ? prepGuide(p, RECIPES, { level: p.level, known: S.skill.known, maybe: S.skill.maybe || [], equip: S.equip }) : null;
-    $('out').innerHTML = `<div class="sum"><span><b>${esc(cLabel(w.cuisine))}</b></span><span>avg <b>${avg('kcal').toLocaleString()} kcal</b> of ${p.targets.kcal.toLocaleString()} kcal</span><span><b>${avg('p')} g protein</b> of ${p.targets.p} g</span>${pgx ? `<span>🍳 Cook ${fmtD(pgx.cookDay, { weekday: 'short' })} · <b>${p.cook.filter(c => !BY[c.id].nocook).length}</b> recipes · ~${hm(pgx.totalMin)}</span>` : ''}</div>
+    $('out').innerHTML = `<div class="sum"><span><b>${esc(cLabel(w.cuisine))}</b></span><span>avg <b>${avg('kcal').toLocaleString()} kcal</b> of ${p.targets.kcal.toLocaleString()} kcal</span><span><b>${avg('p')} g protein</b> of ${p.targets.p} g</span><span>🥦 <b>${Math.round(p.days.reduce((s, d) => s + vegOf(d), 0) / 7 * 2) / 2}</b> veggie servings/day${(p.veg || 'normal') !== 'normal' ? ' · ' + esc(VEG_MODES[p.veg].label.toLowerCase()) : ''}</span>${pgx ? `<span>🍳 Cook ${fmtD(pgx.cookDay, { weekday: 'short' })} · <b>${p.cook.filter(c => !BY[c.id].nocook).length}</b> recipes · ~${hm(pgx.totalMin)}</span>` : ''}</div>
     <div class="grid7">${p.days.map(d => { const ok = Math.abs(d.tot.kcal - p.targets.kcal) / p.targets.kcal <= 0.05 && d.tot.p >= p.targets.p * 0.95;
       return `<div class="day"><div class="hd"><b>${d.day}</b><span class="muted small">${fmtD(d.date)}</span></div>${d.meals.map(m => { const r = BY[m.id]; return `<div class="meal"><span class="ic" title="${m.slot}">${SLOT_IC[m.slot]}</span><span class="nm"><a href="#" data-r="${r.id}">${esc(r.name)}</a>${isFav(r.id) ? ' <span class="fav" title="Favorite">♥</span>' : ''}${badges(r, p, sp)}</span><button class="sw" type="button" data-sw="${r.id}" aria-label="Swap ${esc(r.name)}" title="Swap">⇄</button></div><div class="msub">${m.st === 'freezer' ? '<span title="From the freezer">❄️</span> ' : ''}${svBtn(r, m.sv)}${portion(r, m.sv) ? ` <span class="por">${esc(portion(r, m.sv))}</span>` : ''}<div class="mac">${macroLine(r.kcal * m.sv, r.p * m.sv, r.c * m.sv, r.f * m.sv)}</div></div>`; }).join('')}
-      <div class="tot ${ok ? 'good' : 'off'}">Day total: ${macroLine(d.tot.kcal, d.tot.p, d.tot.c, d.tot.f)}</div></div>`; }).join('')}</div>
-    ${safeNote()}<p class="hint">Everything is cooked Sunday. ❄️ freezer (thaw the night before) · 🏷 sale · ⭐ stretch · ♥ favorite · ⇄ swap · tap a dish for the recipe.</p>`;
+      <div class="vegd">🥦 ${fmtVeg(vegOf(d))} veggies</div><div class="tot ${ok ? 'good' : 'off'}">Day total: ${macroLine(d.tot.kcal, d.tot.p, d.tot.c, d.tot.f)}</div></div>`; }).join('')}</div>
+    ${safeNote()}<p class="hint">Everything is cooked Sunday. 🥦 1 veggie serving ≈ ½ cup cooked or 1 cup leafy (~80 g). ❄️ freezer (thaw the night before) · 🏷 sale · ⭐ stretch · ♥ favorite · ⇄ swap · tap a dish for the recipe.</p>`;
     $('out').querySelectorAll('[data-r]').forEach(a => a.onclick = e => { e.preventDefault(); showRecipe(a.dataset.r, p); });
     $('out').querySelectorAll('[data-sw]').forEach(b => b.onclick = () => openSwap(b.dataset.sw));
   } else if (tab === 'grocery') {
@@ -1614,7 +1699,7 @@ $('out').querySelectorAll('input[type=checkbox]').forEach(c => c.onchange = () =
 }
 function batchInfo(p, id, sv) { const nC = p.days.reduce((s, d) => s + d.meals.filter(m => m.id === id && m.st !== 'grab').length, 0); return `Batch: makes ${servWords(sv)} → ${nC} container${nC === 1 ? '' : 's'}`; }
 function batchCard(p, r, sv, alts) {
-  return `<ul class="bl">${batchList(r, sv, S.units, S.diet).map(x => `<li><span>${esc(x.n)}</span> — <b>${esc(x.amt)}</b></li>`).join('')}</ul>
+  return `${r.vegBoost ? `<div class="tip">${esc(vegNote(r))}</div>` : ''}<ul class="bl">${batchList(r, sv, S.units, S.diet).map(x => `<li><span>${esc(x.n)}</span> — <b>${esc(x.amt)}</b></li>`).join('')}</ul>
     <p class="small">${inlineAmounts(et(r.steps), r, sv, S.units, S.diet)}</p>${(alts || equipPlan(r, S.equip).alts).map(a => `<div class="tip">🔧 ${et(a)}</div>`).join('')}${maybeTips(r)}${r.tip ? `<div class="tip">💡 ${et(r.tip)}</div>` : ''}${r.flavor ? `<div class="tip flav">🌶 <b>Flavor tip:</b> ${et(r.flavor)}</div>` : ''}`;
 }
 function miseHTML(p, pg) {
@@ -1624,12 +1709,17 @@ function miseHTML(p, pg) {
     ${cooked.map(c => { const r = BY[c.id]; return `<div class="mg"><div class="mh"><b>${esc(short2(r.name))}</b> <span class="muted small">for ${servWords(c.sv)}</span></div>
       ${batchList(r, c.sv, S.units, S.diet).map(x => { const k = `mise|${r.id}|${x.n}`; return `<label class="it"><input type="checkbox" data-mk="${esc(k)}" ${ck[k] ? 'checked' : ''}><span class="${ck[k] ? 'done' : ''}">${esc(x.n)}</span><span class="q">${esc(x.amt)}</span></label>`; }).join('')}</div>`; }).join('')}</details>`;
 }
+const vegOf = d => d.veg != null ? d.veg : dayVeg(d, BY);
+const fmtVeg = v => { const x = Math.round(v * 2) / 2; return `${String(x).replace('.5', '½').replace(/^0½/, '½')} serving${x === 1 ? '' : 's'}`; };
+function vegSeg(pre) { return `<div class="seg2 vegseg" role="group" aria-label="Veggies">${Object.entries(VEG_MODES).map(([k, m]) => `<button type="button" data-veg="${k}" class="${S.veg === k ? 'on' : ''}" aria-pressed="${S.veg === k}">${k === 'normal' ? '🥗' : k === 'more' ? '🥦' : '🥦🥕'} ${m.label}</button>`).join('')}</div><p class="hint" id="${pre}VegHint">${vegHint()}</p>`; }
+function vegHint() { const m = VEG_MODES[S.veg]; return S.veg === 'normal' ? 'Recipes as written.' : `Veggies in mains ×${m.vx}, a little less rice/noodles/potato to keep calories on target, and a simple side when a day is short. Aim: ${m.target}+ servings a day.`; }
+function bindVeg(host, after) { host.querySelectorAll('[data-veg]').forEach(b => b.onclick = () => { S.veg = b.dataset.veg; save(); host.querySelectorAll('[data-veg]').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); }); const h = host.querySelector('[id$=VegHint]'); if (h) h.textContent = vegHint(); after && after(); }); }
 const hm = m => `${Math.floor(m / 60)}h${m % 60 ? ' ' + String(m % 60).padStart(2, '0') + 'm' : ''}`;
 const short2 = n => n.split(/ — | with | \(/)[0];
 function recipeBody(r) {
   const w = week(), sp = w ? safeSp(spFor(w.shop)) : null, sale = saleHits(r, sp);
   const keep = r.nocook ? 'Grab & go' : `Keeps ${r.fd} days in the fridge${r.fz ? ' · freezes well ❄️' : ''}`;
-  return `<div class="note small">🥡 ${keep}${r.note ? ' · ' + esc(r.note) : ''}</div>${sale.length ? `<div class="note small" style="background:var(--salebg);color:var(--sale)">🏷 On sale: ${esc(sale.map(short).join(', '))}</div>` : ''}<div class="meta">⏱ ${r.active} min${r.total > r.active ? ` (${r.total} total)` : ''}</div><div class="meta"><b>1 serving</b> (${esc(portion(r, 1) || 'as packaged')}): ${macroLine(r.kcal, r.p, r.c, r.f)}</div>
+  return `<div class="note small">🥡 ${keep}${r.note ? ' · ' + esc(r.note) : ''}</div>${sale.length ? `<div class="note small" style="background:var(--salebg);color:var(--sale)">🏷 On sale: ${esc(sale.map(short).join(', '))}</div>` : ''}<div class="meta">⏱ ${r.active} min${r.total > r.active ? ` (${r.total} total)` : ''}</div><div class="meta"><b>1 serving</b> (${esc(portion(r, 1) || 'as packaged')}): ${macroLine(r.kcal, r.p, r.c, r.f)}${r.veg ? ` · 🥦 ${fmtVeg(r.veg)} veggies` : ''}</div>${r.vegBoost ? `<div class="note ok small">${esc(vegNote(r))}</div>` : ''}
   ${(() => { const ep = equipPlan(r, S.equip); return !ep.ok ? '<div class="note warn small">🔧 Needs equipment you don\u2019t have.</div>' : ep.alts.length ? `<div class="note small">🔧 ${ep.alts.map(et).join(' ')}</div>` : ''; })()}
   ${r.allergens.length ? `<div class="hint">Contains: ${r.allergens.map(a => AL_IC[a] + ' ' + esc(AL[a])).join(' · ')}</div>` : '<div class="hint">No major allergens tagged</div>'}
   <p><b>You need (per serving):</b> ${r.ing.map(i => `${esc(swapName(i.n, S.diet))} ${esc(qtyText(i.q, i.u, S.units))}`).join(' · ')}</p><p>${et(r.steps)}</p>${maybeTips(r)}${r.tip ? `<div class="tip">💡 ${et(r.tip)}</div>` : ''}${r.flavor ? `<div class="tip flav">🌶 <b>Flavor tip:</b> ${et(r.flavor)}</div>` : ''}
@@ -1793,6 +1883,7 @@ function renderSettings() {
    <div class="card" id="set-targets"><h2>🎯 My goal</h2>${profileForm('st')}<div id="stMacro">${macroCard()}</div>
      <details><summary>Set calories by hand</summary>${targetsForm('st')}</details></div>
    <div class="card" id="set-diet"><h2>🚫 Allergies & dislikes</h2>${dietForm('sd')}<div id="sdInfo">${dietInfo()}</div></div>
+   <div class="card" id="set-veg"><h2>🥦 Veggies</h2>${vegSeg('sv')}</div>
    <div class="card" id="set-kitchen"><h2>🍳 My kitchen</h2>${equipForm('se')}<div id="seInfo">${equipInfo()}</div></div>
    <div class="card" id="set-faves"><h2>♥ Favorites & 👎 hidden</h2>
      ${S.favs.length ? `<div class="tags">${S.favs.filter(id => BY[id]).map(id => `<span class="tag">♥ ${esc(short2(BY[id].name))}<button type="button" data-unfav="${id}" aria-label="Remove favorite">✕</button></span>`).join('')}</div>` : '<p class="hint">Tap ♡ on a dish to favorite it. We\u2019ll pick it more often.</p>'}
@@ -1815,6 +1906,7 @@ function renderSettings() {
   const re = () => { renderAll(); };
   bindDiet('sd', () => { const y = scrollY; renderAll(); scrollTo(0, y); });
   bindEquip('se', () => { $('seInfo').innerHTML = equipInfo(); renderWeekBar(); });
+  bindVeg($('set-veg'), () => renderWeekBar());
   $('out').querySelectorAll('[data-unfav]').forEach(b => b.onclick = () => { S.favs = S.favs.filter(x => x !== b.dataset.unfav); save(); re(); });
   $('out').querySelectorAll('[data-unnever]').forEach(b => b.onclick = () => { S.never = S.never.filter(x => x !== b.dataset.unnever); save(); re(); });
   bindTargets('st', re); bindStore('st', re); bindProfile('st', () => { $('stMacro').innerHTML = macroCard(); renderChips(); renderWeekBar(); });
@@ -1920,11 +2012,12 @@ function wzCuisine() {
   const rec = computeRec(); let pick = rec.cuisine ? '__rec' : (CUISINES.find(c => feas(c).ok) || '__rec');
   const okPick = () => !Array.isArray(pick) || feas(pick).ok;
   const draw = () => {
-    openModal(`<div class="wz">${stepBar(5)}<h2>What sounds good this week?</h2><p class="hint">Pick one or more, or let us choose.</p>
+    openModal(`<div class="wz">${stepBar(5)}<h2>What sounds good this week?</h2><label>Veggies</label>${vegSeg('wv')}<p class="hint">Pick one or more cuisines, or let us choose.</p>
       ${tilesHTML(pick, rec)}${!okPick() ? tooFewNote(pick.join(' + ')) : ''}
       ${rec.cuisine ? '' : `<div class="note warn small">${esc(rec.reasons[0])}</div>`}
       <div class="foot"><button class="btn sec" id="wzBack" type="button">Back</button><button class="btn big" id="wzNext" type="button">Make my week</button></div></div>`);
     $('mbox').querySelectorAll('[data-c]:not([disabled])').forEach(b => b.onclick = () => { pick = toggleTile(pick, b.dataset.c); const y = $('mbox').scrollTop; draw(); $('mbox').scrollTop = y; });
+    bindVeg($('mbox'));
     $('wzBack').onclick = wzProfile; $('wzNext').onclick = () => { if (okPick() && build(pick, false)) wzDone(); };
   };
   draw();
@@ -1938,7 +2031,7 @@ function wzDone() {
   $('wzGo').onclick = () => { S.onboarded = true; save(); closeModal(); setTab('plan'); renderAll(); };
 }
 
-function renderAll() { document.body.dataset.tab = tab; renderChips(); renderWeekBar(); renderOut(); }
+function renderAll() { usePool((week() && week().plan.veg) || S.veg); document.body.dataset.tab = tab; renderChips(); renderWeekBar(); renderOut(); }
 renderAll();
 if (!S.onboarded && !/demo/.test(location.hash)) openQuiz(true);
 if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => {});

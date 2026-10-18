@@ -27,7 +27,7 @@ def slugify(s): return re.sub(r'[^a-z0-9]+', '-', s.lower().replace('&', ' and '
 # slug -> name, city, weekly-ad URL, adapter. Chain slugs (no city) hold chain-wide ads; the app also looks up "<chain>-<city|zip>".
 STORES = {
   'superking-culvercity': dict(name='Super King Markets', city='Culver City, CA', ad='https://www.superkingmarkets.com/weekly-ad', adapter='superking'),
-  'heb-austin':           dict(name='H-E-B', city='Austin, TX', ad='https://www.heb.com/weekly-ad'),
+  'heb-austin':           dict(name='H-E-B', city='Austin, TX', ad='https://www.heb.com/weekly-ad/deals', adapter='heb'),
   'centralmarket-austin': dict(name='Central Market', city='Austin, TX', ad='https://www.centralmarket.com'),
   'wholefoods-austin':    dict(name='Whole Foods Market', city='Austin, TX', ad='https://www.wholefoodsmarket.com/sales-flyer'),
   'ralphs':      dict(name='Ralphs', city='', ad='https://www.ralphs.com/weeklyad'),
@@ -103,7 +103,26 @@ def adapter_superking(slug, meta):
             if kw: items.append(dict(name=nm, price=pr, sec=guess_sec(nm, cat), kw=kw))
     return dict(validFrom=us_date(m.group(1)), validTo=us_date(m.group(2)), source=url, items=items)
 
-ADAPTERS = {'superking': adapter_superking}
+def adapter_heb(slug, meta):
+    """H-E-B's weekly ad is store-specific (zone picked by your H-E-B store) and heb.com sits behind Imperva/Incapsula bot
+    protection: scripted requests get a ~200-byte challenge page or 'errorCode 15'. We don't try to get around that.
+    If the page ever comes back with real content, parse it; otherwise fail cleanly and keep the previous file.
+    Fallback: export the Austin-store ad by hand (My H-E-B app / heb.com with your store selected) to CSV and run
+      update_specials.py import heb-austin heb.csv --from YYYY-MM-DD --to YYYY-MM-DD --source https://www.heb.com/weekly-ad/deals"""
+    h = http_get(meta['ad'])
+    if 'Incapsula' in h or '"errorCode"' in h or len(h) < 2000:
+        raise RuntimeError('heb.com blocked automated access (Incapsula bot protection). Import a CSV from the Austin-store ad instead (see adapter_heb docstring).')
+    m = re.search(r'Prices good (?:\w+, )?(\w+ \d{1,2})(?:, (\d{4}))? (?:thru|through) (?:\w+, )?(\w+ \d{1,2}), (\d{4})', h)
+    if not m: raise RuntimeError('page loaded but validity dates not found; refusing to guess')
+    y = m.group(4); f = dt.datetime.strptime(f"{m.group(1)} {m.group(2) or y}", '%B %d %Y').date(); t = dt.datetime.strptime(f"{m.group(3)} {y}", '%B %d %Y').date()
+    items = []
+    for nm, pr in re.findall(r'"name":"([^"]{3,120})".{0,400}?"(?:salePrice|price)":"?(\$?[\d.]+[^",]{0,20})', h, re.S):
+        if SKIP.search(nm): continue
+        kw = kw_for(nm)
+        if kw: items.append(dict(name=H.unescape(nm), price=pr if pr.startswith('$') else '$' + pr, sec=guess_sec(nm), kw=kw))
+    return dict(validFrom=f.isoformat(), validTo=t.isoformat(), source=meta['ad'], items=items)
+
+ADAPTERS = {'superking': adapter_superking, 'heb': adapter_heb}
 
 # ---------- validation + writing ----------
 PRICE_RX = re.compile(r'(\$\d|\d+¢|\d+ for \$|free)', re.I)

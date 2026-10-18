@@ -54,3 +54,10 @@ python3 update_specials.py seed-js                     # seed Super King from sr
 ```
 A weekly job (e.g. cron / GitHub Action, Wednesdays) runs `fetch --push`; it rewrites `index.json` and commits to the Pages repo.
 To support a new store, add an `adapter_<name>(slug, meta)` that returns `{validFrom, validTo, source, items}` from its public ad.
+
+### H-E-B (heb-austin)
+`update_specials.py fetch heb-austin` runs `adapter_heb`, but heb.com is behind Imperva/Incapsula bot protection (scripted requests get 403 or a challenge page), and the ad is zone-specific per store. The adapter fails cleanly and publishes nothing rather than guess. To publish real Austin deals, export the ad with an Austin store selected to CSV (`name,price,sec,kw`) and run
+`python3 update_specials.py import heb-austin heb.csv --from 2026-10-21 --to 2026-10-27 --source https://www.heb.com/weekly-ad/deals --push`.
+
+## Veggies preference
+Normal / More veggies / Lots of veggies (wizard cuisine step + Settings). Every recipe has `veg` (servings per portion; 1 serving ≈ ½ cup chopped or 1 cup leafy ≈ 80 g, from `vegG()` rules in recipes.js). More/Lots: `vegBoost()` scales veg ingredients in mains ×1.5/×2 (breakfasts with veg half as much) and trims rice/noodles/potato/grains (≤35%) so calories stay flat; the planner also favors veg-heavy recipes and adds a cuisine-fitting side (11 `vs*` recipes, meal `v`) on days under 7/10 servings. Plan shows "🥦 N servings veggies" per day. Grocery, Prep batch amounts (🥦 marks boosted items, "(trimmed)" starches) and cost all follow. Tests: `node test-veg.js`.
