@@ -1,0 +1,16 @@
+{
+ "version": 1,
+ "updated": "2026-10-18T04:57:31Z",
+ "stores": {
+  "superking-culvercity": {
+   "name": "Super King Markets",
+   "city": "Culver City, CA",
+   "validFrom": "2026-10-12",
+   "validTo": "2026-10-18",
+   "items": 58,
+   "updated": "2026-10-18T04:57:31Z",
+   "source": "https://www.superkingmarkets.com/weekly-ad",
+   "file": "superking-culvercity.json"
+  }
+ }
+}
