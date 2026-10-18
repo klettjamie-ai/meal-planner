@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#fb923c"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Chef Momo"><meta name="format-detection" content="telephone=no">
-<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" sizes="180x180" href="icon-180.png"><link rel="icon" type="image/svg+xml" href="icon.svg"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="alternate icon" href="favicon.ico">
 <title>Chef Momo</title><style>:root{--bg:#fff8f1;--card:#fff;--ink:#3b2f2a;--muted:#8a7a70;--line:#f1e4d8;--pri:#ea580c;--pri2:#f59e0b;--soft:#fff1e6;--ok:#15803d;--okbg:#e8f7ec;--warnbg:#fff4d6;--sale:#e11d48;--salebg:#ffe4ea;--r:20px}
 *{box-sizing:border-box}
 body{margin:0;font-family:ui-rounded,"SF Pro Rounded",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg);line-height:1.45;font-size:15px}
@@ -175,8 +175,10 @@ button{-webkit-tap-highlight-color:transparent}
 .mise .it{display:flex;gap:10px;align-items:center;min-height:40px;border-bottom:1px dashed var(--line)}.mise .it span:nth-child(2){flex:1}.mise .it .q{font-weight:700;white-space:nowrap}
 .mise .it input{width:22px;height:22px}
 .mise .it span{color:var(--ink)}.mise .it .q{border:0;text-decoration:none}.mise .it span.done{color:var(--muted);text-decoration:line-through}
+
+header h1{display:flex;align-items:center;gap:8px}header h1 .logo{width:34px;height:36px;flex:0 0 auto;background:#ffe8d6;border-radius:10px;padding:2px}
 </style></head><body>
-<header><div class="wrap"><h1>👨‍🍳 Chef Momo</h1><div class="chips" id="chips"></div></div></header>
+<header><div class="wrap"><h1><img class="logo" src="logo.svg" alt="" width="34" height="36"> Chef Momo</h1><div class="chips" id="chips"></div></div></header>
 <main>
   <section class="card">
     <div class="wbar">
@@ -1540,7 +1542,7 @@ function openQuiz(wizard) {
   const ans = { ...S.skill.answers };
   const draw = () => {
     const done = QUIZ.filter(q => ans[q.id] != null).length;
-    openModal(`<div class="wz">${wizard ? stepBar(1) + '<p class="hello">👨‍🍳 Hi, I\u2019m <b>Chef Momo</b>! Let\u2019s plan your week.</p>' : ''}<h2>Can you…?</h2><p class="hint">${done}/${QUIZ.length} answered</p>${quizHTML(ans)}
+    openModal(`<div class="wz">${wizard ? stepBar(1) + '<p class="hello"><img src="logo.svg" alt="" width="28" height="30" style="vertical-align:middle"> Hi, I\u2019m <b>Chef Momo</b>! Let\u2019s plan your week.</p>' : ''}<h2>Can you…?</h2><p class="hint">${done}/${QUIZ.length} answered</p>${quizHTML(ans)}
       <div class="foot">${wizard ? '<span></span>' : '<button class="btn sec" id="qCancel" type="button">Cancel</button>'}<button class="btn big" id="qDone" type="button" ${done < QUIZ.length ? 'disabled style="opacity:.5"' : ''}>${wizard ? 'Next' : 'Save'}</button></div></div>`);
     $('mbox').querySelectorAll('.opts button').forEach(b => b.onclick = () => { ans[b.dataset.q] = b.dataset.v; const y = $('mbox').scrollTop; draw(); $('mbox').scrollTop = y; });
     if ($('qCancel')) $('qCancel').onclick = closeModal;
