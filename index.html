@@ -177,6 +177,10 @@ button{-webkit-tap-highlight-color:transparent}
 .mise .it span{color:var(--ink)}.mise .it .q{border:0;text-decoration:none}.mise .it span.done{color:var(--muted);text-decoration:line-through}
 
 header h1{display:flex;align-items:center;gap:8px}header h1 .logo{width:34px;height:36px;flex:0 0 auto;background:#ffe8d6;border-radius:10px;padding:2px}
+
+.tip.flav{background:#fff4e6;border-left:3px solid #ea580c}
+.gl section.pantry{opacity:.85}
+.gl section.pantry .q::after{content:' · probably have';color:#9a3412;font-size:.75em}
 </style></head><body>
 <header><div class="wrap"><h1><img class="logo" src="logo.svg" alt="" width="34" height="36"> Chef Momo</h1><div class="chips" id="chips"></div></div></header>
 <main>
@@ -388,6 +392,87 @@ R('vn12','Vietnamese chicken & ginger rice porridge (cháo gà)','Vietnamese','b
 R('cn12','Egg & scallion fried rice jars','Chinese','b',420,20,55,13,1,15,20,'stirfry,egg,rice','wok','white rice (cooked, day-old);1;cup;G|eggs;2;ea;D|frozen peas & carrots;0.33;cup;F|scallions;1;ea;P|soy sauce;1;tsp;G|avocado oil;1;tsp;G','Scramble eggs, add veg and cold rice, toss 3 min with soy and scallions. Portion into containers.');
 
 
+
+/* ---------- Seasoning audit: every savory dish gets salt, aromatics, cuisine spices and an acid/fresh finish ---------- */
+const SWEET = new Set(['it1', 'md1', 'la2', 'vn8', 'us1', 'mx8']);
+const SEAS_RX = {
+  salt: /\bsalt\b/i,
+  arom: /garlic|onion|shallot|ginger|scallion|leek|lemongrass|chive/i,
+  seas: /cumin|coriander|paprika|chili|chile|chipotle|oregano|basil|thyme|rosemary|parsley|cilantro|mint|dill|bay lea|cinnamon|cardamom|turmeric|garam|masala|curry|za.atar|sumac|baharat|7-spice|shawarma|pepper flakes|black pepper|white pepper|five-spice|star anise|gochugaru|gochujang|fajita|taco seasoning|taj[íi]n|allspice|nutmeg|fennel|mustard|fenugreek|aleppo|tarragon|sage|herbs|vanilla|sriracha|doubanjiang|peppercorn|seasoning|galangal|jalape|serrano|anaheim|poblano|adobo|kimchi|miso|soy sauce|fish sauce|oyster sauce|hoisin|teriyaki|worcestershire|tamarind|pesto|salsa|tahini|bbq|mirin|tonkatsu|yakisoba|roux|nam prik|lemongrass|ginger|garlic/i,
+  acid: /lemon|lime|vinegar|sumac|tamarind|yogurt|salsa|pickle|kimchi|cilantro|parsley|mint|basil|dill|scallion|taj[íi]n|pomegranate|sriracha|labneh|herbs|tomatillo/i,
+  salty: /soy sauce|fish sauce|miso|gochujang|oyster|hoisin|teriyaki|feta|olive|kimchi|halebi|queso|parmesan|salsa|prosciutto|bacon|soujuk|doubanjiang|maggi|roux|tonkatsu|yakisoba|adobo|nam prik|curry paste|pesto|bbq|string cheese|seaweed|taj[íi]n|cheese|masala|seasoning|shawarma spice/i,
+  protein: /chicken|pork|beef|steak|sirloin|turkey|tofu|salmon|tilapia|shrimp|lamb|flanken/i,
+};
+const sp = (n, q, u) => ({ n, q, u, sec: 'S' }), pr = (n, q, u) => ({ n, q, u, sec: 'P' });
+const KIT = {
+  Mexican: { arom: [pr('garlic', 1, 'clove'), pr('onion', 0.25, 'ea')], seas: [sp('ground cumin', 0.5, 'tsp'), sp('Mexican oregano', 0.25, 'tsp'), sp('ancho chili powder', 0.5, 'tsp'), sp('black pepper', 0.125, 'tsp')], fin: [pr('lime', 0.25, 'ea'), pr('cilantro', 1, 'tbsp')], tip: 'Mexican flavor is earthy cumin + chili, brightened with lime: toast the dry spices in the oil 30 s first.' },
+  Italian: { arom: [pr('garlic', 1, 'clove')], seas: [sp('dried oregano', 0.25, 'tsp'), sp('red pepper flakes', 0.125, 'tsp'), sp('black pepper', 0.125, 'tsp'), sp('dried basil', 0.25, 'tsp')], fin: [pr('lemon', 0.125, 'ea'), pr('parsley', 1, 'tbsp')], tip: 'Gently sizzle garlic and chili flakes in olive oil (don\u2019t brown the garlic), and salt the pasta water like the sea.' },
+  Mediterranean: { arom: [pr('garlic', 1, 'clove')], seas: [sp('dried oregano', 0.5, 'tsp'), sp('sweet paprika', 0.25, 'tsp'), sp('black pepper', 0.125, 'tsp'), sp('ground cumin', 0.25, 'tsp')], fin: [pr('lemon', 0.25, 'ea'), pr('parsley', 1, 'tbsp')], tip: 'Lemon, garlic, oregano and good olive oil are the backbone. Add lemon juice twice: in the marinade and right before eating.' },
+  'Middle Eastern': { arom: [pr('garlic', 1, 'clove'), pr('onion', 0.25, 'ea')], seas: [sp('ground cumin', 0.5, 'tsp'), sp('7-spice (baharat)', 0.5, 'tsp'), sp('sumac', 0.25, 'tsp'), sp('black pepper', 0.125, 'tsp')], fin: [pr('lemon', 0.25, 'ea'), pr('parsley', 1, 'tbsp')], tip: 'Warm spices (baharat, cumin) for depth; sumac and lemon for tang. Bloom the spices in oil before the meat goes in.' },
+  Armenian: { arom: [pr('garlic', 1, 'clove'), pr('onion', 0.25, 'ea')], seas: [sp('Aleppo pepper', 0.5, 'tsp'), sp('dried mint', 0.25, 'tsp'), sp('sweet paprika', 0.25, 'tsp'), sp('black pepper', 0.125, 'tsp')], fin: [pr('lemon', 0.25, 'ea'), pr('parsley', 1, 'tbsp')], tip: 'Aleppo pepper gives fruity, gentle heat and dried mint gives that classic Armenian lift. Crush the mint between your palms as you add it.' },
+  'Latin American': { arom: [pr('garlic', 1, 'clove'), pr('onion', 0.25, 'ea')], seas: [sp('ground cumin', 0.5, 'tsp'), sp('dried oregano', 0.25, 'tsp'), sp('sweet paprika', 0.25, 'tsp'), sp('black pepper', 0.125, 'tsp')], fin: [pr('lime', 0.25, 'ea'), pr('cilantro', 1, 'tbsp')], tip: 'Start with a sofrito: onion, garlic and pepper cooked soft, then cumin and oregano. Finish with lime and cilantro.' },
+  Japanese: { arom: [pr('ginger', 0.5, 'inch'), pr('scallions', 1, 'ea')], seas: [sp('white pepper', 0.0625, 'tsp'), sp('red pepper flakes (or ichimi)', 0.0625, 'tsp'), pr('garlic', 1, 'clove')], fin: [sp('rice vinegar', 1, 'tsp'), pr('scallions', 1, 'ea')], tip: 'Balance salty (soy/miso), sweet (mirin) and fresh ginger; a few drops of rice vinegar at the end keeps it bright.' },
+  Korean: { arom: [pr('garlic', 1, 'clove'), pr('scallions', 1, 'ea')], seas: [sp('gochugaru (Korean chili flakes)', 0.5, 'tsp'), sp('black pepper', 0.125, 'tsp'), pr('ginger', 0.25, 'inch')], fin: [sp('rice vinegar', 1, 'tsp'), pr('scallions', 1, 'ea')], tip: 'Korean flavor is garlic-forward with gochugaru heat. Don\u2019t be shy with garlic, and add scallions at the end.' },
+  Thai: { arom: [pr('garlic', 1, 'clove'), pr('shallot or red onion', 0.25, 'ea')], seas: [pr('Thai chilies', 0.5, 'ea'), sp('white pepper', 0.125, 'tsp'), pr('Thai basil', 0.125, 'cup')], fin: [pr('lime', 0.25, 'ea'), pr('cilantro', 1, 'tbsp')], tip: 'Thai cooking balances salty, sour, sweet and spicy: taste at the end and adjust with lime (sour) and a pinch of sugar (sweet).' },
+  Indian: { arom: [pr('garlic', 1, 'clove'), pr('ginger', 0.5, 'inch'), pr('onion', 0.25, 'ea')], seas: [sp('ground cumin', 0.5, 'tsp'), sp('ground coriander', 0.5, 'tsp'), sp('ground turmeric', 0.25, 'tsp'), sp('garam masala', 0.25, 'tsp'), sp('Kashmiri chili powder', 0.25, 'tsp')], fin: [pr('lemon', 0.125, 'ea'), pr('cilantro', 1, 'tbsp')], tip: 'Bloom whole/ground spices in hot oil (tadka) until fragrant, cook onion-ginger-garlic until golden, and add garam masala at the end.' },
+  Chinese: { arom: [pr('garlic', 1, 'clove'), pr('ginger', 0.5, 'inch'), pr('scallions', 1, 'ea')], seas: [sp('white pepper', 0.125, 'tsp'), sp('red pepper flakes', 0.125, 'tsp'), sp('Sichuan peppercorn (ground)', 0.0625, 'tsp')], fin: [sp('rice vinegar', 1, 'tsp'), pr('scallions', 1, 'ea')], tip: 'Garlic, ginger and scallion hit the hot wok first; a splash of vinegar at the end balances the soy.' },
+  Vietnamese: { arom: [pr('garlic', 1, 'clove'), pr('shallot or red onion', 0.25, 'ea')], seas: [sp('black pepper', 0.125, 'tsp'), pr('Thai chilies', 0.25, 'ea'), pr('lemongrass', 0.25, 'stalk')], fin: [pr('lime', 0.25, 'ea'), pr('cilantro', 1, 'tbsp'), pr('mint', 1, 'tbsp')], tip: 'Vietnamese food lives on fresh herbs and lime: pile on cilantro, mint and Thai basil right before eating.' },
+  American: { arom: [pr('garlic', 1, 'clove'), pr('onion', 0.25, 'ea')], seas: [sp('smoked paprika', 0.5, 'tsp'), sp('black pepper', 0.125, 'tsp'), sp('dried thyme', 0.25, 'tsp'), sp('garlic powder', 0.25, 'tsp')], fin: [sp('apple cider vinegar or hot sauce', 1, 'tsp'), pr('parsley', 1, 'tbsp')], tip: 'Smoked paprika and garlic give backyard-BBQ depth; a dash of vinegar or hot sauce cuts the richness.' },
+};
+const ADD_MAC = { onion: [40, 9], garlic: [4, 1], ginger: [5, 1], scallions: [5, 1], lime: [20, 7], lemon: [17, 5], 'shallot or red onion': [30, 7], 'Thai chilies': [2, 0.4], lemongrass: [10, 2], 'Thai basil': [1, 0] };
+const TSP_KCAL = 6, FRESH_RX = /cilantro|parsley|mint|basil|dill|scallion|lime|lemon|salsa|yogurt|tahini|sriracha|kimchi|herbs|vinegar|hot sauce/i;
+function seasonRecipe(r) {
+  const has = rx => r.ing.some(i => rx.test(i.n));
+  const kit = KIT[r.cuisine] || KIT.American, add = [];
+  const sweet = SWEET.has(r.id), savory = !sweet && !r.nocook;
+  const push = it => { if (r.ing.concat(add).some(i => i.n.toLowerCase() === it.n.toLowerCase())) return false; add.push({ ...it }); return true; };
+  const seasN = () => new Set(r.ing.concat(add).filter(i => SEAS_RX.seas.test(i.n)).map(i => i.n.toLowerCase())).size;
+  let marinade = false;
+  if (savory) {
+    push(sp('kosher salt', has(SEAS_RX.salty) ? 0.125 : (r.meal === 'm' ? 0.375 : 0.25), 'tsp'));
+    if (r.meal !== 's' && !has(SEAS_RX.arom)) push(kit.arom[0]);
+    if (r.meal === 'm' && r.ing.concat(add).filter(i => SEAS_RX.arom.test(i.n)).length < 2 && kit.arom[1]) push(kit.arom[1]);
+    const need = r.meal === 'm' ? 4 : 3;
+    for (const x of kit.seas) { if (seasN() >= need) break; if (r.meal === 's' && x.sec !== 'S') continue; push(x); }
+    if (r.meal !== 's' && !has(SEAS_RX.acid)) { push(kit.fin[0]); if (r.meal === 'm' && kit.fin[1]) push(kit.fin[1]); }
+    else if (r.meal === 'm' && !r.ing.some(i => /cilantro|parsley|mint|basil|dill|scallion|herbs/i.test(i.n)) && kit.fin[1]) push(kit.fin[kit.fin.length - 1]);
+    marinade = r.meal === 'm' && has(SEAS_RX.protein) && r.tech.some(t => ['sear', 'roast', 'bake', 'stirfry'].includes(t)) && !r.tech.includes('marinate') && !/marinat/i.test(r.steps) && !/ground|canned|tuna/i.test(r.ing.filter(i => SEAS_RX.protein.test(i.n)).map(i => i.n).join(' '));
+  } else if (sweet) {
+    if (!has(/cinnamon|vanilla|taj[íi]n|chili/i)) push(sp('ground cinnamon', 0.25, 'tsp'));
+    if (/oat|yogurt|ricotta|licuado/i.test(r.name + r.ing.map(i => i.n).join(' ')) && !has(/vanilla/i)) push(sp('vanilla extract', 0.25, 'tsp'));
+    push(sp('kosher salt', 0.0625, 'tsp'));
+    if (r.id === 'mx8' && !has(/lime/i)) push(pr('lime', 0.25, 'ea'));
+  }
+  // macros for meaningful additions
+  let k = 0, c = 0; add.forEach(i => { const m = ADD_MAC[i.n]; if (m) { k += m[0] * i.q; c += m[1] * i.q; } else if (i.u === 'tsp' && i.n !== 'kosher salt') { k += (/vanilla/.test(i.n) ? 12 : TSP_KCAL) * i.q; c += 1 * i.q; } });
+  r.kcal = Math.round(r.kcal + k); r.c = Math.round(r.c + c);
+  r.ing = r.ing.concat(add); r.seasonAdded = add.map(i => i.n);
+  // steps
+  const names = arr => arr.map(i => i.n.replace(/ \(.*\)/, '')).join(', ').replace(/, ([^,]*)$/, ' and $1');
+  const dry = add.filter(i => i.sec === 'S' && i.n !== 'kosher salt' && !/vinegar|hot sauce|vanilla/.test(i.n));
+  const aro = add.filter(i => SEAS_RX.arom.test(i.n) && !kit.fin.includes(i) && i.sec === 'P' && !/scallion/.test(i.n) || /^(garlic|onion|ginger|shallot)/.test(i.n) && i.sec === 'P');
+  const fin = add.filter(i => kit.fin.some(f => f.n === i.n));
+  const prot = (r.ing.find(i => SEAS_RX.protein.test(i.n)) || {}).n;
+  let pre = '', mid = '', end = '';
+  if (marinade && prot) { const acid = r.ing.find(i => /lemon|lime|vinegar/i.test(i.n)); pre = `Marinade: toss the ${prot.replace(/ \(.*\)/, '')} with ${aro.length ? names(aro.slice(0, 1)) + ', ' : 'garlic, '}half the salt${dry.length ? ' and ' + names(dry.slice(0, 2)) : ''}${acid ? ` and a squeeze of ${acid.n.split(' ')[0]}` : ''}, 20 min or up to overnight. `; }
+  const hasMar = /marinat/i.test(r.steps);
+  const dryM = marinade ? dry.slice(2) : dry;
+  if (savory && r.meal === 'm') mid = `Seasoning: ${aro.length ? `cook the ${names(aro)} at the start until fragrant; ` : ''}${dryM.length ? (hasMar ? `whisk the ${names(dryM)} into the marinade; ` : `stir the ${names(dryM)} into the hot oil 30 s before any sauce or liquid goes in; `) : ''}salt in stages with the kosher salt and taste before portioning.`;
+  else if (savory) mid = `${aro.length ? `Cook the ${names(aro)} first until fragrant. ` : ''}Season with ${names([add.find(i => i.n === 'kosher salt')].concat(dry))}.`;
+  if (sweet) mid = ` Stir in ${names(add.filter(i => i.sec === 'S'))}${add.some(i => i.n === 'lime') ? ' and a squeeze of lime' : ''}.`;
+  if (fin.length && savory) end = ` Pack the ${names(fin)} separately and add at serving.`;
+  const parts = r.steps.split(/(?<=\.)\s+/); const first = parts.shift() || '';
+  r.steps = (pre + (r.meal === 'm' && savory ? [first].concat(parts).join(' ') + ' ' + mid : first + (mid ? ' ' + mid.trim() : '') + (parts.length ? ' ' + parts.join(' ') : '')) + end).replace(/\s+/g, ' ').trim();
+  // flavor tip
+  const freshNow = [...new Set(r.ing.filter(i => FRESH_RX.test(i.n) && !/rice vinegar/.test(i.n) || fin.includes(i)).map(i => i.n.replace(/ \(.*\)/, '').replace(/ or .*/, '')))].slice(0, 3);
+  const prep = sweet ? 'Meal-prep: add a splash of milk or water when reheating and keep fruit/crunchy toppings separate until serving.' : r.nocook ? 'Grab-and-go: keep it cold and season right before eating.' : `Meal-prep: season a little bolder than you would to eat right away, since chilling and reheating dull flavor${freshNow.length ? `; keep the ${freshNow.join(', ').replace(/, ([^,]*)$/, ' and $1')} separate and add after reheating` : '; a squeeze of citrus after reheating wakes it up'}.`;
+  r.flavor = `${sweet ? 'A pinch of salt makes sweet flavors pop, and cinnamon/vanilla add warmth without sugar.' : kit.tip} ${prep}`;
+}
+RAW.forEach(seasonRecipe);
+// pantry staples → "Spices & pantry (probably have)"
+const PANTRY_RX = /\bsalt\b|black pepper|white pepper|ground |dried |oregano|paprika|chili powder|cumin|coriander|garam|masala|curry powder|za.atar|sumac|baharat|7-spice|shawarma spice|cinnamon|star anise|turmeric|red pepper flakes|gochugaru|aleppo|sichuan|fajita|taco seasoning|tikka|tandoori|biryani|chaat|vanilla|olive oil|avocado oil|sesame oil|vinegar|cornstarch|honey|brown sugar|garlic powder|thyme|dried red chilies|hot sauce/i;
+RAW.forEach(r => r.ing.forEach(i => { if (i.sec === 'G' && PANTRY_RX.test(i.n) && !/seaweed|tahini|rice\b/i.test(i.n)) i.sec = 'S'; }));
+
 /* ---------- Storage tags for one-day batch cooking ----------
    fd = days it keeps in the fridge once cooked (USDA: most cooked leftovers 3–4 days); fz = freezes well; fresh = needs day-of cooking (excluded from batch plans).
    Defaults: mains & cooked breakfasts fd 4, fz true. */
@@ -522,7 +607,7 @@ if (typeof module !== 'undefined') module.exports = { SK_SPECIALS };
 const CUISINES = ['Mexican', 'Italian', 'Mediterranean', 'Middle Eastern', 'Armenian', 'Latin American', 'Japanese', 'Korean', 'Thai', 'Indian', 'Chinese', 'Vietnamese', 'American'];
 const LEVELS = ['', 'Beginner', 'Intermediate', 'Advanced'];
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-const SECTIONS = { P: 'Produce', M: 'Meat & seafood', D: 'Dairy, eggs & deli', B: 'Bakery & tortillas', F: 'Frozen', G: 'Pantry & international' };
+const SECTIONS = { P: 'Produce', M: 'Meat & seafood', D: 'Dairy, eggs & deli', B: 'Bakery & tortillas', F: 'Frozen', G: 'Pantry & international', S: '🧂 Spices & pantry (probably have)' };
 const PROTEIN_SNACKS = ['us8', 'kr8', 'jp8', 'am9'];
 
 const TECH = {
@@ -734,8 +819,8 @@ const wu = units => units === 'metric' ? 'kg' : 'lb';
 
 
 /* ---- serving wording & labeled macros ---- */
-const FR = { 0: '', 0.25: '¼', 0.5: '½', 0.75: '¾' };
-function qtrs(x) { const r = Math.round(x * 4) / 4, w = Math.floor(r), f = +(r - w).toFixed(2); return (w ? String(w) : '') + FR[f] || '0'; }
+const FR = { 0: '', 0.125: '⅛', 0.25: '¼', 0.375: '⅜', 0.5: '½', 0.625: '⅝', 0.75: '¾', 0.875: '⅞' };
+function qtrs(x) { const d = x < 1 ? 8 : 4; const r = Math.round(x * d) / d, w = Math.floor(r), f = +(r - w).toFixed(3); return ((w ? String(w) : '') + FR[f]) || '0'; }
 function servWords(sv) { const t = qtrs(sv); return `${t} serving${sv > 1 ? 's' : ''}`; }
 function servInfo(sv) { const pct = Math.round((sv - 1) * 100);
   return `Recipe serving scaled to hit your targets. ${servWords(sv)} = ${pct === 0 ? 'the recipe\u2019s standard portion' : `${Math.abs(pct)}% ${pct > 0 ? 'more' : 'less'} than the recipe\u2019s standard portion`}.`; }
@@ -1018,6 +1103,8 @@ function groceryList(plan, recipes, specials, units) {
   return out;
 }
 function fmtQty(q, u, sec, units) {
+  if (u === 'tbsp' && sec === 'P' && q >= 4) return `${Math.ceil(q / 16 * 2) / 2} bunch (≈${Math.ceil(q)} tbsp chopped)`;
+  if (u === 'tsp' && units !== 'metric' && q >= 3) return `${(Math.ceil(q / 3 * 2) / 2).toString()} tbsp`;
   if (units === 'metric') {
     if (u === 'oz') { const g = q * 28.35; return g >= 1000 ? `${num(Math.ceil(g / 50) * 50 / 1000, 2)} kg` : `${Math.ceil(g / (sec === 'M' ? 25 : 10)) * (sec === 'M' ? 25 : 10)} g`; }
     if (u === 'cup' || u === 'cup dry') { const ml = Math.ceil(q * 240 / 50) * 50; return (ml >= 1000 ? `${num(ml / 1000, 2)} L` : `${ml} ml`) + (u === 'cup dry' ? ' dry' : ''); }
@@ -1287,7 +1374,7 @@ function renderOut() {
     if (pgc && pgc.needContainers > 0) g.K = [{ n: 'Meal-prep containers (optional)', u: 'ea', qty: `${pgc.needContainers} ea`, opt: true }];
     const nSale = Object.values(g).flat().filter(x => x.special).length;
     $('out').innerHTML = `<div class="sum"><span>🛒 <b>${esc(w.store || store().full)}</b></span><span>${fmtD(w.shop, { weekday: 'short', month: 'short', day: 'numeric' })}</span>${nSale ? `<span class="pill sale" style="padding:6px 12px">🏷 ${nSale} on sale</span>` : ''}<button class="btn sm sec" id="glCopy" type="button">Copy</button></div>
-    ${safeNote()}${pgc && pgc.needContainers > 0 ? `<div class="note warn small">🥡 Low on containers: you need ${pgc.nContainers}, you have ${S.equip.containers ? S.equip.nCont : 0}. Added ${pgc.needContainers} to the list (optional).</div>` : ''}<div class="gl">${[...Object.keys(SECTIONS), 'K'].filter(s => g[s]).map(s => `<section><h4>${SECTIONS[s] || '🥡 Kitchen (optional)'}</h4>${g[s].map(x => { const k = x.n + '|' + x.u; return `<label class="it"><input type="checkbox" data-k="${esc(k)}" ${ck[k] ? 'checked' : ''}><span class="${ck[k] ? 'done' : ''}">${esc(x.n)}${x.special ? ` <span class="pill sale" title="${esc(x.special.name)}">${esc(x.special.price)}</span>` : ''}</span><span class="q">${esc(x.qty)}</span></label>`; }).join('')}</section>`).join('')}</div>`;
+    ${safeNote()}${pgc && pgc.needContainers > 0 ? `<div class="note warn small">🥡 Low on containers: you need ${pgc.nContainers}, you have ${S.equip.containers ? S.equip.nCont : 0}. Added ${pgc.needContainers} to the list (optional).</div>` : ''}<div class="gl">${[...Object.keys(SECTIONS), 'K'].filter(s => g[s]).map(s => `<section${s === 'S' ? ' class="pantry"' : ''}><h4>${SECTIONS[s] || '🥡 Kitchen (optional)'}</h4>${s === 'S' ? '<p class="small muted">Staples you probably have. Check the cupboard before buying.</p>' : ''}${g[s].map(x => { const k = x.n + '|' + x.u; return `<label class="it"><input type="checkbox" data-k="${esc(k)}" ${ck[k] ? 'checked' : ''}><span class="${ck[k] ? 'done' : ''}">${esc(x.n)}${x.special ? ` <span class="pill sale" title="${esc(x.special.name)}">${esc(x.special.price)}</span>` : ''}</span><span class="q">${esc(x.qty)}</span></label>`; }).join('')}</section>`).join('')}</div>`;
     $('out').querySelectorAll('input[type=checkbox]').forEach(c => c.onchange = () => { ck[c.dataset.k] = c.checked; save(); c.nextElementSibling.classList.toggle('done', c.checked); });
     $('glCopy').onclick = e => { const txt = [...Object.keys(SECTIONS), 'K'].filter(s => g[s]).map(s => (SECTIONS[s] || 'Kitchen (optional)').toUpperCase() + '\n' + g[s].map(x => `- ${x.n}, ${x.qty}${x.special ? ' [SALE ' + x.special.price + ']' : ''}`).join('\n')).join('\n\n'); navigator.clipboard && navigator.clipboard.writeText(txt).catch(() => {}); e.target.textContent = 'Copied ✓'; };
   } else if (tab === 'prep') {
@@ -1321,7 +1408,7 @@ function renderOut() {
 function batchInfo(p, id, sv) { const nC = p.days.reduce((s, d) => s + d.meals.filter(m => m.id === id && m.st !== 'grab').length, 0); return `Batch: makes ${servWords(sv)} → ${nC} container${nC === 1 ? '' : 's'}`; }
 function batchCard(p, r, sv, alts) {
   return `<ul class="bl">${batchList(r, sv, S.units, S.diet).map(x => `<li><span>${esc(x.n)}</span> — <b>${esc(x.amt)}</b></li>`).join('')}</ul>
-    <p class="small">${inlineAmounts(et(r.steps), r, sv, S.units, S.diet)}</p>${(alts || equipPlan(r, S.equip).alts).map(a => `<div class="tip">🔧 ${et(a)}</div>`).join('')}${r.tip ? `<div class="tip">💡 ${et(r.tip)}</div>` : ''}`;
+    <p class="small">${inlineAmounts(et(r.steps), r, sv, S.units, S.diet)}</p>${(alts || equipPlan(r, S.equip).alts).map(a => `<div class="tip">🔧 ${et(a)}</div>`).join('')}${r.tip ? `<div class="tip">💡 ${et(r.tip)}</div>` : ''}${r.flavor ? `<div class="tip flav">🌶 <b>Flavor tip:</b> ${et(r.flavor)}</div>` : ''}`;
 }
 function miseHTML(p, pg) {
   const ck = S.checks[S.cur] = S.checks[S.cur] || {}; const cooked = p.cook.filter(c => BY[c.id] && !BY[c.id].nocook);
@@ -1338,7 +1425,7 @@ function recipeBody(r) {
   return `<div class="note small">🥡 ${keep}${r.note ? ' · ' + esc(r.note) : ''}</div>${sale.length ? `<div class="note small" style="background:var(--salebg);color:var(--sale)">🏷 On sale: ${esc(sale.map(short).join(', '))}</div>` : ''}<div class="meta">⏱ ${r.active} min${r.total > r.active ? ` (${r.total} total)` : ''}</div><div class="meta"><b>1 serving</b> (${esc(portion(r, 1) || 'as packaged')}): ${macroLine(r.kcal, r.p, r.c, r.f)}</div>
   ${(() => { const ep = equipPlan(r, S.equip); return !ep.ok ? '<div class="note warn small">🔧 Needs equipment you don\u2019t have.</div>' : ep.alts.length ? `<div class="note small">🔧 ${ep.alts.map(et).join(' ')}</div>` : ''; })()}
   ${r.allergens.length ? `<div class="hint">Contains: ${r.allergens.map(a => AL_IC[a] + ' ' + esc(AL[a])).join(' · ')}</div>` : '<div class="hint">No major allergens tagged</div>'}
-  <p><b>You need (per serving):</b> ${r.ing.map(i => `${esc(swapName(i.n, S.diet))} ${esc(qtyText(i.q, i.u, S.units))}`).join(' · ')}</p><p>${et(r.steps)}</p>${r.tip ? `<div class="tip">💡 ${et(r.tip)}</div>` : ''}
+  <p><b>You need (per serving):</b> ${r.ing.map(i => `${esc(swapName(i.n, S.diet))} ${esc(qtyText(i.q, i.u, S.units))}`).join(' · ')}</p><p>${et(r.steps)}</p>${r.tip ? `<div class="tip">💡 ${et(r.tip)}</div>` : ''}${r.flavor ? `<div class="tip flav">🌶 <b>Flavor tip:</b> ${et(r.flavor)}</div>` : ''}
   <details><summary>Techniques & equipment</summary><p class="hint">${r.tech.map(t => TECH[t] ? TECH[t].label : t).join(', ') || 'None'}${r.equip.length ? ' · ' + r.equip.join(', ') : ''}</p></details>`;
 }
 function showRecipe(id, p) { const r = BY[id];
