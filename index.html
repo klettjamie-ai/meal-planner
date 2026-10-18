@@ -99,16 +99,28 @@ input,select,textarea{font-size:16px;min-height:44px}
   .modal .box{border-radius:24px 24px 0 0;max-height:94vh;padding-bottom:calc(18px + env(safe-area-inset-bottom))}
   .wsel select{min-width:0}
 }
+/* cook-day timeline */
+.cookhd{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:var(--soft);border-radius:16px;padding:12px 14px}
+.cookhd b{font-size:17px}
+ol.tl{list-style:none;padding:0;margin:6px 0 10px;position:relative}
+ol.tl li{display:grid;grid-template-columns:70px 30px 1fr;gap:6px;align-items:start;padding:8px 0;border-bottom:1px dashed var(--line);margin:0}
+ol.tl .tm{font-weight:700;font-size:13px;color:var(--pri);padding-top:2px;white-space:nowrap}
+ol.tl .ln{font-size:18px;text-align:center}
+ol.tl .tx{font-size:14px}ol.tl .tx details>summary{color:var(--ink);font-size:14px;margin:0}
+.cont{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.cday{border:1.5px solid var(--line);border-radius:14px;padding:8px 10px;font-size:13px}.cday b{display:block;margin-bottom:2px}
+@media(max-width:600px){ol.tl li{grid-template-columns:62px 26px 1fr}.cont{grid-template-columns:1fr 1fr}}
+body:not([data-tab=plan]) .planonly{display:none!important}
 </style></head><body>
 <header><div class="wrap"><h1>🍊 FitPlan Meals</h1><div class="chips" id="chips"></div></div></header>
 <main>
   <section class="card">
     <div class="wbar">
       <div class="f"><label for="weekSel">Week</label><div class="wsel"><button class="btn sec" id="wPrev" type="button" aria-label="Previous week">‹</button><select id="weekSel"></select><button class="btn sec" id="wNext" type="button" aria-label="Next week">›</button></div></div>
-      <div class="f"><label for="cuisineSel">Cuisine</label><select id="cuisineSel"></select></div>
-      <div><button class="btn big" id="gen" type="button">Make my week</button></div>
+      <div class="f planonly"><label for="cuisineSel">Cuisine</label><select id="cuisineSel"></select></div>
+      <div class="planonly"><button class="btn big" id="gen" type="button">Make my week</button></div>
     </div>
-    <div id="recBox"></div><div id="weekNotes"></div>
+    <div id="recBox" class="planonly"></div><div id="weekNotes"></div>
   </section>
   <section class="card">
     <div class="tabs" id="tabs"><button data-t="plan" class="on"><span class="ti">📅</span>Plan</button><button data-t="grocery"><span class="ti">🛒</span>Groceries</button><button data-t="prep"><span class="ti">🔪</span>Prep</button><button data-t="history"><span class="ti">🗂️</span>History</button><button data-t="settings"><span class="ti">⚙️</span>Settings</button></div>
@@ -298,6 +310,42 @@ R('cn11','Pork & cabbage dumplings (jiaozi)','Chinese','m',560,34,60,18,3,60,75,
 R('us9','Lighter shrimp & grits','American','m',560,38,55,20,2,25,30,'sear,simmer','pot,pan','shrimp (raw, peeled);5;oz;M|quick grits;0.33;cup dry;G|cheddar;0.5;oz;D|turkey bacon;2;slice;D|bell pepper;0.33;ea;P|garlic;1;clove;P|scallions;1;ea;P|lemon;0.25;ea;P','Simmer grits in water/milk 5–7 min, stir in cheddar. Crisp chopped turkey bacon, sauté pepper and garlic, add shrimp 3–4 min until pink; finish with lemon and scallions. Spoon over grits.');
 R('us10','Pan-seared sirloin with pan sauce, mashed potatoes & green beans','American','m',620,44,45,26,3,30,35,'sear,sauce','pan,pot','sirloin tip steak;6;oz;M|potato;6;oz;P|green beans;1;cup;P|garlic;1;clove;P|beef broth;0.33;cup;G|butter;2;tsp;D|dijon mustard;1;tsp;G|almond milk;0.25;cup;D','Boil potatoes until tender; mash with warm milk and a little butter. Sear dried, salted steak 3–4 min per side to 130–135°F for medium-rare; rest. In the same pan add garlic, deglaze with broth, scrape, whisk in mustard and butter. Steam green beans. Slice steak against the grain.','Rest the steak 5 min before slicing so it stays juicy; the pan sauce comes together in that time.');
 
+
+/* ---------- Batch-friendly breakfasts (freeze well) ---------- */
+R('md12','Spinach-feta egg muffins','Mediterranean','b',330,26,8,21,1,15,35,'egg,bake','oven','eggs;3;ea;D|spinach;1;cup;P|feta;0.75;oz;D|cherry tomatoes;3;ea;P|whole-grain bread;1;slice;B','Whisk eggs with chopped spinach, tomato and feta; pour into a greased muffin tin (3 per serving). Bake at 350°F 20–22 min until set. Cool, then refrigerate or freeze. Serve with toast.');
+R('am13','Spinach & halebi cheese egg bake','Armenian','b',400,30,20,22,1,15,40,'egg,bake','oven','eggs;3;ea;D|halebi cheese;0.75;oz;D|spinach;1;cup;P|onion;0.25;ea;P|lavash;0.5;sheet;B','Sauté onion and spinach, spread in a baking dish, pour over beaten eggs and crumbled halebi. Bake at 350°F 25 min. Cut into squares; serve with lavash.');
+R('jp12','Salmon & edamame onigiri (freezer)','Japanese','b',430,28,58,9,2,25,40,'rice,fish','ricecooker,oven','white rice;0.33;cup dry;G|salmon fillet;2.5;oz;M|edamame (frozen, shelled);0.33;cup;F|roasted seaweed snack;1;pack;G|soy sauce;1;tsp;G','Bake salmon at 400°F 12 min, flake with soy. Mix warm rice with salmon and edamame; shape 2 triangles with wet, salted hands. Wrap each tightly in plastic. Fridge 2 days or freeze; microwave 60–90 s, add seaweed.');
+R('kr12','Korean veggie egg muffins with kimchi','Korean','b',320,24,14,18,1,15,35,'egg,bake','oven','eggs;3;ea;D|kimchi;0.25;cup;D|scallions;1;ea;P|carrot;0.25;ea;P|white rice (cooked, day-old);0.25;cup;G','Whisk eggs with chopped kimchi, scallion, grated carrot and rice. Bake in a greased muffin tin at 350°F 20 min. Cool and store.');
+R('in11','Masala egg muffins','Indian','b',330,24,14,19,1,15,35,'egg,bake,dice','oven','eggs;3;ea;D|onion;0.25;ea;P|tomato;0.5;ea;P|spinach;0.5;cup;P|green chili;0.5;ea;P|whole-grain bread;1;slice;B','Whisk eggs with diced onion, tomato, spinach, chili, turmeric and garam masala. Bake in a muffin tin at 350°F 20–22 min. Serve with toast.');
+R('th10','Thai-style chicken & egg rice jars','Thai','b',420,30,48,11,1,15,30,'rice,egg,chicken','pot,ricecooker','white rice;0.33;cup dry;G|ground chicken;2.5;oz;M|eggs;1;ea;D|fish sauce;1;tsp;G|garlic;1;clove;P|scallions;1;ea;P','Cook rice. Brown chicken with garlic and fish sauce; scramble in the egg. Portion rice + chicken into jars with scallions. Microwave 2 min.');
+R('vn12','Vietnamese chicken & ginger rice porridge (cháo gà)','Vietnamese','b',380,28,48,7,1,10,40,'simmer,chicken','pot','white rice;0.25;cup dry;G|chicken breast;3.5;oz;M|ginger;1;inch;P|fish sauce;1;tsp;G|scallions;1;ea;P','Simmer rice in 6x water with ginger 35 min, stirring now and then. Add thin-sliced chicken for the last 8 min (165°F). Season with fish sauce; top with scallions.');
+R('cn12','Egg & scallion fried rice jars','Chinese','b',420,20,55,13,1,15,20,'stirfry,egg,rice','wok','white rice (cooked, day-old);1;cup;G|eggs;2;ea;D|frozen peas & carrots;0.33;cup;F|scallions;1;ea;P|soy sauce;1;tsp;G|avocado oil;1;tsp;G','Scramble eggs, add veg and cold rice, toss 3 min with soy and scallions. Portion into containers.');
+
+
+/* ---------- Storage tags for one-day batch cooking ----------
+   fd = days it keeps in the fridge once cooked (USDA: most cooked leftovers 3–4 days); fz = freezes well; fresh = needs day-of cooking (excluded from batch plans).
+   Defaults: mains & cooked breakfasts fd 4, fz true. */
+const STORAGE = {};
+const tagS = (ids, o) => ids.split(' ').forEach(id => STORAGE[id] = { ...(STORAGE[id] || {}), ...o });
+tagS('mx1 md2 am2 jp1 kr1 kr2 th1 in1 cn2 vn1 la7 vn6 cn5 th8 cn8', { fresh: true });
+tagS('it5 it6 md4 md6 me7 am8 jp2 jp4 jp9 kr10 us5 in9 mx5 th7 cn10 vn11 us9 th6 vn5 vn9 jp5 it8 vn8', { fd: 3, fz: false });
+tagS('it9 md10 me11 us3 th5 kr3 la5 it10 us10 md1 it1 me2 am1', { fd: 4, fz: false });
+tagS('jp10 jp11 in2 jp12', { fd: 3, fz: true });
+tagS('me1 us1 md5 me12 am11 in4 in6 us4 la9', { fd: 5, fz: true });
+tagS('la2', { fd: 1, fz: true });
+tagS('us8 kr8 am9 me9', { fd: 7, fz: false, nocook: true });
+tagS('in8 md8 jp8', { fd: 5 }); tagS('la8 mx8', { fd: 4, fz: false });
+const NOTES = {
+  it9: 'Keep greens and bread separate; toss just before eating.', md10: 'Keep greens separate; add feta day-of.', me11: 'Store chicken, chopped veg, toasted pita and dressing separately; combine at lunch.',
+  us3: 'Keep dressing and avocado separate (slice avocado day-of).', th5: 'Store larb filling separately; spoon into lettuce cold or warm.', kr3: 'Skip the fried egg or use a jammy boiled egg; add gochujang day-of.',
+  mx4: 'Store sliced steak and toppings separately; warm tortillas 30 s.', kr5: 'Store meat and rice; keep lettuce dry in a towel-lined box.', mx10: 'Warm tortillas 30 s; add greens day-of.',
+  jp10: 'Store broth, chicken and noodles separately; heat broth and pour over.', vn2: 'Freeze broth + chicken; soak noodles fresh (3 min) or store cooked noodles separately.',
+  la5: 'Fries soften on reheating; crisp in a hot pan or air fryer 3 min.', md1: 'Layer yogurt in jars; keep nuts in a separate bag.', it1: 'Toast bread day-of (2 min).', la2: 'Freeze smoothie packs; blend with milk 1 min.',
+  me2: 'Use hard-boiled eggs; keep cucumbers and tomato in a separate container.', am1: 'Use hard-boiled eggs; herbs keep best wrapped in a damp towel.',
+};
+RAW.forEach(r => { const t = STORAGE[r.id] || {}; const cooked = r.meal !== 's';
+  r.fresh = !!t.fresh; r.fd = t.fd != null ? t.fd : (cooked ? 4 : 4); r.fz = t.fz != null ? t.fz : cooked; r.nocook = !!t.nocook; r.note = NOTES[r.id] || ''; });
+
 if (typeof module !== 'undefined') module.exports = { RAW };
 
 /* Super King Markets weekly ad — transcribed verbatim from https://www.superkingmarkets.com/weekly-ad on 2026-10-17.
@@ -433,6 +481,7 @@ const parseISO = s => { const [y, m, d] = s.split('-').map(Number); return new D
 const addDays = (s, n) => { const d = parseISO(s); d.setDate(d.getDate() + n); return iso(d); };
 function mondayOf(s) { const d = parseISO(s); const wd = (d.getDay() + 6) % 7; d.setDate(d.getDate() - wd); return iso(d); }
 /** Default planning week: on Sat/Sun plan next week, otherwise this week. */
+function defaultShop(weekISO) { return addDays(weekISO, -2); }
 function defaultWeek(todayISO) { const wd = (parseISO(todayISO).getDay() + 6) % 7; return wd >= 5 ? addDays(mondayOf(todayISO), 7) : mondayOf(todayISO); }
 
 /* ---- targets ---- */
@@ -475,8 +524,8 @@ function recommendCuisine({ recipes, history, weekISO, targets, level, specials,
   const tgtPct = targets.p * 4 / targets.kcal;
   const r = rng('rec' + weekISO);
   const ranked = CUISINES.map(c => {
-    const mains = recipes.filter(x => x.cuisine === c && x.meal === 'm' && x.diff <= level);
-    const all = recipes.filter(x => x.cuisine === c && x.diff <= level);
+    const mains = recipes.filter(x => x.cuisine === c && x.meal === 'm' && x.diff <= level && !x.fresh);
+    const all = recipes.filter(x => x.cuisine === c && x.diff <= level && !x.fresh);
     const pPct = mains.reduce((s, x) => s + x.p * 4 / x.kcal, 0) / Math.max(mains.length, 1);
     const fPct = mains.reduce((s, x) => s + x.f * 9 / x.kcal, 0) / Math.max(mains.length, 1);
     const sale = new Set(); all.forEach(x => saleHits(x, specials).forEach(h => sale.add(h)));
@@ -489,7 +538,7 @@ function recommendCuisine({ recipes, history, weekISO, targets, level, specials,
   const best = ranked[0];
   const reasons = [
     `Mains average ${Math.round(best.pPct * 100)}% of calories from protein (your target: ${Math.round(tgtPct * 100)}% — ${targets.p} g of ${targets.kcal} kcal) and ${Math.round(best.fPct * 100)}% from fat.`,
-    `${best.mains} main dishes at or below your ${LEVELS[level]} level.`,
+    `${best.mains} batch-friendly mains at your ${LEVELS[level]} level.`,
   ];
   if (best.sale.length) reasons.push(`Uses ${best.sale.length} item${best.sale.length > 1 ? 's' : ''} from this week\u2019s specials: ${best.sale.slice(0, 6).map(n => n.split(/ or | \(|, | \d/)[0]).join(', ')}${best.sale.length > 6 ? '…' : ''}.`);
   if (best.strong) reasons.push('Your store is strong in this cuisine\u2019s ingredients.');
@@ -512,62 +561,68 @@ function buildWeekPlan({ recipes, cuisine, weekISO, targets, level, known, stret
   const score = x => {
     const pPct = x.p * 4 / x.kcal;
     const techKnown = x.tech.length ? x.tech.filter(t => knownSet.has(t)).length / x.tech.length : 1;
-    return 3 * (1 - Math.min(1, Math.abs(pPct - Math.max(tgtPct, 0.25)) / 0.2)) + 0.25 * Math.min(saleHits(x, specials).length, 4) + 0.6 * techKnown - 0.004 * x.active + 1.2 * R();
+    return 3 * (1 - Math.min(1, Math.abs(pPct - Math.max(tgtPct, 0.25)) / 0.2)) + 0.25 * Math.min(saleHits(x, specials).length, 4) + 0.6 * techKnown + (x.fz ? 0.8 : 0) + 0.1 * Math.min(x.fd, 5) - 0.004 * x.active + 1.2 * R();
   };
-  const C = recipes.filter(x => x.cuisine === cuisine);
+  const C = recipes.filter(x => x.cuisine === cuisine && !x.fresh);
   const notes = [];
-  // breakfasts
-  let bPool = C.filter(x => x.meal === 'b' && x.diff <= level);
-  if (bPool.length < 2) bPool = bPool.concat(pickRecipes(C.filter(x => x.meal === 'b' && x.diff > level), 2 - bPool.length, x => -x.diff));
-  const B = pickRecipes(bPool, 2, score); if (B.length === 1) B.push(B[0]);
-  // mains
-  const mPool = C.filter(x => x.meal === 'm' && x.diff <= level);
-  let U = pickRecipes(mPool, 6, score);
+  const ok = (r, k) => k <= r.fd || r.fz;                 // k = days after cook day (Mon = 1)
+  // breakfasts: 1–2, at least one that can cover the whole week (freezer)
+  const bAll = C.filter(x => x.meal === 'b');
+  let bLvl = bAll.filter(x => x.diff <= level);
+  let bFz = pickRecipes(bLvl.filter(x => x.fz), 1, score)[0] || pickRecipes(bAll.filter(x => x.fz), 1, x => -x.diff + score(x) * 0.01)[0];
+  const B = bFz ? [bFz] : [];
+  const bOther = pickRecipes(bLvl.filter(x => !B.includes(x)), 1, score)[0];
+  if (bOther && (bOther.fz || bOther.fd >= 3)) B.push(bOther);
+  if (bFz && bFz.diff > level) notes.push(`Breakfast ${bFz.name} is one step up, picked because it freezes well.`);
+  // mains: 2–3 recipes, at least 2 freezer-friendly so Thu–Sun are covered
+  const mAll = C.filter(x => x.meal === 'm');
+  const mLvl = mAll.filter(x => x.diff <= level);
   let stretchR = null;
-  if (stretch && level < 3) stretchR = pickRecipes(C.filter(x => x.meal === 'm' && x.diff === level + 1), 1, score)[0] || null;
-  if (stretchR && U.length >= 6) U = U.slice(0, 5);
-  if (U.length < (stretchR ? 5 : 6)) notes.push(`Only ${U.length} ${LEVELS[level]} ${cuisine} mains, so a few repeat.`);
-  // slots: L1 Mon-Wed, D1 Mon-Tue, D2 Wed-Thu, L2 Thu-Sat, D3 Fri-Sun lunch, D4 Sun dinner; same-day pairs must differ
-  const S = {}; const uses = new Map(U.map(x => [x.id, 0]));
-  const clash = { D1: ['L1'], D2: ['L1'], L2: ['D2'], D3: ['L2'], D4: ['D3'] };
-  for (const slot of ['L1', 'D1', 'D2', 'L2', 'D3', 'D4']) {
-    if (slot === 'D4' && stretchR) { S.D4 = stretchR; break; }
-    const bad = new Set((clash[slot] || []).map(k => S[k] && S[k].id));
-    const cand = U.filter(x => !bad.has(x.id)).sort((a, b) => uses.get(a.id) - uses.get(b.id) || U.indexOf(a) - U.indexOf(b));
-    S[slot] = cand[0] || U[0]; uses.set(S[slot].id, uses.get(S[slot].id) + 1);
-  }
-  const stretchId = stretchR ? stretchR.id : null;
-  const { L1, L2, D1, D2, D3, D4 } = S;
+  if (stretch && level < 3) stretchR = pickRecipes(mAll.filter(x => x.diff === level + 1 && x.fz), 1, score)[0] || null;
+  let M = stretchR ? [stretchR] : [];
+  const fzPool = mLvl.filter(x => x.fz && !M.includes(x));
+  M = M.concat(pickRecipes(fzPool, Math.max(0, 2 - M.filter(x => x.fz).length), score));
+  if (M.filter(x => x.fz).length < 2) { const extra = pickRecipes(mAll.filter(x => x.fz && !M.includes(x)), 2 - M.filter(x => x.fz).length, x => -x.diff * 10 + score(x)); M = M.concat(extra); if (extra.length) notes.push(`Added ${extra.map(x => x.name).join(', ')} (a step up) because it freezes well.`); }
+  const third = pickRecipes(mLvl.filter(x => !M.includes(x)), 1, score)[0];
+  if (third && M.length < 3) M.push(third);
+  // snacks: up to 2
   const snackC = C.find(x => x.meal === 's');
-  const snackP = byId[PROTEIN_SNACKS.find(id => id !== (snackC && snackC.id) && byId[id] && byId[id].cuisine !== cuisine) || 'us8'];
-  const lunch = [L1, L1, L1, L2, L2, L2, D3], dinner = [D1, D1, D2, D2, D3, D3, D4];
-  const days = DAYS.map((dn, i) => {
-    const b = B[i % 2], l = lunch[i], d = dinner[i];
+  const snackP = byId[PROTEIN_SNACKS.find(id => byId[id] && byId[id].cuisine !== cuisine) || 'us8'];
+  const SN = [snackC, snackP].filter(Boolean);
+  // assign
+  const uses = new Map(M.concat(B).map(x => [x.id, 0]));
+  const q = Math.ceil(14 / M.length);
+  const daysPlan = [];
+  for (let k = 1; k <= 7; k++) {
     let best = null;
-    for (const sb of [0.75, 1, 1.25, 1.5, 2]) for (const sm of [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5]) for (const sd of [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5]) for (const sn of [[], [snackC], [snackP], [snackC, snackP], [snackP, snackP]]) {
-      const items = [[b, sb], [l, sm], [d, sd], ...sn.filter(Boolean).map(s => [s, 1])];
-      const t = items.reduce((a, [r, k]) => ({ kcal: a.kcal + r.kcal * k, p: a.p + r.p * k, c: a.c + r.c * k, f: a.f + r.f * k }), { kcal: 0, p: 0, c: 0, f: 0 });
-      const cost = Math.abs(t.kcal - targets.kcal) / targets.kcal + 1.5 * Math.max(0, targets.p - t.p) / targets.p + 0.3 * Math.max(0, t.p - 1.5 * targets.p) / targets.p + 0.01 * sn.length + 0.02 * Math.abs(sm - sd);
-      if (!best || cost < best.cost) best = { cost, t, sb, sm, sd, sn: sn.filter(Boolean) };
+    for (const a of M) for (const b of M) {
+      if (a === b && M.length > 1) continue; if (!ok(a, k) || !ok(b, k)) continue;
+      const sc = [a, b].reduce((s, r) => s - 2 * Math.max(0, uses.get(r.id) + 1 - q) - 0.3 * uses.get(r.id) + (k <= r.fd ? 1 : 0) + (!r.fz ? 2 : 0), 0) + (a === b ? -20 : 0);
+      if (!best || sc > best.sc) best = { sc, a, b };
     }
-    const meals = [{ slot: 'Breakfast', id: b.id, sv: best.sb }, { slot: 'Lunch', id: l.id, sv: best.sm }, { slot: 'Dinner', id: d.id, sv: best.sd }]
-      .concat(best.sn.map(s => ({ slot: 'Snack', id: s.id, sv: 1 })));
-    const tot = { kcal: Math.round(best.t.kcal), p: Math.round(best.t.p), c: Math.round(best.t.c), f: Math.round(best.t.f) };
-    return { day: dn, date: addDays(weekISO, i), meals, tot };
+    if (!best) { best = { a: M[0], b: M[1] || M[0] }; notes.push(`${DAYS[k - 1]}: nothing keeps that long, so eat the oldest portions first.`); }
+    uses.set(best.a.id, uses.get(best.a.id) + 1); uses.set(best.b.id, uses.get(best.b.id) + 1);
+    const bc = B.filter(r => ok(r, k)).sort((x, y) => (uses.get(x.id) - uses.get(y.id)) || ((!y.fz) - (!x.fz)))[0] || B[0];
+    uses.set(bc.id, uses.get(bc.id) + 1);
+    daysPlan.push({ k, b: bc, l: best.a, d: best.b, sn: SN.filter(r => ok(r, k) || r.nocook) });
+  }
+  const days = daysPlan.map(({ k, b, l, d, sn }, i) => {
+    let best = null;
+    for (const sb of [0.75, 1, 1.25, 1.5, 2]) for (const sm of [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5]) for (const sd of [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5]) for (const s of [[], ...sn.map(x => [x]), sn.length > 1 ? sn : null, sn.length ? [sn[sn.length - 1], sn[sn.length - 1]] : null].filter(Boolean)) {
+      const items = [[b, sb], [l, sm], [d, sd], ...s.map(x => [x, 1])];
+      const t = items.reduce((a, [r, m]) => ({ kcal: a.kcal + r.kcal * m, p: a.p + r.p * m, c: a.c + r.c * m, f: a.f + r.f * m }), { kcal: 0, p: 0, c: 0, f: 0 });
+      const cost = Math.abs(t.kcal - targets.kcal) / targets.kcal + 1.5 * Math.max(0, targets.p - t.p) / targets.p + 0.3 * Math.max(0, t.p - 1.5 * targets.p) / targets.p + 0.01 * s.length + 0.02 * Math.abs(sm - sd);
+      if (!best || cost < best.cost) best = { cost, t, sb, sm, sd, s };
+    }
+    const st = r => r.nocook ? 'grab' : (k <= r.fd ? 'fridge' : 'freezer');
+    const meals = [{ slot: 'Breakfast', id: b.id, sv: best.sb, st: st(b) }, { slot: 'Lunch', id: l.id, sv: best.sm, st: st(l) }, { slot: 'Dinner', id: d.id, sv: best.sd, st: st(d) }]
+      .concat(best.s.map(x => ({ slot: 'Snack', id: x.id, sv: 1, st: st(x) })));
+    return { day: DAYS[i], date: addDays(weekISO, i), meals, tot: { kcal: Math.round(best.t.kcal), p: Math.round(best.t.p), c: Math.round(best.t.c), f: Math.round(best.t.f) } };
   });
-  // cook schedule: who cooks what, when
-  const sum = id => days.reduce((s, d) => s + d.meals.filter(m => m.id === id && m.slot !== 'Snack').reduce((a, m) => a + m.sv, 0), 0);
-  const cook = [];
-  const push = (when, r, covers) => { if (!r) return; const ex = cook.find(c => c.when === when && c.id === r.id); const sv = ROUND(covers.reduce((s, [di, slot]) => s + (days[di].meals.find(m => m.slot === slot && m.id === r.id) || { sv: 0 }).sv, 0)); if (ex) ex.sv += sv; else cook.push({ when, id: r.id, sv, covers: covers.map(([di, slot]) => `${DAYS[di]} ${slot.toLowerCase()}`) }); };
-  const prep = addDays(weekISO, -1);
-  B.forEach((b, k) => { if (k === 1 && b.id === B[0].id) return; cook.push({ when: prep, id: b.id, sv: ROUND(sum(b.id)), covers: ['breakfasts (' + days.filter(d => d.meals[0].id === b.id).map(d => d.day).join(', ') + ')'], note: 'Batch-cook or prep components; assemble fresh if it\u2019s an egg dish.' }); });
-  push(prep, L1, [[0, 'Lunch'], [1, 'Lunch'], [2, 'Lunch']]);
-  push(addDays(weekISO, 0), D1, [[0, 'Dinner'], [1, 'Dinner']]);
-  push(addDays(weekISO, 2), D2, [[2, 'Dinner'], [3, 'Dinner']]);
-  push(addDays(weekISO, 2), L2, [[3, 'Lunch'], [4, 'Lunch'], [5, 'Lunch']]);
-  push(addDays(weekISO, 4), D3, [[4, 'Dinner'], [5, 'Dinner'], [6, 'Lunch']]);
-  push(addDays(weekISO, 6), D4, [[6, 'Dinner']]);
-  return { cuisine, weekISO, targets, level, stretchId, notes, days, cook, created: new Date().toISOString(), seed: seed || '' };
+  const ids = [...new Set(days.flatMap(d => d.meals.map(m => m.id)))];
+  const cook = ids.map(id => ({ when: addDays(weekISO, -1), id, sv: ROUND(days.reduce((s, d) => s + d.meals.filter(m => m.id === id).reduce((a, m) => a + m.sv, 0), 0)),
+    covers: days.flatMap(d => d.meals.filter(m => m.id === id).map(m => `${d.day} ${m.slot.toLowerCase()}`)) }));
+  return { v: 2, cuisine, weekISO, cookDay: addDays(weekISO, -1), targets, level, stretchId: stretchR ? stretchR.id : null, notes, days, cook, created: new Date().toISOString(), seed: seed || '' };
 }
 
 /* ---- grocery list ---- */
@@ -590,27 +645,64 @@ function fmtQty(q, u, sec) {
   return `${r.toFixed(2).replace(/\.?0+$/, '')} ${u}`;
 }
 
-/* ---- prep guide ---- */
-function prepGuide(plan, recipes, { level, known }) {
+/* ---- prep guide: one Sunday cook day ---- */
+function laneOf(r) { if (r.tech.includes('pressure') && r.equip.includes('pressure')) return 'pressure'; if (r.equip.some(e => e === 'oven' || e === 'sheet')) return 'oven'; if (r.nocook || !r.equip.length) return 'counter'; return 'stove'; }
+function reheatOf(r) {
+  if (r.nocook) return 'Ready to eat.';
+  if (r.meal === 's') return 'Eat cold or at room temp.';
+  if (!r.fz && /salad|wrap|tuna/i.test(r.name)) return 'Eat cold. Assemble just before eating.';
+  if (/muffin|egg bake|frittata/i.test(r.name)) return 'Microwave 45–60 s (90 s from frozen).';
+  if (/fish|salmon|tilapia|shrimp|cá/i.test(r.name + r.ing.map(i => i.n).join(' '))) return 'Reheat gently: microwave at 50% power 1½–2 min, or eat cold.';
+  if (r.tech.includes('simmer') || r.tech.includes('pressure')) return 'Microwave 3–4 min, stirring halfway, until steaming hot (165°F).';
+  return 'Sprinkle a spoonful of water, cover, microwave 2–3 min until hot (165°F).';
+}
+const clock = (start, min) => { const t = start + min; const h = Math.floor(t / 60), m = t % 60; return `${((h + 11) % 12) + 1}:${String(m).padStart(2, '0')} ${h < 12 || h === 24 ? 'AM' : 'PM'}`; };
+function prepGuide(plan, recipes, { level, known, startMin = 600 }) {
   const byId = Object.fromEntries(recipes.map(x => [x.id, x]));
-  const used = [...new Set(plan.days.flatMap(d => d.meals.map(m => m.id)))].map(id => byId[id]).filter(Boolean);
-  const techs = [...new Set(used.flatMap(r => r.tech))];
   const knownSet = new Set(known || []);
-  const tips = techs.filter(t => TECH[t] && (level === 1 || !knownSet.has(t))).map(t => ({ tech: t, label: TECH[t].label, tip: TECH[t].tip, recipes: used.filter(r => r.tech.includes(t)).map(r => r.name) }));
-  const riceCups = plan.days.reduce((s, d) => s + d.meals.reduce((a, m) => { const r = byId[m.id]; const ri = r && r.ing.find(i => /white rice|brown rice/.test(i.n) && /dry/.test(i.u)); return a + (ri ? ri.q * m.sv : 0); }, 0), 0);
-  const eggsBoil = plan.days.reduce((s, d) => s + d.meals.filter(m => m.id === 'kr8').length * 2, 0);
-  const prepDay = [];
-  if (riceCups > 0) prepDay.push(`Cook rice: about ${(Math.ceil(riceCups * 2) / 2)} cups dry for the week (cook half on prep day, half on Wednesday; cool fast, refrigerate within 1 h, use within 4 days).`);
-  if (eggsBoil) prepDay.push(`Hard-boil ${eggsBoil} eggs for snacks (9–10 min + ice bath).`);
-  prepDay.push('Wash and chop produce for the first half of the week; store in containers lined with a paper towel.');
-  prepDay.push('Portion snacks (nuts, fruit, yogurt) into grab-and-go containers.');
+  const used = plan.cook.map(c => ({ ...c, r: byId[c.id] })).filter(c => c.r);
+  const techs = [...new Set(used.flatMap(c => c.r.tech))];
+  const tips = techs.filter(t => TECH[t] && (level === 1 || !knownSet.has(t))).map(t => ({ tech: t, label: TECH[t].label, tip: TECH[t].tip }));
+  // rice for the week, cooked once
+  const riceCups = plan.days.reduce((s, d) => s + d.meals.reduce((a, m) => { const r = byId[m.id]; const ri = r && r.ing.find(i => /white rice|brown rice|basmati|arborio|glutinous/.test(i.n) && /dry/.test(i.u)); return a + (ri ? ri.q * m.sv : 0); }, 0), 0);
+  // schedule: you (hands-on) are one lane; oven (2 racks), stove (4 burners), pressure cooker (1) run in parallel
+  const cap = { oven: 2, stove: 4, pressure: 1, counter: 9, rice: 1 }; const busy = { oven: [], stove: [], pressure: [], counter: [], rice: [] };
+  const steps = []; let t = 0;
+  steps.push({ at: 0, dur: 10, lane: 'you', text: 'Set out containers and preheat the oven' + (used.some(c => laneOf(c.r) === 'oven') ? ` to ${(used.map(c => (c.r.steps.match(/(\d{3})°F/) || [])[1]).filter(Boolean).sort().pop()) || 400}°F` : '') + '. Pull out all recipes\u2019 ingredients.' });
+  t = 10;
+  if (riceCups > 0) { const cups = Math.ceil(riceCups * 2) / 2; steps.push({ at: t, dur: 5, lane: 'rice', until: t + 35, text: `Rinse and start ${cups} cups dry rice (rice cooker or a big pot) for the whole week (two batches if your cooker is small).` }); busy.rice.push(t + 35); t += 5; }
+  const tasks = used.filter(c => !c.r.nocook).map(c => { const r = c.r; const scale = Math.min(1.8, 1 + 0.1 * Math.max(0, c.sv - 1)); return { ...c, lane: laneOf(r), a: Math.round(r.active * scale / 5) * 5 || 5, p: Math.max(0, r.total - r.active) }; })
+    .sort((x, y) => y.p - x.p || y.a - x.a);
+  let end = t;
+  for (const k of tasks) {
+    const L = busy[k.lane]; let start = t;
+    const live = L.filter(e => e > start).sort((a, b) => a - b);
+    if (live.length >= cap[k.lane]) start = Math.max(start, live[live.length - cap[k.lane]] - k.a);
+    const done = start + k.a + k.p;
+    L.push(done);
+    steps.push({ at: start, dur: k.a, lane: k.lane, until: k.p >= 10 ? done : null, id: k.id, sv: k.sv, text: `${k.r.name} ×${k.sv}` });
+    t = start + k.a; end = Math.max(end, done, t);
+  }
+  const portionAt = Math.max(end, t);
+  const nContainers = plan.days.reduce((s, d) => s + d.meals.filter(m => m.st !== 'grab').length, 0);
+  steps.push({ at: portionAt, dur: 30, lane: 'you', text: `Cool 15 min, then portion into ${nContainers} labeled containers (see below). Fridge Mon–Wed portions, freeze ❄️ ones.` });
+  steps.sort((a, b) => a.at - b.at);
+  const totalMin = portionAt + 30;
+  steps.forEach(s => { s.time = clock(startMin, s.at); if (s.until) s.untilTime = clock(startMin, s.until); });
+  const handsOn = steps.reduce((s, x) => s + x.dur, 0);
+  // containers by day, thaw reminders
+  const containers = plan.days.map(d => ({ day: d.day, date: d.date, items: d.meals.filter(m => m.st !== 'grab').map(m => ({ slot: m.slot, name: byId[m.id].name, sv: m.sv, st: m.st })) }));
+  const thaw = [];
+  plan.days.forEach((d, i) => { const f = d.meals.filter(m => m.st === 'freezer'); if (f.length) thaw.push({ eve: i === 0 ? 'Sun' : DAYS[i - 1], forDay: d.day, items: f.map(m => `${m.slot.toLowerCase()}: ${byId[m.id].name}`) }); });
+  const storage = used.map(c => ({ name: c.r.name, fd: c.r.fd, fz: c.r.fz, nocook: c.r.nocook, reheat: reheatOf(c.r), note: c.r.note }));
   const stretch = plan.stretchId && byId[plan.stretchId];
   const stretchTips = stretch ? { name: stretch.name, tip: stretch.tip, techs: stretch.tech.filter(t => TECH[t]).map(t => ({ label: TECH[t].label, tip: TECH[t].tip })) } : null;
-  const safety = ['Safe internal temps: chicken & turkey 165°F · ground beef/pork 160°F · fish 145°F · whole cuts of beef/pork/lamb 145°F + 3 min rest.', 'Cooked leftovers keep 3–4 days in the fridge. Freeze anything you won\u2019t eat by then.', 'Reheat leftovers to 165°F (steaming hot all the way through).'];
-  return { prepDay, cook: plan.cook.map(c => ({ ...c, name: byId[c.id] && byId[c.id].name })), recipes: used.filter(r => r.meal !== 's' || r.steps.length > 25), tips, stretch: stretchTips, safety, level };
+  const safety = ['Cool food within 2 hours: spread into shallow containers, lids off until steaming stops.', 'Fridge 40°F or colder. Cooked food keeps 3–4 days, so later days come from the freezer.', 'Thaw in the fridge overnight, never on the counter. Reheat to 165°F.', 'Safe cooking temps: poultry 165°F · ground meat 160°F · fish 145°F · whole cuts 145°F + rest.'];
+  return { cookDay: plan.cookDay || addDays(plan.weekISO, -1), steps, totalMin, handsOn, nContainers, containers, thaw, storage, tips, stretch: stretchTips, safety, recipes: used.map(c => c.r).filter(r => !r.nocook), level,
+    cook: plan.cook.map(c => ({ ...c, name: byId[c.id] && byId[c.id].name })), riceCups };
 }
 
-if (typeof module !== 'undefined') module.exports = { CUISINES, LEVELS, DAYS, SECTIONS, TECH, QUIZ, scoreQuiz, macroTargets, fitplanTargets, specialsActive, matchSpecial, saleHits, recommendCuisine, recentCuisines, buildWeekPlan, groceryList, prepGuide, mondayOf, defaultWeek, addDays, iso, parseISO };
+if (typeof module !== 'undefined') module.exports = { CUISINES, LEVELS, DAYS, SECTIONS, TECH, QUIZ, scoreQuiz, macroTargets, fitplanTargets, specialsActive, matchSpecial, saleHits, recommendCuisine, recentCuisines, buildWeekPlan, groceryList, prepGuide, mondayOf, defaultWeek, defaultShop, laneOf, reheatOf, addDays, iso, parseISO };
 </script>
 <script>/* ===== UI ===== */
 const $ = id => document.getElementById(id);
@@ -639,12 +731,12 @@ const targets = () => macroTargets(S.targets);
 const store = () => S.store.id === 'custom' ? { ...STORES.custom, name: S.store.customName || 'Other store', full: S.store.customName || 'Other store', city: S.store.customCity } : STORES[S.store.id];
 const spAll = () => S.specials[S.store.id] || null;
 const week = () => S.weeks[S.cur] || null;
-const shopDate = () => (week() && week().shop) || (S.draft[S.cur] && S.draft[S.cur].shop) || addDays(S.cur, -1);
+const shopDate = () => (week() && week().shop) || (S.draft[S.cur] && S.draft[S.cur].shop) || defaultShop(S.cur);
 const spActive = () => specialsActive(spAll(), shopDate()) ? spAll() : null;
 const fmtD = (s, o) => parseISO(s).toLocaleDateString(undefined, o || { month: 'short', day: 'numeric' });
 const dl = d => `<span class="pill d${d}">${LEVELS[d]}</span>`;
 const short = n => n.split(/ or | \(|, | \d/)[0];
-function setTab(t) { tab = t; document.querySelectorAll('#tabs button').forEach(x => x.classList.toggle('on', x.dataset.t === t)); renderOut(); window.scrollTo({ top: 0 }); }
+function setTab(t) { tab = t; document.body.dataset.tab = t; document.querySelectorAll('#tabs button').forEach(x => x.classList.toggle('on', x.dataset.t === t)); renderOut(); window.scrollTo({ top: 0 }); }
 
 /* ---------- header chips ---------- */
 function renderChips() {
@@ -676,6 +768,7 @@ function renderWeekBar() {
   $('recBox').innerHTML = rec ? `<div class="rec">✨ <b>${EMOJI[rec.cuisine] || ''} ${esc(rec.cuisine)}</b> <span class="muted small">${esc(rec.line || '')}</span>
     <details><summary>Why?</summary><ul>${rec.reasons.map(r => `<li>${esc(r)}</li>`).join('')}</ul></details></div>` : '';
   let notes = '';
+  if (w && w.plan.v !== 2) notes += `<div class="note warn small">Made with the old planner. Tap “Remake week” for a one-day cook plan.</div>`;
   if (w && w.plan.notes.length) notes += `<div class="note small">${w.plan.notes.map(esc).join('<br>')}</div>`;
   if (w && (w.plan.targets.kcal !== targets().kcal || w.plan.targets.p !== targets().p || w.plan.level !== level())) notes += `<div class="note warn small">Targets or level changed. Tap “Remake week” to update.</div>`;
   $('weekNotes').innerHTML = notes;
@@ -706,11 +799,12 @@ function renderOut() {
   const p = w.plan, sp = specialsActive(spAll(), w.shop) ? spAll() : null;
   if (tab === 'plan') {
     const avg = k => Math.round(p.days.reduce((s, d) => s + d.tot[k], 0) / 7);
-    $('out').innerHTML = `<div class="sum"><span>${EMOJI[w.cuisine] || ''} <b>${esc(w.cuisine)}</b></span><span>avg <b>${avg('kcal')}</b> / ${p.targets.kcal} kcal</span><span><b>${avg('p')}</b> g protein</span><span>${LEVELS[p.level]}</span></div>
+    const pgx = p.v === 2 ? prepGuide(p, RECIPES, { level: p.level, known: S.skill.known }) : null;
+    $('out').innerHTML = `<div class="sum"><span>${EMOJI[w.cuisine] || ''} <b>${esc(w.cuisine)}</b></span><span>avg <b>${avg('kcal')}</b> / ${p.targets.kcal} kcal</span><span><b>${avg('p')}</b> g protein</span>${pgx ? `<span>🍳 Cook ${fmtD(pgx.cookDay, { weekday: 'short' })} · <b>${p.cook.filter(c => !BY[c.id].nocook).length}</b> recipes · ~${hm(pgx.totalMin)}</span>` : ''}</div>
     <div class="grid7">${p.days.map(d => { const ok = Math.abs(d.tot.kcal - p.targets.kcal) / p.targets.kcal <= 0.05 && d.tot.p >= p.targets.p * 0.95;
-      return `<div class="day"><div class="hd"><b>${d.day}</b><span class="muted small">${fmtD(d.date)}</span></div>${d.meals.map(m => { const r = BY[m.id]; return `<div class="meal"><span class="ic" title="${m.slot}">${SLOT_IC[m.slot]}</span><span class="nm"><a href="#" data-r="${r.id}">${esc(r.name)}</a>${badges(r, p, sp)}</span><span class="kc">${Math.round(r.kcal * m.sv)}${m.sv !== 1 ? `<br>${m.sv}×` : ''}</span></div>`; }).join('')}
+      return `<div class="day"><div class="hd"><b>${d.day}</b><span class="muted small">${fmtD(d.date)}</span></div>${d.meals.map(m => { const r = BY[m.id]; return `<div class="meal"><span class="ic" title="${m.slot}">${SLOT_IC[m.slot]}</span><span class="nm"><a href="#" data-r="${r.id}">${esc(r.name)}</a>${badges(r, p, sp)}</span><span class="kc">${m.st === 'freezer' ? '<span title="From the freezer">❄️</span> ' : ''}${Math.round(r.kcal * m.sv)}${m.sv !== 1 ? `<br>${m.sv}×` : ''}</span></div>`; }).join('')}
       <div class="tot ${ok ? 'good' : 'off'}">${d.tot.kcal} kcal · ${d.tot.p} g P</div></div>`; }).join('')}</div>
-    <details><summary>How this works</summary><p class="hint">Lunches are batch-cooked (Mon–Wed, Thu–Sat). Dinners make leftovers. 🏷 = uses sale items · ⭐ = stretch recipe · green = on target. Tap a dish for the recipe.</p></details>`;
+    <p class="hint">Everything is cooked Sunday. ❄️ = from the freezer (thaw the night before) · 🏷 sale · ⭐ stretch · tap a dish for the recipe.</p>`;
     $('out').querySelectorAll('[data-r]').forEach(a => a.onclick = e => { e.preventDefault(); showRecipe(a.dataset.r, p); });
   } else if (tab === 'grocery') {
     const g = groceryList(p, RECIPES, sp); const ck = S.checks[S.cur] = S.checks[S.cur] || {};
@@ -720,19 +814,32 @@ function renderOut() {
     $('out').querySelectorAll('input[type=checkbox]').forEach(c => c.onchange = () => { ck[c.dataset.k] = c.checked; save(); c.nextElementSibling.classList.toggle('done', c.checked); });
     $('glCopy').onclick = e => { const txt = Object.keys(SECTIONS).filter(s => g[s]).map(s => SECTIONS[s].toUpperCase() + '\n' + g[s].map(x => `- ${x.n}, ${x.qty}${x.special ? ' [SALE ' + x.special.price + ']' : ''}`).join('\n')).join('\n\n'); navigator.clipboard && navigator.clipboard.writeText(txt).catch(() => {}); e.target.textContent = 'Copied ✓'; };
   } else if (tab === 'prep') {
+    if (p.v !== 2) { $('out').innerHTML = '<div class="note warn">This week was made with the old planner. Tap “Remake week” to get a Sunday cook-day plan.</div>'; return; }
     const pg = prepGuide(p, RECIPES, { level: p.level, known: S.skill.known });
+    const LANE = { you: '🧑‍🍳', rice: '🍚', oven: '♨️', stove: '🍳', pressure: '⏲️', counter: '🔪' };
+    const LN = { you: 'You', rice: 'Rice', oven: 'Oven', stove: 'Stove', pressure: 'Instant Pot', counter: 'Counter' };
+    const ST = { fridge: '', freezer: ' ❄️', grab: '' };
     $('out').innerHTML = `<div class="prep">
-      <h3>🧺 ${fmtD(addDays(p.weekISO, -1), { weekday: 'long' })} prep</h3><ul>${pg.prepDay.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
-      <h3>🍳 Cook days</h3><ul>${pg.cook.map(c => `<li><b>${fmtD(c.when, { weekday: 'short' })}</b> · ${esc(c.name)} ×${c.sv}${c.id === p.stretchId ? ' <span class="pill stretch">⭐ stretch</span>' : ''}</li>`).join('')}</ul>
-      ${pg.stretch ? `<details class="sec" open><summary>⭐ Stretch: ${esc(pg.stretch.name)}</summary>${pg.stretch.tip ? `<div class="tip">${esc(pg.stretch.tip)}</div>` : ''}${pg.stretch.techs.map(t => `<div class="tip"><b>${esc(t.label)}</b>: ${esc(t.tip)}</div>`).join('')}</details>` : ''}
+      <div class="cookhd"><div><div class="muted small">Cook day</div><b>${fmtD(pg.cookDay, { weekday: 'long', month: 'short', day: 'numeric' })}</b></div>
+        <div class="sum" style="margin:0"><span>⏱ <b>~${hm(pg.totalMin)}</b></span><span>🥡 <b>${pg.nContainers}</b> containers</span><span>📋 <b>${pg.recipes.length}</b> recipes</span></div></div>
+      <h3>Timeline</h3><ol class="tl">${pg.steps.map(s => { const r = s.id && BY[s.id]; return `<li class="tl-${s.lane}"><span class="tm">${s.time}</span><span class="ln" title="${LN[s.lane]}">${LANE[s.lane]}</span><div class="tx">${r ? `<details><summary><b>${esc(r.name)}</b> ×${s.sv}${r.id === p.stretchId ? ' <span class="pill stretch">⭐</span>' : ''}</summary><p class="small">${esc(r.steps)}</p><p class="hint">Multiply ingredients ×${s.sv}. See Groceries for totals.</p>${r.tip ? `<div class="tip">💡 ${esc(r.tip)}</div>` : ''}</details>` : esc(s.text)}
+        <div class="hint" style="margin:2px 0 0">${s.dur} min hands-on${s.untilTime ? ` · ${LN[s.lane].toLowerCase()} until ${s.untilTime}` : ''}</div></div></li>`; }).join('')}
+        <li class="tl-you"><span class="tm">${clock(600, pg.totalMin)}</span><span class="ln">🎉</span><div class="tx"><b>Done for the week</b></div></li></ol>
+      <h3>Containers by day</h3><div class="cont">${pg.containers.map(d => `<div class="cday"><b>${d.day}</b>${d.items.map(i => `<div>${SLOT_IC[i.slot]} ${esc(short2(i.name))}${i.sv !== 1 ? ` <span class="muted">×${i.sv}</span>` : ''}${ST[i.st]}</div>`).join('')}</div>`).join('')}</div>
+      <p class="hint">Label each with day + meal. Mon–Wed go in the fridge. ❄️ go straight in the freezer.</p>
+      ${pg.thaw.length ? `<h3>❄️ Thaw reminders</h3><ul>${pg.thaw.map(t => `<li><b>${t.eve} night</b>: move ${t.forDay}\u2019s ${t.items.length} container${t.items.length > 1 ? 's' : ''} to the fridge</li>`).join('')}</ul>` : ''}
+      <details class="sec"><summary>🥡 Storage & reheating</summary>${pg.storage.map(x => `<div class="rc" style="padding:6px 0;border-bottom:1px solid var(--line)"><b>${esc(x.name)}</b><div class="hint" style="margin:2px 0">${x.nocook ? 'Grab & go' : `Fridge ${x.fd} days${x.fz ? ' · freezes ✓' : ' · don\u2019t freeze'}`} · ${esc(x.reheat)}${x.note ? ' ' + esc(x.note) : ''}</div></div>`).join('')}</details>
+      ${pg.stretch ? `<details class="sec"><summary>⭐ Stretch: ${esc(pg.stretch.name)}</summary>${pg.stretch.tip ? `<div class="tip">${esc(pg.stretch.tip)}</div>` : ''}${pg.stretch.techs.map(t => `<div class="tip"><b>${esc(t.label)}</b>: ${esc(t.tip)}</div>`).join('')}</details>` : ''}
       ${pg.tips.length ? `<details class="sec"${p.level === 1 ? ' open' : ''}><summary>💡 ${p.level === 1 ? 'Beginner tips' : 'Skill tips'} (${pg.tips.length})</summary>${pg.tips.map(t => `<div class="tip"><b>${esc(t.label)}</b>: ${esc(t.tip)}</div>`).join('')}</details>` : ''}
-      <details class="sec"><summary>🌡️ Food safety</summary><ul>${pg.safety.map(x => `<li>${esc(x)}</li>`).join('')}</ul></details>
-      <h3>📖 Recipes</h3>${pg.recipes.map(r => `<details class="sec rc"><summary>${esc(r.name)} ${dl(r.diff)}${r.id === p.stretchId ? ' <span class="pill stretch">⭐</span>' : ''}</summary>${recipeBody(r)}</details>`).join('')}</div>`;
+      <details class="sec"><summary>🌡️ Food safety</summary><ul>${pg.safety.map(x => `<li>${esc(x)}</li>`).join('')}</ul></details></div>`;
   }
 }
+const hm = m => `${Math.floor(m / 60)}h${m % 60 ? ' ' + String(m % 60).padStart(2, '0') + 'm' : ''}`;
+const short2 = n => n.split(/ — | with | \(/)[0];
 function recipeBody(r) {
   const w = week(), sp = w && specialsActive(spAll(), w.shop) ? spAll() : null, sale = saleHits(r, sp);
-  return `${sale.length ? `<div class="note small" style="background:var(--salebg);color:var(--sale)">🏷 On sale: ${esc(sale.map(short).join(', '))}</div>` : ''}<div class="meta">⏱ ${r.active} min${r.total > r.active ? ` (${r.total} total)` : ''} · ${r.kcal} kcal · ${r.p}P ${r.c}C ${r.f}F per serving</div>
+  const keep = r.nocook ? 'Grab & go' : `Keeps ${r.fd} days in the fridge${r.fz ? ' · freezes well ❄️' : ''}`;
+  return `<div class="note small">🥡 ${keep}${r.note ? ' · ' + esc(r.note) : ''}</div>${sale.length ? `<div class="note small" style="background:var(--salebg);color:var(--sale)">🏷 On sale: ${esc(sale.map(short).join(', '))}</div>` : ''}<div class="meta">⏱ ${r.active} min${r.total > r.active ? ` (${r.total} total)` : ''} · ${r.kcal} kcal · ${r.p}P ${r.c}C ${r.f}F per serving</div>
   <p><b>You need:</b> ${r.ing.map(i => `${esc(i.n)} ${i.q} ${esc(i.u)}`).join(' · ')}</p><p>${esc(r.steps)}</p>${r.tip ? `<div class="tip">💡 ${esc(r.tip)}</div>` : ''}
   <details><summary>Techniques & equipment</summary><p class="hint">${r.tech.map(t => TECH[t] ? TECH[t].label : t).join(', ') || 'None'}${r.equip.length ? ' · ' + r.equip.join(', ') : ''}</p></details>`;
 }
@@ -857,7 +964,7 @@ function wzDone() {
   $('wzGo').onclick = () => { S.onboarded = true; save(); closeModal(); setTab('plan'); renderAll(); };
 }
 
-function renderAll() { renderChips(); renderWeekBar(); renderOut(); }
+function renderAll() { document.body.dataset.tab = tab; renderChips(); renderWeekBar(); renderOut(); }
 renderAll();
 if (!S.onboarded && !/demo/.test(location.hash)) openQuiz(true);
 if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => {});
