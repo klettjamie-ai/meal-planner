@@ -198,6 +198,12 @@ header h1{display:flex;align-items:center;gap:8px}header h1 .logo{width:34px;hei
 .vegd{font-size:12.5px;color:#15803d;font-weight:600;margin:6px 0 2px}
 .vegseg button{flex:1 1 30%;min-height:44px}
 .vvar .fams{margin-left:4px;white-space:nowrap}.vvar .fams i{font-style:normal;opacity:.22;filter:grayscale(1);margin:0 1px}.vvar .fams i.on{opacity:1;filter:none}
+
+.stagebox{margin:10px 0 4px}.stagebox .seg2 button{font-size:13px}
+.pill.stg{background:#fde7f1;color:#9d174d;font-weight:600}
+.stagenote ul{margin:4px 0 0 18px;padding:0}.stagenote details.why{margin-top:6px}.stagenote details.why summary{cursor:pointer;font-weight:600}
+.stagenote details.why a{color:inherit}
+.nutd{display:flex;flex-wrap:wrap;gap:3px;margin:3px 0;font-size:11px}.nutd i{font-style:normal;background:#fdf2f8;color:#831843;border-radius:9px;padding:1px 6px}
 </style></head><body>
 <header><div class="wrap"><h1><img class="logo" src="logo.svg" alt="" width="34" height="36"> Chef Momo</h1><div class="chips" id="chips"></div></div></header>
 <main>
@@ -557,6 +563,13 @@ function seasonRecipe(r) {
   r.flavor = `${sweet ? 'A pinch of salt makes sweet flavors pop, and cinnamon/vanilla add warmth without sugar.' : kit.tip} ${prep}`;
 }
 
+/* ---------- postpartum-friendly additions: warming soups, lactation oats, one-hand snacks ---------- */
+R('kr16','Miyeok-guk — Korean seaweed & beef soup with rice','Korean','m',470,30,53,14,1,15,45,'simmer','pot','stew meat (beef);4;oz;M|dried seaweed (miyeok/wakame);0.25;oz;G|toasted sesame oil;1;tsp;S|garlic;1;clove;P|soy sauce;2;tsp;G|water;2.5;cup;G|white rice;0.33;cup dry;G','Soak miyeok in cold water 15 min until soft, drain, squeeze and cut into bite-size pieces. Slice beef thin; sauté with sesame oil and garlic 3 min, add the seaweed and stir 2 min. Add the water and soy sauce; simmer 25 min until the beef is tender and cooked through. Serve with rice.','Korean families serve miyeok-guk to new mothers: seaweed brings iodine and iron, and it reheats well.');
+R('cn16','Ginger & sesame-oil chicken with bok choy (alcohol-free má yóu jī)','Chinese','m',490,34,53,15,1,10,30,'simmer,chicken','pot','chicken thighs (boneless);5;oz;M|toasted sesame oil;2;tsp;S|ginger;2;inch;P|chicken broth;0.5;cup;G|soy sauce;1;tsp;G|baby bok choy;1;ea;P|white rice;0.33;cup dry;G','Slice ginger into thin coins and fry in sesame oil over medium-low heat 5 min until the edges curl. Add bite-size chicken and brown 4 min. Add broth and soy, cover and simmer 15 min to 165°F. Add halved bok choy for the last 3 min. Serve with rice.','Traditionally made with rice wine; this version uses broth only, so it is alcohol-free.');
+R('mx14','Caldo de pollo — chicken & vegetable soup','Mexican','m',440,35,55,8,1,15,45,'simmer,chicken','pot','chicken thighs (boneless);5;oz;M|carrot;1;ea;P|zucchini;0.5;ea;P|potato;0.5;ea;P|corn on the cob;0.5;ea;P|onion;0.25;ea;P|garlic;1;clove;P|cilantro;1;tbsp;P|lime;0.5;ea;P|water;2.5;cup;G|corn tortillas;2;ea;B','Simmer chicken with onion, garlic and the water 20 min. Add carrot, potato and corn chunks 12 min, then zucchini 5 min, until the chicken reaches 165°F; shred it back into the pot. Serve with cilantro, lime and warm tortillas.','');
+R('us14','Lactation overnight oats with flax, chia & banana','American','b',450,23,59,15,1,5,5,'','','rolled oats;0.5;cup;G|milk (2%);0.75;cup;D|greek yogurt (plain);0.33;cup;D|ground flaxseed;1;tbsp;G|chia seeds;1;tbsp;G|banana;0.5;ea;P|ground cinnamon;0.25;tsp;S','Stir oats, milk, yogurt, flax, chia and cinnamon in jars; refrigerate overnight. Top with sliced banana in the morning. Eat cold or warm 1 min.','Oats, flax and chia add fiber and iron; easy to eat one-handed.');
+R('us15','One-hand oat, peanut butter & flax energy bites','American','s',230,7,27,11,1,10,10,'','','rolled oats;0.33;cup;G|peanut butter;1;tbsp;G|ground flaxseed;1;tsp;G|honey;1;tsp;S|vanilla extract;0.25;tsp;S','Mix oats, peanut butter, flax, honey and vanilla; roll into 3 balls per serving and chill. Keeps 1 week in the fridge.','');
+
 /* ---------- Storage tags for one-day batch cooking ----------
    fd = days it keeps in the fridge once cooked (USDA: most cooked leftovers 3–4 days); fz = freezes well; fresh = needs day-of cooking (excluded from batch plans).
    Defaults: mains & cooked breakfasts fd 4, fz true. */
@@ -570,7 +583,7 @@ tagS('me1 us1 md5 me12 am11 in4 in6 us4 la9', { fd: 5, fz: true });
 tagS('la2', { fd: 1, fz: true });
 tagS('vn23 kr14 md14 md15 am15', { fd: 4, fz: false }); tagS('vn26 me16 am16 la14 in14', { fd: 3, fz: false }); tagS('vn25', { fd: 3, fz: true }); tagS('vn19 vn20 vn13 vn18', { fd: 5, fz: true });
 tagS('pl1', { fd: 4, fz: false }); tagS('pl3', { fd: 3, fz: false }); tagS('pl12', { fd: 7, fz: false, nocook: true }); tagS('pl4 pl10', { fd: 5, fz: true }); tagS('pl11', { fd: 3, fz: true });
-tagS('us8 kr8 am9 me9', { fd: 7, fz: false, nocook: true });
+tagS('us8 kr8 am9 me9', { fd: 7, fz: false, nocook: true }); tagS('us14', { fd: 4, fz: false, nocook: true }); tagS('us15', { fd: 7, fz: true, nocook: true });
 tagS('in8 md8 jp8', { fd: 5 }); tagS('la8 mx8', { fd: 4, fz: false });
 const NOTES = {
   vn19: 'Freeze broth + shank in portions; soak noodles and slice raw sirloin fresh, add herbs at serving.', vn20: 'Freeze broth + meat; boil noodles fresh and add cabbage/mint at serving.', vn25: 'Freeze the sour base; add fish when reheating (5 min) and herbs at serving.', vn15: 'Store pork, noodles, herbs and nước chấm separately.', vn13: 'Freeze pork in its sauce; add freshly boiled eggs after thawing (eggs go rubbery frozen).', vn21: 'Keep crispy shallots in a separate bag.', kr15: 'Fry or soft-boil eggs fresh; jar the rice.', md15: 'Reheat gently without boiling.',
@@ -845,6 +858,117 @@ function fitplanTargets(o) {
   return { kcal: Math.round(t / 10) * 10, protein: Math.round(0.85 * goal), from: 'FitPlan' };
 }
 
+/* ---- pregnancy & postpartum (ACOG / USDA DGA / CDC / FDA guidance). Not medical advice. ---- */
+const STAGE_SOURCES = [
+  ['ACOG FAQ: Healthy Eating During Pregnancy', 'https://www.acog.org/womens-health/faqs/healthy-eating-during-pregnancy'],
+  ['ACOG Committee Opinion 548: Weight Gain During Pregnancy (IOM 2009 ranges)', 'https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2013/01/weight-gain-during-pregnancy'],
+  ['ACOG Committee Opinion 462: Moderate Caffeine Consumption During Pregnancy', 'https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2010/08/moderate-caffeine-consumption-during-pregnancy'],
+  ['USDA/HHS Dietary Guidelines for Americans 2020–2025 (pregnancy & lactation)', 'https://www.dietaryguidelines.gov/'],
+  ['CDC: Safer Food Choices for Pregnant Women', 'https://www.cdc.gov/food-safety/foods/pregnant-women.html'],
+  ['FDA/EPA: Advice About Eating Fish', 'https://www.fda.gov/food/consumers/advice-about-eating-fish'],
+  ['CDC: Maternal Diet and Breastfeeding', 'https://www.cdc.gov/breastfeeding-special-circumstances/hcp/diet-micronutrients/maternal-diet.html'],
+  ['National Academies DRIs: energy (+340/+452 kcal T2/T3; +330/+400 lactation) and protein (71 g or 1.1 g/kg)', 'https://nap.nationalacademies.org/catalog/10490'],
+];
+const STAGE_DISCLAIMER = 'Not medical advice; check with your OB or midwife, especially if you have gestational diabetes, preeclampsia, twins, anemia or another condition.';
+const PREG_KCAL = { 1: 0, 2: 340, 3: 452 };
+/** profile → stage or null (only for sex = female) */
+function stageOf(pr) { if (!pr || pr.sex !== 'female') return null;
+  if (pr.stage === 'preg') return { k: 'preg', tri: [1, 2, 3].includes(+pr.tri) ? +pr.tri : 1 };
+  if (pr.stage === 'pp') return { k: 'pp', bf: pr.bf !== false && pr.bf !== 'no', wk: Math.max(0, +pr.ppWeeks || 0) };
+  return null; }
+const stageKey = st => !st ? '' : st.k === 'preg' ? 'preg' : st.bf ? 'ppbf' : 'pp';
+function stageLabel(st) { return !st ? '' : st.k === 'preg' ? `Pregnant · trimester ${st.tri}` : `Postpartum · ${st.wk} wk${st.bf ? ' · breastfeeding' : ''}`; }
+/** IOM 2009 / ACOG total gain by pre-pregnancy BMI (singleton) */
+function gainRange(bmi) { return bmi < 18.5 ? [28, 40, 'underweight'] : bmi < 25 ? [25, 35, 'healthy weight'] : bmi < 30 ? [15, 25, 'overweight'] : [11, 20, 'obesity']; }
+const NUTS = { folate: ['🥬', 'Folate'], iron: ['🩸', 'Iron'], vitc: ['🍊', 'Vit C'], calcium: ['🦴', 'Calcium'], choline: ['🥚', 'Choline'], dha: ['🐟', 'DHA'], fiber: ['🌾', 'Fiber'] };
+const NUT_RX = {
+  folate: /spinach|kale|greens|lettuce|romaine|arugula|asparagus|broccoli|brussels|lentil|\bbeans?\b|black beans|chickpea|edamame|avocado|orange|beet|\bpeas\b|bok choy|choy|okra|molokhia|seaweed|miyeok|wakame|moong|mung|dal\b|fava|cabbage|napa/i,
+  iron: /\bbeef\b|sirloin|steak|chuck|shank|stew meat|ground beef|lamb|flanken|short rib|lentil|\bbeans?\b|black beans|chickpea|spinach|tofu|chard|molokhia|mussel|clam|seaweed|miyeok|kasha|buckwheat|quinoa|fava|moong|mung|dal\b|edamame|oats/i,
+  vitc: /bell pepper|tomato|orange|lemon|\blime\b|broccoli|strawberr|kiwi|papaya|mango|pineapple|cabbage|brussels|cauliflower|guava|jalape|poblano|chili|bok choy|kale|potato/i,
+  calcium: /yogurt|\bmilk\b|milk \(|cheese|feta|ricotta|kefir|tofu|sardine|bok choy|kale|labneh|twaróg|paneer|queso|almond milk|tahini|sesame seeds|chia/i,
+  choline: /\beggs?\b|\bbeef\b|sirloin|chuck|shank|stew meat|chicken|salmon|tilapia|\bcod\b|shrimp|tofu|edamame|soy milk|turkey/i,
+  dha: /salmon|sardine|trout|herring|anchov|atlantic mackerel|light tuna|canned tuna/i,
+  fiber: /lentil|\bbeans?\b|chickpea|\boats\b|rolled oats|barley|bulgur|quinoa|brown rice|whole.wheat|buckwheat|kasha|chia|flax|split pea|edamame|moong|mung|fava|freekeh|okra|sweet potato/i,
+};
+function nutTags(r) { const s = r.ing.map(i => i.n).join(' | '); const t = Object.keys(NUT_RX).filter(k => NUT_RX[k].test(s)); if ((r.veg || 0) >= 2 && !t.includes('fiber')) t.push('fiber'); return t; }
+const LOWHG_RX = /salmon|sardine|tilapia|\bcod\b|pollock|trout|shrimp|catfish|herring|anchov|light tuna|canned tuna|haddock|scallop|crab|clam|mussel|flounder|\bsole\b|hake|whitefish|atlantic mackerel/i;
+const isFishMeal = r => r.ing.some(i => LOWHG_RX.test(i.n) && i.sec !== 'S' && !/sauce|paste|mắm/i.test(i.n));
+const WARM_RX = /soup|stew|porridge|cháo|congee|\bjok\b|caldo|-guk|\bguk\b|jjigae|bigos|gulasz|\bdal\b|curry|phở|pho\b|chili\b|molokhia|udon|ramen|pozole|canh|braise|jjim|ginger/i;
+// hard excludes during pregnancy (CDC/FDA): [regex over name+ingredients+steps, reason]
+const PREG_EXCLUDE = [
+  [/ceviche|tartare|carpaccio|sashimi|sushi|\bpoke\b|crudo|yukhoe|nayyeh|kitfo|tamago kake|raw (fish|egg|beef|oyster)|\boysters?\b(?! sauce)|steak tartare/i, 'raw or lime-cured fish, meat or eggs'],
+  [/\bshark\b|swordfish|king mackerel|tilefish|bigeye|\bmarlin\b|orange roughy|\bahi\b|tuna steak/i, 'high-mercury fish'],
+  [/\bliver\b|pâté|\bpate\b|foie gras|liverwurst/i, 'liver (very high in vitamin A)'],
+  [/raw milk|unpasteurized/i, 'unpasteurized milk or cheese'],
+  [/smoked salmon|\blox\b|gravlax|smoked trout|smoked whitefish|nova-style/i, 'refrigerated smoked fish'],
+  [/alfalfa|clover sprouts|radish sprouts/i, 'raw sprouts'],
+];
+const CURED_RX = /prosciutto|salami|pepperoni|\bdeli\b|cold cuts|lunch meat|mortadella|bresaola|coppa|jamón|serrano|soppressata|\bham\b|hot dogs?|frankfurter|kielbasa|soujuk|sujuk|basturma|chorizo|\bsausage|turkey bacon|\bbacon\b/i;
+const COOK_RX = /crisp|fry|fried|bake|sear|simmer|grill|roast|brown|sauté|saute|boil|stew|pressure cook|broil|cook/i;
+const STEP_FIX = [ // pregnancy: rewrite undercooked methods to safe ones (CDC safe temps)
+  [/ to 130–135°F for medium-rare/g, ' to 145°F (medium, no pink juices)'], [/medium-rare/gi, 'medium (145°F)'],
+  [/paper-thin raw sirloin/g, 'paper-thin sirloin simmered in the boiling broth 1–2 min until no longer pink'], [/slice raw sirloin fresh/g, 'slice sirloin fresh and cook it in the boiling broth until no longer pink'],
+  [/Soft-boil eggs 7 min/g, 'Hard-boil eggs 10–12 min (firm yolks)'], [/soft-boil/gi, 'hard-boil'], [/a jammy boiled egg/g, 'a hard-boiled egg (firm yolk)'], [/fried or jammy egg/g, 'fried egg cooked until the yolk is firm'], [/jammy( boiled)? eggs?/g, 'hard-boiled egg'],
+  [/runny yolks?/gi, 'firm yolk'], [/Crack in an egg/g, 'Crack in an egg and simmer until the white and yolk are firm'], [/[Ff]ry eggs to your liking/g, 'Fry eggs until whites and yolks are firm'],
+  [/then sprouts/g, 'then sprouts (simmer 1 min until steaming)'], [/[Aa]dd sprouts/g, m => m + ' and simmer 1 min until steaming'], [/add sprouts, basil/g, 'add sprouts (dunked in the boiling broth 1 min), basil'],
+  [/\bmirin\b/g, 'alcohol-free mirin'],
+];
+const ALC_RX = /\b(white|red|rice|cooking|shaoxing|shao hsing) wine\b(?! vinegar)|\bsake\b|\bbeer\b|\bsoju\b|\brum\b|brandy|vodka|cognac|sherry(?! vinegar)|marsala|\bmirin\b|liqueur|bourbon/i;
+const CAFF_RX = /matcha|coffee|espresso|black tea|green tea|\bchai\b|cocoa|chocolate|\bcola\b/i;
+const SOFTCHEESE_RX = /feta|farmer|twaróg|halebi|ricotta|labneh|cottage cheese|string cheese|mozzarella|paneer|cotija|panela|goat cheese|\bbrie\b|camembert|halloumi|blue cheese|gorgonzola|cream cheese|requesón|cheese/i;
+const QF_RX = /queso fresco|queso blanco|requesón/i;
+/** recipe as cooked for a pregnancy/postpartum stage: null = excluded. Adds r.stage = {k, notes, nut, fish, warm}. */
+function stageRecipe(r, key) {
+  const nut = nutTags(r), fish = isFishMeal(r);
+  if (!key) return r;
+  const all = [r.name, r.steps, r.tip, r.note, r.ing.map(i => i.n).join(' | ')].join(' ¦ ');
+  const notes = []; let ing = r.ing, steps = r.steps, tip = r.tip, note = r.note;
+  if (key === 'preg') {
+    for (const [re, why] of PREG_EXCLUDE) if (re.test(all)) return null;
+    const cured = r.ing.filter(i => CURED_RX.test(i.n));
+    if (cured.length && (r.nocook || r.meal === 's' || !COOK_RX.test(r.steps))) return null;   // eaten cold
+    const fx = s => STEP_FIX.reduce((t, [re, to]) => t.replace(re, to), s || '');
+    steps = fx(steps); tip = fx(tip); note = fx(note);
+    ing = r.ing.map(i => { let n = i.n;
+      if (QF_RX.test(n)) n = 'pasteurized feta (in place of queso fresco)';
+      else if (SOFTCHEESE_RX.test(n) && !/pasteurized/i.test(n) && !/parmesan|pecorino|cheddar|jack|swiss|gruyère/i.test(n)) n = `${n}, pasteurized`;
+      if (/bean sprouts/i.test(n)) n = 'bean sprouts (cook until steaming)';
+      if (/canned tuna/i.test(n)) n = 'canned light tuna (skipjack, in water)';
+      if (/\bmirin\b/i.test(n)) n = 'alcohol-free mirin seasoning';
+      else if (ALC_RX.test(n)) n = `broth (alcohol-free swap for ${n})`;
+      return n === i.n ? i : { ...i, n }; });
+    if (QF_RX.test(r.ing.map(i => i.n).join(' '))) { steps = steps.replace(/queso fresco/gi, 'feta'); notes.push('Queso fresco–type cheeses are swapped for pasteurized feta: CDC/FDA advise avoiding them in pregnancy even when pasteurized, unless heated to 165°F.'); }
+    if (r.ing.some(i => SOFTCHEESE_RX.test(i.n) && !QF_RX.test(i.n))) notes.push('Use cheese labeled “made with pasteurized milk.”');
+    if (cured.length) notes.push(`Cook the ${cured.map(i => i.n).join(', ')} through until steaming hot (165°F).`);
+    if (r.ing.some(i => /bean sprouts/i.test(i.n)) && !/^Boil sprouts/.test(r.steps)) { steps += ' Pregnancy: cook the bean sprouts until steaming hot (no raw sprouts).'; notes.push('No raw sprouts: cook bean sprouts until steaming hot.'); }
+    if (r.ing.some(i => /\beggs?\b/i.test(i.n) && !/whites/.test(i.n))) notes.push('Cook eggs until whites and yolks are firm (160°F).');
+    if (/canned tuna/i.test(all)) notes.push('Canned light tuna is an FDA “Best Choice”; limit albacore (white) tuna to 1 serving a week.');
+    if (ALC_RX.test(all)) notes.push('Alcohol swapped out: cooking does not remove all of it.');
+    if (fish) notes.push('Low-mercury fish (FDA Best Choice): cook until opaque, 145°F. Aim for 2–3 servings a week.');
+    if (r.ing.some(i => /chicken|turkey/i.test(i.n) && i.sec === 'M')) notes.push('Poultry to 165°F.'); else if (r.ing.some(i => /ground|lean ground/i.test(i.n) && i.sec === 'M')) notes.push('Ground meat to 160°F.'); else if (r.ing.some(i => /beef|pork|lamb|steak|sirloin|chop/i.test(i.n) && i.sec === 'M')) notes.push('Whole cuts to 145°F, then rest 3 min.');
+    if (CAFF_RX.test(all)) notes.push('Contains caffeine: keep the daily total under 200 mg (ACOG).');
+  } else {
+    if (key === 'ppbf' && ALC_RX.test(all)) { ing = r.ing.map(i => /\bmirin\b/i.test(i.n) ? { ...i, n: 'alcohol-free mirin seasoning' } : ALC_RX.test(i.n) ? { ...i, n: `broth (alcohol-free swap for ${i.n})` } : i); steps = steps.replace(/\bmirin\b/g, 'alcohol-free mirin'); notes.push('Alcohol swapped out while breastfeeding (CDC: not drinking is safest).'); }
+    if (key === 'ppbf' && CAFF_RX.test(all)) notes.push('Contains caffeine: about 300 mg a day or less while breastfeeding (CDC).');
+    if (fish) notes.push('Low-mercury fish: 2–3 servings a week supports DHA in breast milk.');
+  }
+  const warm = WARM_RX.test(r.name + ' ' + r.steps) && r.meal !== 's', oats = /oats/i.test(r.ing.map(i => i.n).join(' ')), oneHand = r.meal === 's' && (r.nocook || /bites|skewer|bar|ball/i.test(r.name));
+  const core = ['folate', 'iron', 'calcium', 'choline', 'dha', 'fiber'].filter(k => nut.includes(k)).length;
+  const boost = key === 'preg' ? 0.45 * core + (nut.includes('iron') && nut.includes('vitc') ? 0.4 : 0) + (fish ? FISH_BOOST : 0)
+    : (warm ? 2 : 0) + (nut.includes('iron') ? 0.7 : 0) + (oats ? 1.2 : 0) + (oneHand ? 1.2 : 0) + (fish ? 0.8 : 0) + 0.2 * core;
+  return { ...r, ing, steps, tip, note, stageBoost: +boost.toFixed(2), stage: { k: key, notes, nut, fish, warm, oats, oneHand } };
+}
+let FISH_BOOST = 0;
+const _stageCache = new WeakMap();
+function stagePool(recipes, key) { if (!key) return recipes; let m = _stageCache.get(recipes); if (!m) _stageCache.set(recipes, m = {}); return m[key] || (m[key] = recipes.map(r => stageRecipe(r, key)).filter(Boolean)); }
+/** nutrient highlights for one plan day */
+function dayNutrients(d, byId) { const t = new Set(); d.meals.forEach(m => { const r = byId[m.id]; if (r) nutTags(r).forEach(k => t.add(k)); }); return { tags: Object.keys(NUTS).filter(k => t.has(k)), ironC: t.has('iron') && t.has('vitc') }; }
+const FISH_ING_RX = /salmon|sardine|tilapia|\bcod\b|pollock|trout|shrimp|catfish|herring|anchov|light tuna|canned tuna|haddock|scallop|crab|clam|mussel|flounder|\bsole\b|hake|whitefish|atlantic mackerel/i;
+/** ounces (raw weight) of low-mercury fish in the week's meals */
+function fishOz(plan, byId) { return plan.days.reduce((s, d) => s + d.meals.reduce((t, m) => { const r = byId[m.id]; return t + (r ? r.ing.filter(i => i.u === 'oz' && FISH_ING_RX.test(i.n)).reduce((u, i) => u + i.q * m.sv, 0) : 0); }, 0), 0); }
+/** FDA servings (4 oz) of low-mercury fish per week, to the nearest ½ */
+function fishServings(plan, byId) { return Math.round(fishOz(plan, byId) / 4 * 2) / 2; }
+
 /* ---- weight goal → calories & macros ---- */
 const PACE = { lose: { slow: 0.5, moderate: 1, fast: 1.5 }, gain: { slow: 0.25, moderate: 0.5, fast: 0.75 } };
 const GAIN_MAX = 0.5;
@@ -855,9 +979,24 @@ function calcMacros(pr, today) {
   const kg = pr.curLb / 2.20462, cm = pr.heightIn * 2.54;
   const bmr = 10 * kg + 6.25 * cm - 5 * pr.age + (pr.sex === 'male' ? 5 : -161);
   const tdee = bmr * (+pr.activity || 1.375);
-  const floor = pr.sex === 'male' ? 1500 : 1200;
-  const diff = pr.goalLb - pr.curLb, mode = Math.abs(diff) < 1 ? 'maintain' : diff < 0 ? 'lose' : 'gain';
+  const st = stageOf(pr);
+  if (st && st.k === 'preg') {   // no deficit in pregnancy: pre-pregnancy maintenance + trimester extra (DRI EER)
+    const kg0 = (+pr.preLb > 0 ? +pr.preLb : +pr.curLb) / 2.20462, bmr0 = 10 * kg0 + 6.25 * cm - 5 * pr.age - 161, tdee0 = bmr0 * (+pr.activity || 1.375);
+    const extra = PREG_KCAL[st.tri], fl = 1800; let kcal = Math.round(Math.max(fl, tdee0 + extra) / 10) * 10;
+    const bmi = kg0 / Math.pow(cm / 100, 2), [lo, hi, cat] = gainRange(bmi);
+    const warnings = []; if (pr.goalLb < pr.curLb - 0.5) warnings.push('No weight-loss goal during pregnancy: calories are set for healthy weight gain.');
+    if (tdee0 + extra < fl) warnings.push(`Kept calories at ${fl}/day, the minimum we plan for in pregnancy.`);
+    const protein = Math.max(71, Math.round(1.1 * kg));
+    const fatPct = +pr.fatPct || 27, fat = Math.round(Math.max(kcal * fatPct / 100 / 9, 0.3 * pr.curLb)), carbs = Math.max(175, Math.round((kcal - protein * 4 - fat * 9) / 4));
+    const fat2 = Math.round((kcal - protein * 4 - carbs * 4) / 9);   // ≥175 g carbs (DRI in pregnancy)
+    return { ok: true, mode: 'maintain', stage: st, bmr: Math.round(bmr0), tdee: Math.round(tdee0), delta: extra, rate: 0, kcal, protein, fat: Math.max(fat2, 40), carbs, fatPct, weeks: null, goalDate: null, suggested: null, clamped: false, warnings, floor: fl, gain: { lo, hi, cat, bmi: +bmi.toFixed(1), preLb: Math.round(kg0 * 2.20462) } };
+  }
+  const pp = st && st.k === 'pp' ? st : null, extraPP = pp && pp.bf ? (pp.wk <= 26 ? 330 : 400) : 0;
+  const floor = pp && pp.bf ? 1800 : pr.sex === 'male' ? 1500 : 1200;
+  const diff = pr.goalLb - pr.curLb; let mode = Math.abs(diff) < 1 ? 'maintain' : diff < 0 ? 'lose' : 'gain';
   const warnings = []; let rate = 0, suggested = null, clamped = false;
+  if (pp && mode === 'lose' && pp.wk < (pp.bf ? 8 : 6)) { mode = 'maintain'; warnings.push(`Weight loss waits until about ${pp.bf ? '8 weeks postpartum while breastfeeding, so milk supply is established' : '6 weeks postpartum'}; for now calories are set to maintain${pp.bf ? ' plus breastfeeding' : ''}.`); }
+  if (pp && mode === 'gain') mode = 'maintain';
   const W = x => pr.units === 'metric' ? `${(x / 2.20462).toFixed(2)} kg` : `${(+x).toFixed(1)} lb`;
   let weeksWanted = null;
   if (mode !== 'maintain') {
@@ -866,22 +1005,22 @@ function calcMacros(pr, today) {
       if (weeksWanted <= 0) { warnings.push('That date has passed. Using a moderate pace instead.'); weeksWanted = null; }
     }
     rate = weeksWanted ? Math.abs(diff) / weeksWanted : PACE[mode][pr.pace || 'moderate'];
-    const max = mode === 'lose' ? Math.min(0.01 * pr.curLb, 2) : GAIN_MAX;
+    const max = mode === 'lose' ? Math.min(0.01 * pr.curLb, pp ? 1 : 2) : GAIN_MAX;
     if (rate > max + 1e-9) { clamped = true; warnings.push(mode === 'lose' ? `That's faster than the ~${W(max)}/week (1% of body weight) that's safe to keep up, so we slowed it down.` : `Gaining more than ${W(GAIN_MAX)}/week is mostly fat, so we capped it.`); rate = max; }
   }
   let delta = mode === 'lose' ? -rate * 500 : mode === 'gain' ? rate * 500 : 0;   // 3500 kcal/lb ÷ 7
-  let kcal = tdee + delta;
-  if (kcal < floor) { clamped = true; kcal = floor; delta = kcal - tdee; rate = Math.max(0, -delta / 500); warnings.push(`We kept calories at ${floor}/day, the minimum without medical supervision.`); }
+  let kcal = tdee + delta + extraPP;
+  if (kcal < floor) { clamped = true; kcal = floor; delta = kcal - tdee - extraPP; rate = Math.max(0, -delta / 500); warnings.push(pp && pp.bf ? `We kept calories at ${floor}/day, the minimum we plan for while breastfeeding.` : `We kept calories at ${floor}/day, the minimum without medical supervision.`); }
   kcal = Math.round(kcal / 10) * 10;
   const weeks = mode === 'maintain' ? 0 : rate > 0 ? Math.abs(diff) / rate : null;
   const goalDate = weeks != null ? addDays(today, Math.ceil(weeks * 7)) : null;
   if (clamped && weeks != null && (pr.plan === 'date' || mode === 'lose')) suggested = goalDate;
-  const protein = Math.round(0.8 * pr.goalLb);                        // 0.8 g per lb of goal weight
+  const protein = pp && pp.bf ? Math.max(71, Math.round(1.3 * kg), Math.round(0.8 * Math.max(pr.goalLb, pr.curLb * 0.9))) : Math.round(0.8 * pr.goalLb);                        // 0.8 g per lb of goal weight
   const fatPct = +pr.fatPct || 27;
   const fat = Math.round(Math.max(kcal * fatPct / 100 / 9, 0.3 * pr.curLb));
   let carbs = Math.round((kcal - protein * 4 - fat * 9) / 4);
   if (carbs < 50) { warnings.push('Carbs are very low at this calorie level. Consider a slower pace.'); carbs = Math.max(0, carbs); }
-  return { ok: true, mode, bmr: Math.round(bmr), tdee: Math.round(tdee), delta: Math.round(delta), rate: +rate.toFixed(2), kcal, protein, fat, carbs, fatPct, weeks: weeks != null ? Math.ceil(weeks) : null, goalDate, suggested, clamped, warnings, floor };
+  return { ok: true, mode, stage: st, extra: extraPP, bmr: Math.round(bmr), tdee: Math.round(tdee), delta: Math.round(delta), rate: +rate.toFixed(2), kcal, protein, fat, carbs, fatPct, weeks: weeks != null ? Math.ceil(weeks) : null, goalDate, suggested, clamped, warnings, floor };
 }
 /** weigh-ins [{date, lb}] sorted → progress summary */
 function progressInfo(weighins, pr, m, today) {
@@ -1237,7 +1376,7 @@ function buildWeekPlan({ recipes, cuisine, weekISO, targets, level, known, maybe
   const score = x => {
     const pPct = x.p * 4 / x.kcal;
     const techKnown = x.tech.length ? x.tech.reduce((a, t) => a + (knownSet.has(t) ? 1 : maybeSet.has(t) ? 0.5 : 0), 0) / x.tech.length : 1;
-    return 3 * (1 - Math.min(1, Math.abs(pPct - Math.max(tgtPct, 0.25)) / 0.2)) + 0.25 * Math.min(saleHits(x, specials).length, 4) + 0.6 * techKnown + (x.fz ? 0.8 : 0) + 0.1 * Math.min(x.fd, 5) - 0.004 * x.active + 1.2 * R() + (FAV.has(x.id) ? 1.5 : 0) + VM.w * Math.min(x.veg || 0, 4);
+    return 3 * (1 - Math.min(1, Math.abs(pPct - Math.max(tgtPct, 0.25)) / 0.2)) + 0.25 * Math.min(saleHits(x, specials).length, 4) + 0.6 * techKnown + (x.fz ? 0.8 : 0) + 0.1 * Math.min(x.fd, 5) - 0.004 * x.active + 1.2 * R() + (FAV.has(x.id) ? 1.5 : 0) + VM.w * Math.min(x.veg || 0, 4) + (x.stageBoost || 0);
   };
   const CU = asList(cuisine); const multi = CU.length > 1; cuisine = CU.join(' + ');
   const C = recipes.filter(x => CU.includes(x.cuisine) && !x.fresh);
@@ -1366,6 +1505,57 @@ function swapCandidates({ plan, fromId, recipes, all, level, known, favs, anyCui
     .map(x => ({ r: x, fit: Math.abs(x.kcal - r0.kcal) / r0.kcal + 3 * Math.abs(pp(x) - pp(r0)) + (asList(plan.cuisines || plan.cuisine).includes(x.cuisine) ? 0 : 0.15) - (FAV.has(x.id) ? 0.4 : 0) - 0.05 * Math.min(saleHits(x, specials).length, 3) }))
     .sort((a, b) => a.fit - b.fit);
   return out.slice(0, limit || (q ? 20 : 5)).map(o => ({ ...o.r, fit: +o.fit.toFixed(3), fav: FAV.has(o.r.id), sale: saleHits(o.r, specials).length }));
+}
+/** pregnancy: if the week has < 2 low-mercury fish meals, swap one lunch/dinner recipe for a same-cuisine fish recipe (FDA: 2–3 servings/week) */
+function ensureFish(plan, o) {
+  const all = o.all || o.recipes, by = Object.fromEntries(all.map(x => [x.id, x])); const n0 = fishServings(plan, by);
+  const okDays = np => np.days.every(d => Math.abs(d.tot.kcal - plan.targets.kcal) / plan.targets.kcal <= 0.12 && d.tot.p >= plan.targets.p * 0.9);
+  if (n0 > 4) { // FDA: 2–3 servings (8–12 oz) a week; trade a fish main for a non-fish one (up to 2 swaps)
+    let cur = plan, swapped = [];
+    for (let t = 0; t < 3 && fishServings(cur, by) > 4; t++) { let best = null, bs = Infinity;
+      const fm = [...new Set(cur.days.flatMap(d => d.meals.filter(m => m.slot !== 'Snack' && m.slot !== 'Side' && isFishMeal(by[m.id])).map(m => m.id)))].filter(id => id !== cur.stretchId);
+      for (const from of fm) for (const x of swapCandidates({ ...o, plan: cur, fromId: from, all, anyCuisine: false, limit: 40 })) {
+        const np = swapRecipe(cur, from, x.id, all), n = fishServings(np, by);
+        if (!okDays(np) || n < 2 || n >= fishServings(cur, by)) continue;
+        const sc = (n > 4 ? 10 + n : Math.abs(n - 2.5)) + x.fit; if (sc < bs) { bs = sc; best = { np, from, x }; } }
+      if (!best) break; delete best.np._swapName; swapped.push(`${best.x.name} replaces ${by[best.from].name}`); cur = best.np; }
+    // still high: move single days of a fish meal to a non-fish recipe already in the plan (same meal type, keeps that long)
+    const sn0 = planSnacks(cur); let moved = 0;
+    for (let t = 0; t < 8 && fishServings(cur, by) > 4; t++) { let best = null, bs = Infinity;
+      cur.days.forEach((d, i) => d.meals.forEach(m => { if (m.slot === 'Snack' || m.slot === 'Side' || !isFishMeal(by[m.id])) return; const k = i + 1;
+        const alts = [...new Set(cur.days.flatMap(x => x.meals.filter(y => y.slot === m.slot || (m.slot !== 'Breakfast' && (y.slot === 'Lunch' || y.slot === 'Dinner'))).map(y => y.id)))].filter(id => !isFishMeal(by[id]) && keepsFor(by[id], k) && by[id].meal === by[m.id].meal);
+        for (const alt of alts) { const daysPlan = cur.days.map((dd, j) => { const kk = j + 1, g = s => { const mm = dd.meals.find(x => x.slot === s); return by[kk === k && s === m.slot ? alt : mm.id]; }; const sm = dd.meals.find(x => x.slot === 'Side');
+            return { k: kk, b: g('Breakfast'), l: g('Lunch'), d: g('Dinner'), vs: sm ? [by[sm.id], sm.sv] : null, sn: sn0.map(id => by[id]).filter(r => r && keepsFor(r, kk)) }; });
+          const { days, cook } = finalizeDays(daysPlan, cur.weekISO, cur.targets); const np = { ...cur, days, cook }, n = fishServings(np, by);
+          if (n < 2 || !okDays(np)) continue; const sc = Math.abs(n - 3); if (sc < bs) { bs = sc; best = np; } } }));
+      if (!best) break; cur = best; moved++; }
+    if (moved) swapped.push('a few fish meals moved to other dishes');
+    return swapped.length ? { ...cur, edited: plan.edited || false, swaps: plan.swaps || [], notes: cur.notes.concat([`🐟 ${swapped.join('; ')} to keep fish at 2–3 servings a week (FDA: 8–12 oz).`]) } : plan; }
+  if (n0 >= 2) return plan;
+  const mains = [...new Set(plan.days.flatMap(d => d.meals.filter(m => m.slot === 'Lunch' || m.slot === 'Dinner').map(m => m.id)))].filter(id => by[id] && !isFishMeal(by[id]) && id !== plan.stretchId);
+  let best = null, bestScore = Infinity;
+  for (const from of mains) for (const x of swapCandidates({ ...o, plan, fromId: from, all, anyCuisine: false, limit: 40 }).filter(x => isFishMeal(x))) {
+    const np = swapRecipe(plan, from, x.id, all), n = fishServings(np, by);
+    if (n < 2 || n > 4 || !okDays(np)) continue;
+    const sc = Math.abs(n - 2.5) + x.fit; if (sc < bestScore) { bestScore = sc; best = { np, x, from }; } }
+  if (!best) { // no whole-week swap fits: cook a fish main for the first days only (fridge life), replacing that slot on 2–3 days
+    const CU = asList(plan.cuisines || plan.cuisine), inPlan = new Set(plan.days.flatMap(d => d.meals.map(m => m.id)));
+    const lv = o.level || 3, base = (o.recipes || all).filter(x => x.meal === 'm' && isFishMeal(x) && !x.fresh && !inPlan.has(x.id) && (!o.equip || equipPlan(x, o.equip).ok));
+    const tiers = [base.filter(x => CU.includes(x.cuisine) && x.diff <= lv), base.filter(x => CU.includes(x.cuisine) && x.diff === lv + 1), base.filter(x => !CU.includes(x.cuisine) && x.diff <= lv)];
+    const sn0 = planSnacks(plan);
+    let pick = null, ps = Infinity;
+    for (const fishR of tiers) { if (pick) break; for (const f of fishR) for (const slot of ['Dinner', 'Lunch']) for (const nd of [1, 2, 3]) {
+      const ks = [1, 2, 3].slice(0, nd).filter(k => keepsFor(f, k)); if (ks.length < nd) continue;
+      const daysPlan = plan.days.map((d, i) => { const k = i + 1, g = s => by[d.meals.find(x => x.slot === s).id]; const sm = d.meals.find(x => x.slot === 'Side');
+        return { k, b: g('Breakfast'), l: slot === 'Lunch' && ks.includes(k) ? f : g('Lunch'), d: slot === 'Dinner' && ks.includes(k) ? f : g('Dinner'), vs: sm ? [by[sm.id], sm.sv] : null, sn: sn0.map(id => by[id]).filter(r => r && keepsFor(r, k)) }; });
+      const { days, cook } = finalizeDays(daysPlan, plan.weekISO, plan.targets);
+      const np = { ...plan, days, cook }, n = fishServings(np, by);
+      if (n < 2 || n > 4 || !okDays(np)) continue;
+      const sc = Math.abs(n - 2.5) + nd * 0.1; if (sc < ps) { ps = sc; pick = { np, f, slot, ks }; } } }
+    if (pick) return { ...pick.np, notes: plan.notes.concat([`🐟 Added ${pick.f.name}${CU.includes(pick.f.cuisine) ? (pick.f.diff > lv ? ' (a step up)' : '') : ` (${pick.f.cuisine})`} for ${pick.slot.toLowerCase()} ${pick.ks.map(k => DAYS[k - 1]).join('–')} so the week has 2–3 servings of low-mercury fish.`]) };
+    return plan; }
+  const { np, x, from } = best; delete np._swapName;
+  return { ...np, edited: plan.edited || false, swaps: plan.swaps || [], notes: np.notes.concat([`🐟 ${x.name} replaces ${by[from].name} so the week has 2–3 low-mercury fish meals.`]) };
 }
 /** replace fromId with toId on every day it's used; rescale servings and rebuild cook list */
 function swapRecipe(plan, fromId, toId, all) {
@@ -1545,16 +1735,17 @@ function prepGuide(plan, recipes, { level, known, maybe, startMin = 600, equip }
     cook: plan.cook.map(c => ({ ...c, name: byId[c.id] && byId[c.id].name })), riceCups, warn, needContainers: needC, nFreeze, equip: eq, flags, maybe: [...maybeSet] };
 }
 
-if (typeof module !== 'undefined') module.exports = { measure, unitText, isLiquid, gPerCup, weekVariety, recVegKeys, ADDINS, ADDV, VEG_MODES, vegBoost, vegNote, dayVeg, pickSides, starchK, mergeSpecials, slugify, PRICE, costSummary, regUnitPrice, saleUnitPrice, money, CUISINES, LEVELS, DAYS, SECTIONS, TECH, QUIZ, scoreQuiz, macroTargets, fitplanTargets, specialsActive, matchSpecial, saleHits, recommendCuisine, recentCuisines, buildWeekPlan, groceryList, calcMacros, dietFilter, specialSafe, asList, amountText, batchList, inlineAmounts, equipPlan, equipFilter, EQUIP_DEFAULT, FREEZER_CAP, laneOf, servWords, servInfo, portionText, portionVol, macroLine, qtrs, metricText, qtyText, fmtQty, wt, wu, LB_KG, swapCandidates, swapRecipe, finalizeDays, swapName, SWAPS, cuisineFeasible, progressInfo, PACE, prepGuide, mondayOf, defaultWeek, defaultShop, laneOf, reheatOf, addDays, iso, parseISO };
+if (typeof module !== 'undefined') module.exports = { fishOz, ensureFish, STAGE_SOURCES, STAGE_DISCLAIMER, PREG_KCAL, stageOf, stageKey, stageLabel, gainRange, NUTS, nutTags, isFishMeal, stageRecipe, stagePool, dayNutrients, fishServings, PREG_EXCLUDE, CURED_RX, measure, unitText, isLiquid, gPerCup, weekVariety, recVegKeys, ADDINS, ADDV, VEG_MODES, vegBoost, vegNote, dayVeg, pickSides, starchK, mergeSpecials, slugify, PRICE, costSummary, regUnitPrice, saleUnitPrice, money, CUISINES, LEVELS, DAYS, SECTIONS, TECH, QUIZ, scoreQuiz, macroTargets, fitplanTargets, specialsActive, matchSpecial, saleHits, recommendCuisine, recentCuisines, buildWeekPlan, groceryList, calcMacros, dietFilter, specialSafe, asList, amountText, batchList, inlineAmounts, equipPlan, equipFilter, EQUIP_DEFAULT, FREEZER_CAP, laneOf, servWords, servInfo, portionText, portionVol, macroLine, qtrs, metricText, qtyText, fmtQty, wt, wu, LB_KG, swapCandidates, swapRecipe, finalizeDays, swapName, SWAPS, cuisineFeasible, progressInfo, PACE, prepGuide, mondayOf, defaultWeek, defaultShop, laneOf, reheatOf, addDays, iso, parseISO };
 </script>
 <script>/* ===== UI ===== */
 const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const KEY = 'fitplan.meals.v1';
+const curStage = () => (typeof S !== 'undefined' && S && S.profile) ? stageKey(stageOf(S.profile)) : '';
 let RECIPES = RAW, BY = Object.fromEntries(RAW.map(r => [r.id, r])), POOL_MODE = 'normal|';
 /* recipes as cooked under a Veggies setting (more veg, a little less starch); the shown week uses the mode it was made with */
-function usePool(mode) { mode = VEG_MODES[mode] ? mode : 'normal'; const av = (S && S.diet ? (S.diet.dislikeOther + ',' + S.diet.allergyOther) : '').toLowerCase().split(/[,;]+/).map(x => x.trim().replace(/s$/, '')).filter(x => x.length > 2); const key = mode + '|' + av.join(',');
-  if (key === POOL_MODE) return; POOL_MODE = key; RECIPES = vegBoost(RAW, mode, av); BY = Object.fromEntries(RECIPES.map(r => [r.id, r])); }
+function usePool(mode, sk) { mode = VEG_MODES[mode] ? mode : 'normal'; sk = sk == null ? curStage() : sk; const av = (S && S.diet ? (S.diet.dislikeOther + ',' + S.diet.allergyOther) : '').toLowerCase().split(/[,;]+/).map(x => x.trim().replace(/s$/, '')).filter(x => x.length > 2); const key = mode + '|' + av.join(',') + '|' + sk;
+  if (key === POOL_MODE) return; POOL_MODE = key; RECIPES = stagePool(vegBoost(RAW, mode, av), sk); BY = Object.fromEntries(RECIPES.map(r => [r.id, r])); }
 const EMOJI = { Mexican: '🌮', Italian: '🍝', Mediterranean: '🫒', 'Middle Eastern': '🧆', Armenian: '🍇', 'Latin American': '🫓', Japanese: '🍱', Korean: '🥘', Thai: '🥥', Indian: '🍛', Chinese: '🥟', Vietnamese: '🍜', American: '🍔', Polish: '🥬' };
 const SLOT_IC = { Breakfast: '☀️', Lunch: '🥗', Dinner: '🍽️', Side: '🥦', Snack: '🍎' };
 const STORES = {
@@ -1609,6 +1800,10 @@ const hasDiet = () => S.diet.allergens.length || S.diet.dislikes.length || S.die
 const feas = c => cuisineFeasible(allowed(), c);
 const safeSp = sp => sp && sp.items ? { ...sp, items: sp.items.filter(it => specialSafe(it, S.diet, tagIngredient)) } : sp;
 const gList = (p, sp) => { const g = groceryList(p, RECIPES, safeSp(sp), S.units); Object.values(g).forEach(a => a.forEach(x => x.n = swapName(x.n, S.diet))); return g; };
+function stagePlanNote(p) { const cur = curStage(), ps = p.stage || ''; const st = stageOf(S.profile);
+  const mis = cur !== ps ? `<div class="note warn small">${cur ? (cur === 'preg' ? '🤰' : '🍼') + ' This week was planned before your ' + (cur === 'preg' ? 'pregnancy' : 'postpartum') + ' setting.' : 'This week was planned for ' + (ps === 'preg' ? 'pregnancy' : 'postpartum') + '.'} <button class="btn sm" type="button" id="stRe">↻ Remake week</button></div>` : '';
+  if (!ps) return mis; const ex = RAW.length - RECIPES.length;
+  return mis + `<div class="note ok small stagenote">${ps === 'preg' ? `🤰 <b>Pregnancy-safe plan:</b> ${ex} recipes left out (raw or undercooked fish, meat or eggs; cold deli meat; high-mercury fish; liver). Recipes are adjusted where needed: eggs cooked firm, meats cooked to safe temperatures, pasteurized cheese, cooked sprouts, no alcohol. More folate, iron + vitamin C, calcium, choline and DHA; 2–3 low-mercury fish meals a week.` : `🍼 <b>Postpartum plan:</b> warming soups and stews, iron to rebuild stores, oats, and easy one-hand snacks${ps === 'ppbf' ? '; extra calories and fluids for breastfeeding, no alcohol' : ''}.`} ${esc(STAGE_DISCLAIMER)}${stageWhy(st || (ps === 'preg' ? { k: 'preg', tri: 1 } : { k: 'pp', bf: ps === 'ppbf', wk: 0 }))}</div>`; }
 function safeNote() {
   const d = S.diet; if (!d.allergens.length && !d.allergyOther.trim()) return '';
   const names = d.allergens.map(a => AL[a].toLowerCase()).concat(d.allergyOther.trim() ? [d.allergyOther.trim()] : []);
@@ -1725,9 +1920,10 @@ function build(pick, shuffle) {
   const label = asList(cuisine).join(' + ');
   const prev = week(); const seed = shuffle ? String(Date.now()) : (prev && prev.cuisine === label ? prev.plan.seed : '');
   if (!cuisine) return false;
-  usePool(S.veg);
-  const plan = buildWeekPlan({ veg: S.veg, recipes: allowed(), cuisine, weekISO: S.cur, targets: targets(), level: level(), known: S.skill.known, maybe: S.skill.maybe || [], stretch: S.skill.stretch, specials: spActive(), seed, favs: S.favs });
-  if (plan.error) return false;
+  usePool(S.veg, curStage());
+  let plan = buildWeekPlan({ veg: S.veg, recipes: allowed(), cuisine, weekISO: S.cur, targets: targets(), level: level(), known: S.skill.known, maybe: S.skill.maybe || [], stretch: S.skill.stretch, specials: spActive(), seed, favs: S.favs });
+  if (plan.error) return false; plan.stage = curStage();
+  if (plan.stage === 'preg') { const fp = ensureFish(plan, { recipes: allowed(), all: RECIPES, level: level(), known: S.skill.known, favs: S.favs, specials: spActive(), equip: S.equip }); fp.stage = plan.stage; plan = fp; }
   S.weeks[S.cur] = { cuisine: label, cuisines: asList(cuisine), mode: pick === '__rec' ? 'rec' : pick === '__combo' ? 'combo' : 'pick', rec, plan, shop: shopDate(), store: S.stores.map(st => stInfo(st).full).join(' + '), specialsUsed: !!spActive() };
   if (S.draft[S.cur]) delete S.draft[S.cur].pick;
   save(); return true;
@@ -1750,13 +1946,13 @@ function renderOut() {
   if (tab === 'plan') {
     const avg = k => Math.round(p.days.reduce((s, d) => s + d.tot[k], 0) / 7);
     const pgx = p.v === 2 ? prepGuide(p, RECIPES, { level: p.level, known: S.skill.known, maybe: S.skill.maybe || [], equip: S.equip }) : null;
-    $('out').innerHTML = `<div class="sum"><span><b>${esc(cLabel(w.cuisine))}</b></span><span>avg <b>${avg('kcal').toLocaleString()} kcal</b> of ${p.targets.kcal.toLocaleString()} kcal</span><span><b>${avg('p')} g protein</b> of ${p.targets.p} g</span><span>🥦 <b>${Math.round(p.days.reduce((s, d) => s + vegOf(d), 0) / 7 * 2) / 2}</b> veggie servings/day${(p.veg || 'normal') !== 'normal' ? ' · ' + esc(VEG_MODES[p.veg].label.toLowerCase()) : ''}</span>${(() => { const v = weekVariety(p, BY); return `<span class="vvar" title="${esc(v.keys.join(', '))}">🌈 <b>${v.n}</b> different veggies this week <span class="fams" aria-label="Color mix: ${Object.keys(v.fams).map(f => VEG_FAMS[f][1]).join(', ')}">${Object.entries(VEG_FAMS).filter(([f]) => f !== 'other').map(([f, [ic, l]]) => `<i class="${v.fams[f] ? 'on' : ''}" title="${esc(l)}${v.fams[f] ? ': ' + esc(v.fams[f].join(', ')) : ''}">${ic}</i>`).join('')}</span></span>`; })()}${pgx ? `<span>🍳 Cook ${fmtD(pgx.cookDay, { weekday: 'short' })} · <b>${p.cook.filter(c => !BY[c.id].nocook).length}</b> recipes · ~${hm(pgx.totalMin)}</span>` : ''}</div>
+    $('out').innerHTML = `<div class="sum"><span><b>${esc(cLabel(w.cuisine))}</b></span><span>avg <b>${avg('kcal').toLocaleString()} kcal</b> of ${p.targets.kcal.toLocaleString()} kcal</span><span><b>${avg('p')} g protein</b> of ${p.targets.p} g</span><span>🥦 <b>${Math.round(p.days.reduce((s, d) => s + vegOf(d), 0) / 7 * 2) / 2}</b> veggie servings/day${(p.veg || 'normal') !== 'normal' ? ' · ' + esc(VEG_MODES[p.veg].label.toLowerCase()) : ''}</span>${(() => { const v = weekVariety(p, BY); return `<span class="vvar" title="${esc(v.keys.join(', '))}">🌈 <b>${v.n}</b> different veggies this week <span class="fams" aria-label="Color mix: ${Object.keys(v.fams).map(f => VEG_FAMS[f][1]).join(', ')}">${Object.entries(VEG_FAMS).filter(([f]) => f !== 'other').map(([f, [ic, l]]) => `<i class="${v.fams[f] ? 'on' : ''}" title="${esc(l)}${v.fams[f] ? ': ' + esc(v.fams[f].join(', ')) : ''}">${ic}</i>`).join('')}</span></span>`; })()}${p.stage ? `<span class="pill stg">${p.stage === 'preg' ? '🤰 Pregnancy-safe' : '🍼 Postpartum'}</span><span title="FDA: 8–12 oz a week of Best Choice fish">🐟 <b>${String(fishServings(p, BY)).replace('.5', '½')}</b> fish servings (~${MET() ? Math.round(fishOz(p, BY) * 28.35 / 10) * 10 + ' g' : Math.round(fishOz(p, BY)) + ' oz'}) · aim 2–3</span>` : ''}${pgx ? `<span>🍳 Cook ${fmtD(pgx.cookDay, { weekday: 'short' })} · <b>${p.cook.filter(c => !BY[c.id].nocook).length}</b> recipes · ~${hm(pgx.totalMin)}</span>` : ''}</div>
     <div class="grid7">${p.days.map(d => { const ok = Math.abs(d.tot.kcal - p.targets.kcal) / p.targets.kcal <= 0.05 && d.tot.p >= p.targets.p * 0.95;
       return `<div class="day"><div class="hd"><b>${d.day}</b><span class="muted small">${fmtD(d.date)}</span></div>${d.meals.map(m => { const r = BY[m.id]; return `<div class="meal"><span class="ic" title="${m.slot}">${SLOT_IC[m.slot]}</span><span class="nm"><a href="#" data-r="${r.id}">${esc(r.name)}</a>${isFav(r.id) ? ' <span class="fav" title="Favorite">♥</span>' : ''}${badges(r, p, sp)}</span><button class="sw" type="button" data-sw="${r.id}" aria-label="Swap ${esc(r.name)}" title="Swap">⇄</button></div><div class="msub">${m.st === 'freezer' ? '<span title="From the freezer">❄️</span> ' : ''}${svBtn(r, m.sv)}${portion(r, m.sv) ? ` <span class="por">${esc(portion(r, m.sv))}</span>` : ''}<div class="mac">${macroLine(r.kcal * m.sv, r.p * m.sv, r.c * m.sv, r.f * m.sv)}</div></div>`; }).join('')}
-      <div class="vegd">🥦 ${fmtVeg(vegOf(d))} veggies</div><div class="tot ${ok ? 'good' : 'off'}">Day total: ${macroLine(d.tot.kcal, d.tot.p, d.tot.c, d.tot.f)}</div></div>`; }).join('')}</div>
-    ${safeNote()}<p class="hint">Everything is cooked Sunday. 🥦 1 veggie serving ≈ 80 g (about 3 oz) of vegetables. ❄️ freezer (thaw the night before) · 🏷 sale · ⭐ stretch · ♥ favorite · ⇄ swap · tap a dish for the recipe.</p>`;
+      <div class="vegd">🥦 ${fmtVeg(vegOf(d))} veggies</div>${p.stage ? (() => { const n = dayNutrients(d, BY); return `<div class="nutd" aria-label="Nutrient highlights">${n.tags.filter(k => k !== 'vitc' || !n.ironC).map(k => k === 'iron' && n.ironC ? `<i title="Iron paired with vitamin C helps absorption">🩸🍊 Iron+C</i>` : `<i>${NUTS[k][0]} ${NUTS[k][1]}</i>`).join('')}</div>`; })() : ''}<div class="tot ${ok ? 'good' : 'off'}">Day total: ${macroLine(d.tot.kcal, d.tot.p, d.tot.c, d.tot.f)}</div></div>`; }).join('')}</div>
+    ${stagePlanNote(p)}${safeNote()}<p class="hint">Everything is cooked Sunday. 🥦 1 veggie serving ≈ 80 g (about 3 oz) of vegetables. ❄️ freezer (thaw the night before) · 🏷 sale · ⭐ stretch · ♥ favorite · ⇄ swap · tap a dish for the recipe.</p>`;
     $('out').querySelectorAll('[data-r]').forEach(a => a.onclick = e => { e.preventDefault(); showRecipe(a.dataset.r, p); });
-    $('out').querySelectorAll('[data-sw]').forEach(b => b.onclick = () => openSwap(b.dataset.sw));
+    $('out').querySelectorAll('[data-sw]').forEach(b => b.onclick = () => openSwap(b.dataset.sw)); if ($('stRe')) $('stRe').onclick = () => $('gen').click();
   } else if (tab === 'grocery') {
     const g = gList(p, sp); const ck = S.checks[S.cur] = S.checks[S.cur] || {};
     const pgc = p.v === 2 ? prepGuide(p, RECIPES, { level: p.level, known: S.skill.known, maybe: S.skill.maybe || [], equip: S.equip }) : null;
@@ -1819,6 +2015,7 @@ function recipeBody(r) {
   const keep = r.nocook ? 'Grab & go' : `Keeps ${r.fd} days in the fridge${r.fz ? ' · freezes well ❄️' : ''}`;
   return `<div class="note small">🥡 ${keep}${r.note ? ' · ' + esc(r.note) : ''}</div>${sale.length ? `<div class="note small" style="background:var(--salebg);color:var(--sale)">🏷 On sale: ${esc(sale.map(short).join(', '))}</div>` : ''}<div class="meta">⏱ ${r.active} min${r.total > r.active ? ` (${r.total} total)` : ''}</div><div class="meta"><b>1 serving</b> (${esc(portion(r, 1) || 'as packaged')}): ${macroLine(r.kcal, r.p, r.c, r.f)}${r.veg ? ` · 🥦 ${fmtVeg(r.veg)} veggies` : ''}</div>${r.vegBoost ? `<div class="note ok small">${esc(vegNote(r))}</div>` : ''}
   ${(() => { const ep = equipPlan(r, S.equip); return !ep.ok ? '<div class="note warn small">🔧 Needs equipment you don\u2019t have.</div>' : ep.alts.length ? `<div class="note small">🔧 ${ep.alts.map(et).join(' ')}</div>` : ''; })()}
+  ${r.stage ? `<div class="note ok small stagenote"><span class="pill stg">${r.stage.k === 'preg' ? '🤰 Pregnancy-safe' : '🍼 Postpartum'}</span>${r.stage.nut.length ? ' ' + r.stage.nut.map(k => `${NUTS[k][0]} ${NUTS[k][1]}`).join(' · ') : ''}${r.stage.notes.length ? `<ul>${r.stage.notes.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}</div>` : ''}
   ${r.allergens.length ? `<div class="hint">Contains: ${r.allergens.map(a => AL_IC[a] + ' ' + esc(AL[a])).join(' · ')}</div>` : '<div class="hint">No major allergens tagged</div>'}
   <p><b>You need (per serving):</b> ${r.ing.map(i => `${esc(swapName(i.n, S.diet))} ${esc(qtyText(i.q, i.u, S.units, i.n))}`).join(' · ')}</p><p>${et(r.steps)}</p>${maybeTips(r)}${r.tip ? `<div class="tip">💡 ${et(r.tip)}</div>` : ''}${r.flavor ? `<div class="tip flav">🌶 <b>Flavor tip:</b> ${et(r.flavor)}</div>` : ''}
   <details><summary>Techniques & equipment</summary><p class="hint">${r.tech.map(t => TECH[t] ? TECH[t].label : t).join(', ') || 'None'}${r.equip.length ? ' · ' + r.equip.join(', ') : ''}</p></details>`;
@@ -1890,9 +2087,10 @@ function macroCard(compact) {
   const pct = k => Math.round((k === 'p' ? m.protein * 4 : k === 'c' ? m.carbs * 4 : m.fat * 9) / kc({ p: m.protein, c: m.carbs, f: m.fat }) * 100);
   const goalTxt = m.mode === 'maintain' ? 'Maintain your weight' : `${m.mode === 'lose' ? '−' : '+'}${W(m.rate, 2)} ${WU()}/week · goal ${fmtD(m.goalDate, { month: 'short', day: 'numeric', year: 'numeric' })} (${m.weeks} wk)`;
   return `<div class="mc">
-    <div class="mc-top"><div><div class="mc-k">Daily calories</div><div class="mc-v">${m.kcal.toLocaleString()}</div><div class="hint" style="margin:0">${m.mode === 'maintain' ? 'maintenance' : `${Math.abs(m.delta)} kcal ${m.mode === 'lose' ? 'below' : 'above'} maintenance (${m.tdee.toLocaleString()})`}</div></div></div>
+    <div class="mc-top"><div><div class="mc-k">Daily calories</div><div class="mc-v">${m.kcal.toLocaleString()}</div><div class="hint" style="margin:0">${m.stage && m.stage.k === 'preg' ? (m.delta ? `pre-pregnancy maintenance (${m.tdee.toLocaleString()}) + ${m.delta}` : 'pre-pregnancy maintenance') : m.mode === 'maintain' ? (m.extra ? `maintenance (${m.tdee.toLocaleString()}) + ${m.extra} breastfeeding` : 'maintenance') : `${Math.abs(m.delta)} kcal ${m.mode === 'lose' ? 'below' : 'above'} maintenance (${m.tdee.toLocaleString()})`}</div></div></div>
     <div class="mc-macros">${[['Protein', m.protein, 'p'], ['Carbs', m.carbs, 'c'], ['Fat', m.fat, 'f']].map(([l, g, k]) => `<div class="mm mm-${k}"><b>${g}g</b><span>${l}</span><i style="width:${pct(k)}%"></i></div>`).join('')}</div>
-    <div class="mc-goal">🎯 ${goalTxt}</div>
+    <div class="mc-goal">🎯 ${m.stage && m.stage.k === 'preg' ? `Healthy pregnancy gain: <b>${MET() ? `${Math.round(m.gain.lo / 2.20462)}–${Math.round(m.gain.hi / 2.20462)} kg` : `${m.gain.lo}–${m.gain.hi} lb`}</b> total (pre-pregnancy BMI ${m.gain.bmi}, ${m.gain.cat})` : goalTxt}</div>
+    ${m.stage ? `<div class="note ok small stagenote">${m.stage.k === 'preg' ? `🤰 Trimester ${m.stage.tri}: ${m.delta ? '+' + m.delta + ' kcal over' : 'same as'} pre-pregnancy maintenance (${m.tdee.toLocaleString()}). Protein ${m.protein} g (at least 71 g).` : `🍼 ${stageLabel(m.stage)}${m.extra ? `: +${m.extra} kcal for breastfeeding, never below ${m.floor.toLocaleString()} kcal` : ''}.${m.mode === 'lose' ? ' Gentle loss, max 1 lb/week.' : ''}`} ${esc(STAGE_DISCLAIMER)}${stageWhy(m.stage)}</div>` : ''}
     ${m.warnings.length ? `<div class="note warn small">${m.warnings.map(esc).join(' ')}${m.suggested ? ` Realistic goal date: <b>${fmtD(m.suggested, { month: 'short', day: 'numeric', year: 'numeric' })}</b>.` : ''}</div>` : ''}
     ${manual && !compact ? `<div class="note small">Using calories you set by hand (${t.kcal} kcal). <button class="btn sm" type="button" onclick="S.profile.auto=true;save();renderAll()">Use my goal</button></div>` : ''}
     ${compact ? '' : `<details><summary>How it\u2019s calculated</summary><p class="hint">Maintenance from Mifflin-St Jeor × activity. ~3,500 kcal per lb (7,700 per kg) → daily deficit/surplus for your pace. Capped at 1% body weight/week loss, ${MET() ? '0.23 kg' : '0.5 lb'}/week gain, min 1,200 (women) / 1,500 (men) kcal. Protein 0.8 g per lb (1.76 g per kg) of goal weight. Fat 27% (at least ${MET() ? '0.66 g/kg' : '0.3 g/lb'}). Carbs are the rest.</p></details>`}</div>`;
@@ -1915,9 +2113,22 @@ function chartSVG(list, pr, m) {
   return `<svg class="chart" viewBox="0 0 ${CW} ${H}" role="img" aria-label="Weight trend">${g}</svg><div class="hint" style="margin-top:2px"><b style="color:#ea580c">━</b> weigh-ins · <b style="color:#f59e0b">┅</b> projected · <b style="color:#15803d">┅</b> goal</div>`;
 }
 const hIn = () => (+S.profile.ft || 0) * 12 + (+S.profile.inch || 0);
+function stageForm(pre) { const p = S.profile, st = p.stage || 'none';
+  return `<div class="stagebox${p.sex === 'female' ? '' : ' hidden'}" data-stagebox><label>Pregnancy or postpartum <span class="muted small">(optional)</span></label>
+  <div class="seg2" role="group" aria-label="Pregnancy or postpartum">${[['none', 'Not pregnant'], ['preg', '🤰 Pregnant'], ['pp', '🍼 Postpartum']].map(([v, l]) => `<button type="button" data-stage="${v}" class="${st === v ? 'on' : ''}" aria-pressed="${st === v}">${l}</button>`).join('')}</div>
+  <div data-stg="preg" class="${st === 'preg' ? '' : 'hidden'}"><label>Trimester</label><div class="seg2" role="group" aria-label="Trimester">${[1, 2, 3].map(t => `<button type="button" data-tri="${t}" class="${(+p.tri || 1) === t ? 'on' : ''}">${t === 1 ? '1st (wk 1–13)' : t === 2 ? '2nd (14–27)' : '3rd (28+)'}</button>`).join('')}</div>
+   <label for="${pre}Pre">Pre-pregnancy weight (${WU()}) <span class="muted small">for weight-gain guidance</span></label><input id="${pre}Pre" type="number" inputmode="decimal" step="0.1" value="${p.preLb ? W(p.preLb) : ''}"></div>
+  <div data-stg="pp" class="${st === 'pp' ? '' : 'hidden'}"><div class="row"><div><label>Breastfeeding?</label><div class="seg2" role="group" aria-label="Breastfeeding">${[['yes', 'Yes'], ['no', 'No']].map(([v, l]) => `<button type="button" data-bf="${v}" class="${(p.bf === false ? 'no' : 'yes') === v ? 'on' : ''}">${l}</button>`).join('')}</div></div>
+   <div><label for="${pre}PpW">Weeks since birth</label><input id="${pre}PpW" type="number" inputmode="numeric" min="0" value="${esc(p.ppWeeks || '')}"></div></div></div>
+  ${st !== 'none' ? `<p class="hint">${st === 'preg' ? '🤰 Plans skip unsafe foods (raw fish, runny eggs, unheated deli meat, high-mercury fish, alcohol) and favor folate, iron, calcium, choline and DHA. No weight-loss goal.' : '🍼 Plans favor warming soups, iron, oats and one-hand snacks; gentle loss only (max 1 lb/wk, none before ~8 weeks if breastfeeding).'} ${esc(STAGE_DISCLAIMER)}</p>` : ''}</div>`; }
+function stageWhy(st) { if (!st) return ''; return `<details class="why"><summary>Why? (sources)</summary><ul class="small">${st.k === 'preg'
+    ? '<li>Calories: +0 / +340 / +452 kcal in trimesters 1 / 2 / 3 over pre-pregnancy needs; no deficit in pregnancy.</li><li>Protein: at least 71 g/day or 1.1 g/kg; at least 175 g carbs.</li><li>Weight gain by pre-pregnancy BMI: under 18.5 → 28–40 lb, 18.5–24.9 → 25–35, 25–29.9 → 15–25, 30+ → 11–20 (single baby).</li><li>Food safety: no raw/undercooked meat, fish or eggs; no high-mercury fish; pasteurized cheese only (no queso fresco-type unless heated to 165°F); deli meat and sausages heated until steaming; no raw sprouts; no alcohol; limit liver; caffeine under 200 mg/day.</li><li>2–3 servings/week of low-mercury fish.</li>'
+    : '<li>Breastfeeding: +330 kcal (0–6 months) / +400 (after), not below 1,800 kcal.</li><li>Gentle loss only: up to 1 lb/week, starting after ~8 weeks if breastfeeding (~6 weeks otherwise).</li><li>Protein at least 71 g or 1.3 g/kg while breastfeeding; iron to rebuild stores; choline 550 mg, iodine 290 µg.</li><li>Low-mercury fish 2–3×/week; caffeine about 300 mg/day or less while breastfeeding.</li>'}</ul>
+  <p class="small">${STAGE_SOURCES.map(([t, u]) => `<a href="${u}" target="_blank" rel="noopener">${esc(t)}</a>`).join(' · ')}</p><p class="small"><b>${esc(STAGE_DISCLAIMER)}</b></p></details>`; }
 function profileForm(pre) {
   const p = S.profile;
   return `${unitSeg()}<div class="seg2" role="group" aria-label="Sex">${[['female', 'Female'], ['male', 'Male']].map(([v, l]) => `<button type="button" data-sex="${v}" class="${p.sex === v ? 'on' : ''}">${l}</button>`).join('')}</div>
+  ${stageForm(pre)}
   <div class="row3"><div><label for="${pre}Age">Age</label><input id="${pre}Age" type="number" inputmode="numeric" value="${esc(p.age)}"></div>
    ${MET() ? `<div style="grid-column:span 2"><label for="${pre}Cm">Height cm</label><input id="${pre}Cm" type="number" inputmode="decimal" step="0.5" value="${hIn() ? +(hIn() * 2.54).toFixed(1) : ''}"></div>`
      : `<div><label for="${pre}Ft">Height ft</label><input id="${pre}Ft" type="number" inputmode="numeric" value="${esc(p.ft)}"></div><div><label for="${pre}In">in</label><input id="${pre}In" type="number" inputmode="decimal" value="${p.inch === '' ? '' : esc(+(+p.inch).toFixed(1))}"></div>`}</div>
@@ -1938,7 +2149,14 @@ function bindProfile(pre, after, redraw) {
     ['Cm', 'In', 'Goal', 'Cur'].forEach(k => { const e = $(pre + k); if (e) e.defaultValue = e.value; });
     p.date = $(pre + 'Date').value; p.auto = true; save(); after(); };
   [pre + 'Age', pre + 'Ft', pre + 'In', pre + 'Cm', pre + 'Act', pre + 'Cur', pre + 'Goal', pre + 'Date'].forEach(id => $(id) && $(id).addEventListener('change', upd));
-  host.querySelectorAll('[data-sex]').forEach(b => b.onclick = () => { S.profile.sex = b.dataset.sex; host.querySelectorAll('[data-sex]').forEach(x => x.classList.toggle('on', x === b)); upd(); });
+  host.querySelectorAll('[data-sex]').forEach(b => b.onclick = () => { S.profile.sex = b.dataset.sex; host.querySelectorAll('[data-sex]').forEach(x => x.classList.toggle('on', x === b)); const sb = host.querySelector('[data-stagebox]'); if (sb) sb.classList.toggle('hidden', S.profile.sex !== 'female'); upd(); });
+  const reStage = () => { const sb = host.querySelector('[data-stagebox]'); if (sb) { const y = sb.closest('#mbox') ? $('mbox').scrollTop : scrollY; sb.outerHTML = stageForm(pre); bindStage(); if ($('mbox') && sb.closest) $('mbox').scrollTop = y; } upd(); };
+  const bindStage = () => { host.querySelectorAll('[data-stage]').forEach(b => b.onclick = () => { S.profile.stage = b.dataset.stage; if (b.dataset.stage === 'preg' && !S.profile.tri) S.profile.tri = 1; reStage(); });
+    host.querySelectorAll('[data-tri]').forEach(b => b.onclick = () => { S.profile.tri = +b.dataset.tri; reStage(); });
+    host.querySelectorAll('[data-bf]').forEach(b => b.onclick = () => { S.profile.bf = b.dataset.bf === 'yes'; reStage(); });
+    const pe = $(pre + 'Pre'); if (pe) pe.addEventListener('change', () => { S.profile.preLb = pe.value === '' ? '' : String(toLb(pe.value)); upd(); });
+    const pw = $(pre + 'PpW'); if (pw) pw.addEventListener('change', () => { S.profile.ppWeeks = pw.value; upd(); }); };
+  bindStage();
   host.querySelectorAll('[data-pace]').forEach(b => b.onclick = () => { const v = b.dataset.pace; if (v === 'date') S.profile.plan = 'date'; else { S.profile.plan = 'pace'; S.profile.pace = v; }
     host.querySelectorAll('[data-pace]').forEach(x => x.classList.toggle('on', x === b)); host.querySelector('[data-datebox]').classList.toggle('hidden', v !== 'date'); upd(); });
 }
@@ -2129,7 +2347,7 @@ function wzDone() {
   $('wzGo').onclick = () => { S.onboarded = true; save(); closeModal(); setTab('plan'); renderAll(); };
 }
 
-function renderAll() { usePool((week() && week().plan.veg) || S.veg); document.body.dataset.tab = tab; renderChips(); renderWeekBar(); renderOut(); }
+function renderAll() { usePool((week() && week().plan.veg) || S.veg, week() ? (week().plan.stage || '') : curStage()); document.body.dataset.tab = tab; renderChips(); renderWeekBar(); renderOut(); }
 renderAll();
 if (!S.onboarded && !/demo/.test(location.hash)) openQuiz(true);
 if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => {});

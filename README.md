@@ -64,3 +64,14 @@ Normal / More veggies / Lots of veggies (wizard cuisine step + Settings). Every 
 
 ## Units
 Displayed amounts never use cups/tbsp/tsp/bunches. Liquids show as volume (ml/L or fl oz/qt/gal) and solids (spices, salt, herbs, grains, chopped veg) as weight (g/kg or oz/lb), converted with a density table (`measure()` / `unitText()` in src/logic.js). Countable items keep their count, and eggs and tortillas also show a weight. Grocery amounts round up. `node test-units.js` checks 84 plans in both unit systems.
+
+## Pregnancy & postpartum
+When sex is female, the profile has an optional stage: Not pregnant, Pregnant (trimester 1, 2 or 3, plus pre-pregnancy weight), or Postpartum (breastfeeding yes/no, weeks since birth). You can change it in Settings.
+- **Calories:** pregnancy adds +0 / +340 / +452 kcal by trimester, with no loss goal and a minimum of 1,800 kcal. A gain range is shown based on pre-pregnancy BMI (IOM/ACOG). Breastfeeding adds +330 kcal (+400 after 6 months), with a minimum of 1,800 kcal. Postpartum loss is capped at 1 lb/wk and starts only after about 8 weeks if breastfeeding (6 weeks otherwise).
+- **Protein:** at least 71 g, or 1.1 g/kg in pregnancy and 1.3 g/kg while breastfeeding.
+- **Food safety:** `stagePool()` in logic.js applies CDC/FDA pregnancy food-safety rules. It removes raw or undercooked dishes, cold cured meats, high-mercury fish and liver. It rewrites cooking steps where needed (eggs cooked firm, meats to safe temperatures, cooked sprouts). It switches cheese to pasteurized, replaces queso fresco with pasteurized feta, and swaps out alcohol.
+- **Fish:** `ensureFish()` keeps pregnancy weeks at 2–3 servings (8–12 oz) of low-mercury fish.
+- **Plan view:** shows a badge, per-day nutrient chips and a "Why" section with sources and a disclaimer.
+- **Postpartum plans** favor warming soups, iron, oats and one-hand snacks.
+
+`node test-preg.js` runs the checks above.
