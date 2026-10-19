@@ -872,7 +872,7 @@ function fitplanTargets(o) {
 }
 
 /* ---- stores near me: OpenStreetMap Nominatim (geocode) + Overpass (shops). Usage policy: ≤1 req/s, explicit search only (no per-keystroke), cached ---- */
-const NOMINATIM = 'https://nominatim.openstreetmap.org/search', OVERPASS = ['https://overpass-api.de/api/interpreter', 'https://overpass.private.coffee/api/interpreter', 'https://maps.mail.ru/osm/tools/overpass/api/interpreter'];
+const NOMINATIM = 'https://nominatim.openstreetmap.org/search', OVERPASS = ['https://overpass-api.de/api/interpreter', 'https://overpass.private.coffee/api/interpreter', 'https://overpass.kumi.systems/api/interpreter'];
 const MI = 1609.344;
 function haversine(a, b) { const R = 6371008.8, r = x => x * Math.PI / 180, dLa = r(b.lat - a.lat), dLo = r(b.lon - a.lon);
   const h = Math.sin(dLa / 2) ** 2 + Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(dLo / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(h)); }
@@ -889,11 +889,11 @@ function osmStore(el, at) { const t = el.tags || {}, lat = el.lat != null ? el.l
   if (!t.name || lat == null) return null; const street = [t['addr:housenumber'], t['addr:street']].filter(Boolean).join(' ');
   const s = { osm: `${el.type}/${el.id}`, name: t.name, brand: t.brand || '', shop: t.shop, street, city: t['addr:city'] || '', state: t['addr:state'] || '', lat, lon };
   s.dist = Math.round(haversine(at, s)); s.key = brandKey(s); return s; }
-function overpassQuery(at, r) { return `[out:json][timeout:25];nwr["shop"~"^(supermarket|grocery|greengrocer)$"](around:${Math.round(r)},${(+at.lat).toFixed(5)},${(+at.lon).toFixed(5)});out center tags 200;`; }
+function overpassQuery(at, r) { const a = `(around:${Math.round(r)},${(+at.lat).toFixed(5)},${(+at.lon).toFixed(5)})`; return `[out:json][timeout:45];(${['supermarket', 'grocery', 'greengrocer'].map(t => `nwr["shop"="${t}"]${a};`).join('')});out center tags qt 200;`; }
 let _lastOsm = 0; const _osmCache = {};
 async function osmGet(url, opts, fetchFn, wait) { const k = url + (opts && opts.body || ''); if (_osmCache[k]) return _osmCache[k];
   const dt = Date.now() - _lastOsm; if (dt < 1100) await (wait || (ms => new Promise(r => setTimeout(r, ms))))(1100 - dt); _lastOsm = Date.now();
-  const ac = typeof AbortController !== 'undefined' ? new AbortController() : null, to = ac && setTimeout(() => ac.abort(), 30000);
+  const ac = typeof AbortController !== 'undefined' ? new AbortController() : null, to = ac && setTimeout(() => ac.abort(), 60000);
   let res; try { res = await fetchFn(url, ac ? { ...opts, signal: ac.signal } : opts); } finally { if (to) clearTimeout(to); } if (!res.ok) throw new Error('http ' + res.status); const j = await res.json(); _osmCache[k] = j; return j; }
 /** geocode a typed address (one request; caller only calls on explicit Search) */
 async function geocode(q, { fetch: f, wait } = {}) { q = String(q || '').trim(); if (q.length < 4) return null;
