@@ -75,3 +75,13 @@ When sex is female, the profile has an optional stage: Not pregnant, Pregnant (t
 - **Postpartum plans** favor warming soups, iron, oats and one-hand snacks.
 
 `node test-preg.js` runs the checks above.
+
+## Find stores near me
+The store picker in the wizard and in Settings can search by street address, or use the browser's location. It geocodes with OpenStreetMap Nominatim, then queries Overpass for shop=supermarket|grocery|greengrocer within about 5 mi, widening to 10 and then 20 mi if fewer than 5 stores are found.
+- Searches only run when you press Search (nothing is sent per keystroke). OSM requests are at least 1.1 s apart, and results are cached.
+- Known chains are mapped to existing store keys so deals attach (Super King Culver City, H-E-B, Central Market and Whole Foods in Austin, Ralphs, Vons, Trader Joe's, Sprouts and others).
+- The address is kept only in localStorage.
+- `node test-near.js` uses a mocked network; `e2e_near.py` uses mocked routes, or the real APIs when given a URL.
+
+## Mise en place
+Each recipe group folds into a "✅ … — all N ready" row once all its items are checked, and opens again when tapped. When everything is checked, the whole section folds to "✅ All ingredients ready" and the timeline scrolls into view. Unchecking an item opens it again. The fold state is saved with the checkboxes, and "Clear checks" resets everything. Covered by `e2e_mise.py`.

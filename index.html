@@ -204,6 +204,19 @@ header h1{display:flex;align-items:center;gap:8px}header h1 .logo{width:34px;hei
 .stagenote ul{margin:4px 0 0 18px;padding:0}.stagenote details.why{margin-top:6px}.stagenote details.why summary{cursor:pointer;font-weight:600}
 .stagenote details.why a{color:inherit}
 .nutd{display:flex;flex-wrap:wrap;gap:3px;margin:3px 0;font-size:11px}.nutd i{font-style:normal;background:#fdf2f8;color:#831843;border-radius:9px;padding:1px 6px}
+
+.mise .mh{display:flex;align-items:center;gap:6px;width:100%;min-height:44px;background:none;border:0;padding:4px 0;text-align:left;font:inherit;color:var(--ink);cursor:pointer}
+.mise .mh b{flex:0 1 auto}.mise .mh .msum{flex:1 1 auto;min-width:0}.mise .gcnt{font-size:12px;font-weight:700;color:var(--muted);background:var(--line);border-radius:10px;padding:1px 8px;white-space:nowrap}
+.mise .mg.done .gcnt{background:#dcfce7;color:#15803d}.mise .mg.done .mh{color:#15803d}
+.mise .chev{transition:transform .3s;color:var(--muted)}.mise .mg.col .chev{transform:rotate(-90deg)}.mise .mg:not(.done) .chev{visibility:hidden}
+.mise .mgb{display:grid;grid-template-rows:1fr;transition:grid-template-rows .35s ease,opacity .35s ease}.mise .mg.col .mgb{grid-template-rows:0fr;opacity:0}.mise .mgi{overflow:hidden;min-height:0}
+.mise .mfoot{display:flex;justify-content:flex-end;margin-top:8px}.mise.alldone>summary{color:#15803d}.mise .mcnt{font-weight:700}
+@media (prefers-reduced-motion:reduce){.mise .mgb,.mise .chev{transition:none}}
+
+.near{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)}.near .nrow{display:flex;gap:8px;align-items:center}.near .nrow input{flex:1;min-width:0}.near #wzGeo,.near #stGeo{margin-top:8px}
+.nearl{margin-top:6px}.nst{display:flex;gap:10px;align-items:center;width:100%;min-height:52px;text-align:left;background:var(--card,#fff);border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin:6px 0;font:inherit;color:var(--ink);cursor:pointer}
+.nst.on{border-color:#15803d;background:#f0fdf4}.nst .nck{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--line);font-weight:700;flex:none}.nst.on .nck{background:#15803d;color:#fff}
+.nst .nmain{flex:1;min-width:0}.nst .nad{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.nst .ndist{font-weight:700;white-space:nowrap;font-size:13px}
 </style></head><body>
 <header><div class="wrap"><h1><img class="logo" src="logo.svg" alt="" width="34" height="36"> Chef Momo</h1><div class="chips" id="chips"></div></div></header>
 <main>
@@ -857,6 +870,42 @@ function fitplanTargets(o) {
   if (ch > 0) t = Math.min(t, tdee + 500);
   return { kcal: Math.round(t / 10) * 10, protein: Math.round(0.85 * goal), from: 'FitPlan' };
 }
+
+/* ---- stores near me: OpenStreetMap Nominatim (geocode) + Overpass (shops). Usage policy: ≤1 req/s, explicit search only (no per-keystroke), cached ---- */
+const NOMINATIM = 'https://nominatim.openstreetmap.org/search', OVERPASS = ['https://overpass-api.de/api/interpreter', 'https://overpass.private.coffee/api/interpreter', 'https://maps.mail.ru/osm/tools/overpass/api/interpreter'];
+const MI = 1609.344;
+function haversine(a, b) { const R = 6371008.8, r = x => x * Math.PI / 180, dLa = r(b.lat - a.lat), dLo = r(b.lon - a.lon);
+  const h = Math.sin(dLa / 2) ** 2 + Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(dLo / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(h)); }
+const distText = (m, units) => units === 'metric' ? (m < 1000 ? `${Math.round(m / 10) * 10} m` : `${num(m / 1000, 1)} km`) : m < 0.05 * MI ? '<0.1 mi' : `${num(m / MI, m < 16 * MI ? 1 : 0)} mi`;
+// known chains → store keys with deals/ad links; local stores (with a published ad) match only near their own location
+const BRANDS = [
+  [/super ?king/i, 'superking-culvercity', { lat: 33.9906, lon: -118.3960, r: 500 }], [/\bh-?e-?b\b/i, 'heb-austin', { lat: 30.2672, lon: -97.7431, r: 60000 }],
+  [/central market/i, 'centralmarket-austin', { lat: 30.2672, lon: -97.7431, r: 60000 }], [/whole foods/i, 'wholefoods-austin', { lat: 30.2672, lon: -97.7431, r: 60000 }],
+  [/ralphs/i, 'ralphs'], [/\bvons\b/i, 'vons'], [/trader joe/i, 'traderjoes'], [/sprouts/i, 'sprouts'], [/\btarget\b/i, 'target'], [/walmart/i, 'walmart'], [/costco/i, 'costco'], [/\baldi\b/i, 'aldi'], [/smart ?& ?final/i, 'smartfinal'],
+];
+function brandKey(s) { const t = `${s.brand || ''} ${s.name || ''}`; for (const [re, key, near] of BRANDS) if (re.test(t)) { if (!near) return key; if (haversine(s, near) <= near.r) return key; } return null; }
+/** OSM element → store row */
+function osmStore(el, at) { const t = el.tags || {}, lat = el.lat != null ? el.lat : el.center && el.center.lat, lon = el.lon != null ? el.lon : el.center && el.center.lon;
+  if (!t.name || lat == null) return null; const street = [t['addr:housenumber'], t['addr:street']].filter(Boolean).join(' ');
+  const s = { osm: `${el.type}/${el.id}`, name: t.name, brand: t.brand || '', shop: t.shop, street, city: t['addr:city'] || '', state: t['addr:state'] || '', lat, lon };
+  s.dist = Math.round(haversine(at, s)); s.key = brandKey(s); return s; }
+function overpassQuery(at, r) { return `[out:json][timeout:25];nwr["shop"~"^(supermarket|grocery|greengrocer)$"](around:${Math.round(r)},${(+at.lat).toFixed(5)},${(+at.lon).toFixed(5)});out center tags 200;`; }
+let _lastOsm = 0; const _osmCache = {};
+async function osmGet(url, opts, fetchFn, wait) { const k = url + (opts && opts.body || ''); if (_osmCache[k]) return _osmCache[k];
+  const dt = Date.now() - _lastOsm; if (dt < 1100) await (wait || (ms => new Promise(r => setTimeout(r, ms))))(1100 - dt); _lastOsm = Date.now();
+  const ac = typeof AbortController !== 'undefined' ? new AbortController() : null, to = ac && setTimeout(() => ac.abort(), 30000);
+  let res; try { res = await fetchFn(url, ac ? { ...opts, signal: ac.signal } : opts); } finally { if (to) clearTimeout(to); } if (!res.ok) throw new Error('http ' + res.status); const j = await res.json(); _osmCache[k] = j; return j; }
+/** geocode a typed address (one request; caller only calls on explicit Search) */
+async function geocode(q, { fetch: f, wait } = {}) { q = String(q || '').trim(); if (q.length < 4) return null;
+  const j = await osmGet(`${NOMINATIM}?format=jsonv2&limit=1&countrycodes=us&q=${encodeURIComponent(q)}`, { headers: { Accept: 'application/json' }, referrerPolicy: 'strict-origin-when-cross-origin' }, f || fetch, wait);
+  return j && j[0] ? { lat: +j[0].lat, lon: +j[0].lon, label: j[0].display_name } : null; }
+/** grocery stores around a point: ~5 mi, widening to 10 / 20 mi when fewer than 5 */
+async function storesNear(at, { fetch: f, wait } = {}) { let out = [], r = 5;
+  for (r of [5, 10, 20]) { const opts = { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'data=' + encodeURIComponent(overpassQuery(at, r * MI)) };
+    let j = null, err = null; for (const url of OVERPASS) { try { j = await osmGet(url, opts, f || fetch, wait); break; } catch (e) { err = e; } } if (!j) throw err;
+    const seen = new Set(); out = (j.elements || []).map(e => osmStore(e, at)).filter(Boolean).filter(s => { const k = (s.name + '|' + (s.street || s.osm)).toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; }).sort((a, b) => a.dist - b.dist);
+    if (out.length >= 5) break; }
+  return { stores: out.slice(0, 40), radiusMi: r }; }
 
 /* ---- pregnancy & postpartum (ACOG / USDA DGA / CDC / FDA guidance). Not medical advice. ---- */
 const STAGE_SOURCES = [
@@ -1735,7 +1784,7 @@ function prepGuide(plan, recipes, { level, known, maybe, startMin = 600, equip }
     cook: plan.cook.map(c => ({ ...c, name: byId[c.id] && byId[c.id].name })), riceCups, warn, needContainers: needC, nFreeze, equip: eq, flags, maybe: [...maybeSet] };
 }
 
-if (typeof module !== 'undefined') module.exports = { fishOz, ensureFish, STAGE_SOURCES, STAGE_DISCLAIMER, PREG_KCAL, stageOf, stageKey, stageLabel, gainRange, NUTS, nutTags, isFishMeal, stageRecipe, stagePool, dayNutrients, fishServings, PREG_EXCLUDE, CURED_RX, measure, unitText, isLiquid, gPerCup, weekVariety, recVegKeys, ADDINS, ADDV, VEG_MODES, vegBoost, vegNote, dayVeg, pickSides, starchK, mergeSpecials, slugify, PRICE, costSummary, regUnitPrice, saleUnitPrice, money, CUISINES, LEVELS, DAYS, SECTIONS, TECH, QUIZ, scoreQuiz, macroTargets, fitplanTargets, specialsActive, matchSpecial, saleHits, recommendCuisine, recentCuisines, buildWeekPlan, groceryList, calcMacros, dietFilter, specialSafe, asList, amountText, batchList, inlineAmounts, equipPlan, equipFilter, EQUIP_DEFAULT, FREEZER_CAP, laneOf, servWords, servInfo, portionText, portionVol, macroLine, qtrs, metricText, qtyText, fmtQty, wt, wu, LB_KG, swapCandidates, swapRecipe, finalizeDays, swapName, SWAPS, cuisineFeasible, progressInfo, PACE, prepGuide, mondayOf, defaultWeek, defaultShop, laneOf, reheatOf, addDays, iso, parseISO };
+if (typeof module !== 'undefined') module.exports = { haversine, distText, brandKey, osmStore, overpassQuery, geocode, storesNear, fishOz, ensureFish, STAGE_SOURCES, STAGE_DISCLAIMER, PREG_KCAL, stageOf, stageKey, stageLabel, gainRange, NUTS, nutTags, isFishMeal, stageRecipe, stagePool, dayNutrients, fishServings, PREG_EXCLUDE, CURED_RX, measure, unitText, isLiquid, gPerCup, weekVariety, recVegKeys, ADDINS, ADDV, VEG_MODES, vegBoost, vegNote, dayVeg, pickSides, starchK, mergeSpecials, slugify, PRICE, costSummary, regUnitPrice, saleUnitPrice, money, CUISINES, LEVELS, DAYS, SECTIONS, TECH, QUIZ, scoreQuiz, macroTargets, fitplanTargets, specialsActive, matchSpecial, saleHits, recommendCuisine, recentCuisines, buildWeekPlan, groceryList, calcMacros, dietFilter, specialSafe, asList, amountText, batchList, inlineAmounts, equipPlan, equipFilter, EQUIP_DEFAULT, FREEZER_CAP, laneOf, servWords, servInfo, portionText, portionVol, macroLine, qtrs, metricText, qtyText, fmtQty, wt, wu, LB_KG, swapCandidates, swapRecipe, finalizeDays, swapName, SWAPS, cuisineFeasible, progressInfo, PACE, prepGuide, mondayOf, defaultWeek, defaultShop, laneOf, reheatOf, addDays, iso, parseISO };
 </script>
 <script>/* ===== UI ===== */
 const $ = id => document.getElementById(id);
@@ -1818,7 +1867,7 @@ const targets = () => { const m = S.profile.auto ? macros() : null; return m && 
 if (!S.stores) S.stores = S.store && S.store.id === 'custom' ? [{ key: 'custom', name: S.store.customName || 'Other store', city: S.store.customCity || '' }] : [{ key: (S.store && STORES[S.store.id]) ? S.store.id : 'superking-culvercity' }];
 if (!S.remote) S.remote = {};
 const stSlug = st => { const p = STORES[st.key]; if (p && p.city) return st.key; const loc = slugify(st.city || st.zip || ''); return st.key === 'custom' ? slugify(st.name || 'store') + (loc ? '-' + loc : '') : st.key + (loc ? '-' + loc : ''); };
-const stInfo = st => { const p = STORES[st.key] || STORES.custom; const custom = st.key === 'custom'; return { ...p, key: st.key, slug: stSlug(st), name: custom ? (st.name || 'Other store') : p.name, full: custom ? (st.name || 'Other store') : p.full, city: p.city || st.city || '' }; };
+const stInfo = st => { const p = STORES[st.key] || STORES.custom; const custom = st.key === 'custom'; return { ...p, key: st.key, slug: stSlug(st), name: custom ? (st.name || 'Other store') : p.name, full: custom ? (st.name || 'Other store') : p.full, city: p.city || st.city || '', addr: st.addr || p.addr || '' }; };
 const store = () => stInfo(S.stores[0]);
 const syncStore = () => { S.store = { ...(S.store || {}), id: store().slug }; };
 syncStore();
@@ -1987,8 +2036,7 @@ $('out').querySelectorAll('input[type=checkbox]').forEach(c => c.onchange = () =
       ${pg.tips.length ? `<details class="sec"${p.level === 1 ? ' open' : ''}><summary>💡 ${p.level === 1 ? 'Beginner tips' : 'Skill tips'} (${pg.tips.length})</summary>${pg.tips.map(t => `<div class="tip${t.maybe ? ' maybe' : ''}"><b>${et(t.label)}</b>${t.maybe ? ' <span class="pill mbp">you said maybe</span>' : ''}: ${et(t.tip)}</div>`).join('')}</details>` : ''}
       <details class="sec"><summary>🌡️ Food safety</summary><ul>${pg.safety.map(x => `<li>${et(x)}</li>`).join('')}</ul></details></div>`;
     const ck = S.checks[S.cur];
-    $('out').querySelectorAll('[data-mk]').forEach(c => c.onchange = () => { ck[c.dataset.mk] = c.checked; save(); c.nextElementSibling.classList.toggle('done', c.checked);
-      const s = $('out').querySelector('.mise summary'); s.textContent = s.textContent.replace(/\d+\/(\d+)/, (m, n) => `${$('out').querySelectorAll('[data-mk]:checked').length}/${n}`); });
+    bindMise(p);
   }
 }
 function batchInfo(p, id, sv) { const nC = p.days.reduce((s, d) => s + d.meals.filter(m => m.id === id && m.st !== 'grab').length, 0); return `Batch: makes ${servWords(sv)} → ${nC} container${nC === 1 ? '' : 's'}`; }
@@ -1996,12 +2044,35 @@ function batchCard(p, r, sv, alts) {
   return `${r.vegBoost ? `<div class="tip">${esc(vegNote(r))}</div>` : ''}<ul class="bl">${batchList(r, sv, S.units, S.diet).map(x => `<li><span>${esc(x.n)}</span> — <b>${esc(x.amt)}</b></li>`).join('')}</ul>
     <p class="small">${inlineAmounts(et(r.steps), r, sv, S.units, S.diet)}</p>${(alts || equipPlan(r, S.equip).alts).map(a => `<div class="tip">🔧 ${et(a)}</div>`).join('')}${maybeTips(r)}${r.tip ? `<div class="tip">💡 ${et(r.tip)}</div>` : ''}${r.flavor ? `<div class="tip flav">🌶 <b>Flavor tip:</b> ${et(r.flavor)}</div>` : ''}`;
 }
+/* Mise en place: groups auto-collapse when all checked (tap to reopen); whole section collapses when everything is ready */
+function miseGroups(p) { const cooked = p.cook.filter(c => BY[c.id] && !BY[c.id].nocook);
+  return cooked.map(c => { const r = BY[c.id]; const items = batchList(r, c.sv, S.units, S.diet).map(x => ({ ...x, k: `mise|${r.id}|${x.n}` })); return { r, c, items, keys: [...new Set(items.map(x => x.k))] }; }); }
+function miseState(p) { const ck = S.checks[S.cur] = S.checks[S.cur] || {}; const G = miseGroups(p);
+  const gs = G.map(g => { const d = g.keys.filter(k => ck[k]).length; return { id: g.r.id, d, n: g.keys.length, all: d === g.keys.length, open: !!ck['miseopen|' + g.r.id] }; });
+  const d = gs.reduce((s, g) => s + g.d, 0), n = gs.reduce((s, g) => s + g.n, 0); return { G, gs, d, n, all: n > 0 && d === n, open: !!ck['miseopen|__all'], ck }; }
+const miseSum = st => st.all ? `✅ All ingredients ready <span class="mcnt">${st.n}/${st.n}</span>` : `🧺 Mise en place · <span class="mcnt">${st.d}/${st.n}</span> ready`;
 function miseHTML(p, pg) {
-  const ck = S.checks[S.cur] = S.checks[S.cur] || {}; const cooked = p.cook.filter(c => BY[c.id] && !BY[c.id].nocook);
-  const n = cooked.reduce((s, c) => s + BY[c.id].ing.length, 0), done = Object.keys(ck).filter(k => k.startsWith('mise|') && ck[k]).length;
-  return `<details class="sec mise" open><summary>🧺 Mise en place · ${done}/${n} ready</summary><p class="hint">Everything for the whole week, measured. No need for the Groceries tab while you cook.</p>
-    ${cooked.map(c => { const r = BY[c.id]; return `<div class="mg"><div class="mh"><b>${esc(short2(r.name))}</b> <span class="muted small">for ${servWords(c.sv)}</span></div>
-      ${batchList(r, c.sv, S.units, S.diet).map(x => { const k = `mise|${r.id}|${x.n}`; return `<label class="it"><input type="checkbox" data-mk="${esc(k)}" ${ck[k] ? 'checked' : ''}><span class="${ck[k] ? 'done' : ''}">${esc(x.n)}</span><span class="q">${esc(x.amt)}</span></label>`; }).join('')}</div>`; }).join('')}</details>`;
+  const st = miseState(p), ck = st.ck;
+  return `<details class="sec mise${st.all ? ' alldone' : ''}" id="mise"${st.all && !st.open ? '' : ' open'}><summary>${miseSum(st)}</summary><p class="hint">Everything for the whole week, measured. No need for the Groceries tab while you cook. Each recipe folds up when it\u2019s all checked.</p>
+    ${st.G.map((g, gi) => { const s2 = st.gs[gi], col = s2.all && !s2.open; return `<div class="mg${s2.all ? ' done' : ''}${col ? ' col' : ''}" data-mg="${g.r.id}"><button type="button" class="mh" data-mgt="${g.r.id}" aria-expanded="${!col}"><span class="mck">${s2.all ? '✅' : ''}</span><b>${esc(short2(g.r.name))}</b><span class="msum">${s2.all ? ` — all ${s2.n} ready` : ` <span class="muted small">for ${servWords(g.c.sv)}</span>`}</span><span class="gcnt">${s2.d}/${s2.n}</span><span class="chev" aria-hidden="true">▾</span></button>
+      <div class="mgb"><div class="mgi">${g.items.map(x => `<label class="it"><input type="checkbox" data-mk="${esc(x.k)}" ${ck[x.k] ? 'checked' : ''}><span class="${ck[x.k] ? 'done' : ''}">${esc(x.n)}</span><span class="q">${esc(x.amt)}</span></label>`).join('')}</div></div></div>`; }).join('')}
+    <div class="mfoot"><button type="button" class="btn sm sec" id="miseClear">Clear checks</button></div></details>`;
+}
+function bindMise(p) { const out = $('out'), sec = $('mise'); if (!sec) return; const ck = S.checks[S.cur];
+  const sync = (fromAll) => { const st = miseState(p);
+    st.gs.forEach(g => { const el = out.querySelector(`[data-mg="${g.id}"]`); if (!el) return; const col = g.all && !g.open;
+      el.classList.toggle('done', g.all); el.classList.toggle('col', col); el.querySelector('.mh').setAttribute('aria-expanded', !col);
+      el.querySelector('.gcnt').textContent = `${g.d}/${g.n}`; el.querySelector('.mck').textContent = g.all ? '✅' : '';
+      el.querySelector('.msum').innerHTML = g.all ? ` — all ${g.n} ready` : ` <span class="muted small">for ${servWords(st.G.find(x => x.r.id === g.id).c.sv)}</span>`; });
+    sec.querySelector('summary').innerHTML = miseSum(st); sec.classList.toggle('alldone', st.all);
+    if (st.all && fromAll && !st.open) setTimeout(() => { sec.open = false; const tl = out.querySelector('.tl') || out.querySelector('h3'); if (tl) tl.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 450);
+    if (!st.all && !sec.open) sec.open = true; };
+  out.querySelectorAll('[data-mk]').forEach(c => c.onchange = () => { ck[c.dataset.mk] = c.checked; c.nextElementSibling.classList.toggle('done', c.checked);
+    const id = c.closest('[data-mg]').dataset.mg; if (!c.checked) { delete ck['miseopen|' + id]; delete ck['miseopen|__all']; } else { const g = miseState(p).gs.find(x => x.id === id); if (g.all) delete ck['miseopen|' + id]; }
+    save(); sync(c.checked); });
+  out.querySelectorAll('[data-mgt]').forEach(b => b.onclick = () => { const id = b.dataset.mgt, g = miseState(p).gs.find(x => x.id === id); if (!g.all) return; ck['miseopen|' + id] = !g.open; if (!ck['miseopen|' + id]) delete ck['miseopen|' + id]; save(); sync(false); });
+  sec.querySelector('summary').addEventListener('click', () => setTimeout(() => { if (miseState(p).all) { if (sec.open) ck['miseopen|__all'] = true; else delete ck['miseopen|__all']; save(); } }, 0));
+  $('miseClear').onclick = () => { Object.keys(ck).filter(k => k.startsWith('mise|') || k.startsWith('miseopen|')).forEach(k => delete ck[k]); save(); const y = scrollY; renderOut(); scrollTo(0, y); };
 }
 const vegOf = d => d.veg != null ? d.veg : dayVeg(d, BY);
 const fmtVeg = v => { const x = Math.round(v * 2) / 2; return `${String(x).replace('.5', '½').replace(/^0½/, '½')} serving${x === 1 ? '' : 's'}`; };
@@ -2175,12 +2246,48 @@ function bindTargets(pre, after) {
 }
 function storeForm(pre) {
   const sel = new Set(S.stores.map(stSlug));
-  return `<div class="stl" id="${pre}Stl">${S.stores.map((st, k) => { const i = stInfo(st), d = dealStatus(st); return `<div class="stc"><div><b>${k === 0 ? '⭐ ' : ''}${esc(i.full)}</b>${i.city ? ` <span class="muted">· ${esc(i.city)}</span>` : ''}<div class="small ${d.ok ? 'okc' : 'muted'}">${d.ok ? '🏷 ' : ''}${esc(d.txt)}${i.ad ? ` · <a href="${i.ad}" target="_blank" rel="noopener">weekly ad</a>` : ''}</div></div>${S.stores.length > 1 ? `<button type="button" class="btn sm ghost" data-strm="${k}" aria-label="Remove ${esc(i.full)}">✕</button>` : ''}</div>`; }).join('')}</div>
+  return `<div class="stl" id="${pre}Stl">${S.stores.map((st, k) => { const i = stInfo(st), d = dealStatus(st); return `<div class="stc"><div><b>${k === 0 ? '⭐ ' : ''}${esc(i.full)}</b>${i.city ? ` <span class="muted">· ${esc(i.city)}</span>` : ''}${st.addr && !STORES[st.key]?.addr ? `<div class="small muted">${esc(st.addr)}</div>` : ''}<div class="small ${d.ok ? 'okc' : 'muted'}">${d.ok ? '🏷 ' : ''}${esc(d.txt)}${i.ad ? ` · <a href="${i.ad}" target="_blank" rel="noopener">weekly ad</a>` : ''}</div></div>${S.stores.length > 1 ? `<button type="button" class="btn sm ghost" data-strm="${k}" aria-label="Remove ${esc(i.full)}">✕</button>` : ''}</div>`; }).join('')}</div>
   <label for="${pre}Q">Add a store</label><div class="row"><div><input id="${pre}Q" autocomplete="off" placeholder="Search or type any store"></div><div><input id="${pre}Loc" autocomplete="off" placeholder="City or ZIP"></div></div>
   <div class="stsug" id="${pre}Sug"></div>
+  <div class="near"><label for="${pre}Addr">📍 Find stores near me</label><div class="nrow"><input id="${pre}Addr" autocomplete="street-address" enterkeyhint="search" placeholder="Street address, city" value="${esc(S.nearQ || '')}"><button type="button" class="btn sm" id="${pre}NearGo">Search</button></div>
+   <button type="button" class="btn sm sec" id="${pre}Geo">◎ Use my location</button>
+   <p class="hint small">🔒 Address is sent to OpenStreetMap to search; not saved anywhere except your phone.</p><div class="nearl" id="${pre}Near" aria-live="polite">${nearHTML()}</div></div>
   <p class="hint">Pick several stores: we use the best sale price for each item and group your list by store. ⭐ = main store.</p>`;
 }
+let NEAR = { st: 'idle', stores: [], msg: '' };
+const nearSel = s => S.stores.some(x => (x.osm && x.osm === s.osm) || (s.key && STORES[s.key].city && x.key === s.key && !x.osm));
+function nearHTML() { const n = NEAR;
+  if (n.st === 'busy') return `<p class="hint">🔎 ${esc(n.msg || 'Searching…')}</p>`;
+  if (n.st === 'err' || n.st === 'none') return `<div class="note ${n.st === 'err' ? 'warn' : ''} small">${esc(n.msg)}</div>`;
+  if (n.st !== 'ok') return '';
+  return `<p class="hint small">${n.stores.length} grocery stores within ${n.radiusMi} mi${n.label ? ' of ' + esc(n.label.split(',').slice(0, 3).join(',')) : ''} · tap to add (pick several)</p>${n.stores.map((x, i) => { const on = nearSel(x), deal = x.key && STORES[x.key];
+    return `<button type="button" class="nst${on ? ' on' : ''}" data-near="${i}" aria-pressed="${on}"><span class="nck">${on ? '✓' : '+'}</span><span class="nmain"><b>${esc(x.name)}</b>${x.brand && x.brand !== x.name ? ` <span class="muted small">${esc(x.brand)}</span>` : ''}${deal ? ` <span class="pill sale small">🏷 ${STORES[x.key].city ? 'weekly deals' : 'weekly ad'}</span>` : ''}<span class="small muted nad">${esc([x.street, x.city].filter(Boolean).join(', ') || x.shop)}</span></span><span class="ndist">${distText(x.dist, S.units)}</span></button>`; }).join('')}<p class="hint small">Store data © OpenStreetMap contributors</p>`; }
+async function runNear(pre, at, after) {
+  const box = $(pre + 'Near'), draw = () => { if ($(pre + 'Near')) { $(pre + 'Near').innerHTML = nearHTML(); bindNear(pre, after); } };
+  if (!navigator.onLine) { NEAR = { st: 'err', stores: [], msg: 'You\u2019re offline. Connect to search for nearby stores, or add one by name above.' }; return draw(); }
+  try {
+    if (at.q) { NEAR = { st: 'busy', stores: [], msg: 'Finding that address…' }; draw(); const g = await geocode(at.q); if (!g) { NEAR = { st: 'none', stores: [], msg: 'Couldn\u2019t find that address. Try adding the city and state, e.g. “5587 Sepulveda Blvd, Culver City, CA”.' }; return draw(); } at = g; }
+    NEAR = { st: 'busy', stores: [], msg: 'Looking for grocery stores nearby…' }; draw();
+    const r = await storesNear(at);
+    NEAR = r.stores.length ? { st: 'ok', stores: r.stores, radiusMi: r.radiusMi, label: at.label || '' } : { st: 'none', stores: [], msg: `No grocery stores found within ${r.radiusMi} mi. Add one by name above.` };
+  } catch (e) { NEAR = { st: 'err', stores: [], msg: 'Store search is unavailable right now (network or OpenStreetMap busy). Try again in a minute, or add a store by name above.' }; }
+  draw();
+}
+function bindNear(pre, after) { const box = $(pre + 'Near'); if (!box) return;
+  box.querySelectorAll('[data-near]').forEach(b => b.onclick = () => { const x = NEAR.stores[+b.dataset.near]; const i = S.stores.findIndex(y => (y.osm && y.osm === x.osm) || (x.key && STORES[x.key].city && y.key === x.key && !y.osm));
+    if (i >= 0) { if (S.stores.length > 1) S.stores.splice(i, 1); }
+    else { const city = [x.city, x.state].filter(Boolean).join(', '); const addr = [x.street, x.city].filter(Boolean).join(', ');
+      S.stores.push(x.key ? (STORES[x.key].city ? { key: x.key, osm: x.osm, addr } : { key: x.key, city: x.city || city, osm: x.osm, addr }) : { key: 'custom', name: x.name, city: x.city || city, osm: x.osm, addr }); }
+    syncStore(); save(); loadDeals(); after(); }); }
 function bindStore(pre, after) {
+  const go = () => { const q = $(pre + 'Addr').value.trim(); if (q.length < 4) { NEAR = { st: 'none', stores: [], msg: 'Type a street address with the city (or tap “Use my location”).' }; $(pre + 'Near').innerHTML = nearHTML(); return; }
+    S.nearQ = q; save(); runNear(pre, { q }, after); };
+  $(pre + 'NearGo').onclick = go; $(pre + 'Addr').onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); go(); } };
+  $(pre + 'Geo').onclick = () => { if (!navigator.geolocation) { NEAR = { st: 'err', stores: [], msg: 'Location isn\u2019t available in this browser. Type your address instead.' }; $(pre + 'Near').innerHTML = nearHTML(); return; }
+    NEAR = { st: 'busy', stores: [], msg: 'Getting your location…' }; $(pre + 'Near').innerHTML = nearHTML();
+    navigator.geolocation.getCurrentPosition(p => runNear(pre, { lat: p.coords.latitude, lon: p.coords.longitude, label: 'your location' }, after),
+      () => { NEAR = { st: 'err', stores: [], msg: 'Location permission was denied. Type your address instead.' }; $(pre + 'Near').innerHTML = nearHTML(); }, { timeout: 10000, maximumAge: 600000 }); };
+  bindNear(pre, after);
   const sug = () => { const q = $(pre + 'Q').value.trim().toLowerCase(), loc = $(pre + 'Loc').value.trim();
     const m = Object.entries(STORES).filter(([k, v]) => k !== 'custom' && !(v.city && S.stores.some(x => x.key === k)) && (!q || (v.full + ' ' + v.name + ' ' + v.city).toLowerCase().includes(q)));
     $(pre + 'Sug').innerHTML = m.map(([k, v]) => `<button type="button" class="chip" data-stadd="${k}">${esc(v.full)}${v.city ? ' · ' + esc(v.city) : loc ? ' · ' + esc(loc) : ''}</button>`).join('') + (q && !m.some(([, v]) => v.full.toLowerCase() === q) ? `<button type="button" class="chip" data-stadd="custom">➕ “${esc($(pre + 'Q').value.trim())}”${loc ? ' · ' + esc(loc) : ''}</button>` : '');
