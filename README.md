@@ -85,3 +85,9 @@ The store picker in the wizard and in Settings can search by street address, or 
 
 ## Mise en place
 Each recipe group folds into a "✅ … — all N ready" row once all its items are checked, and opens again when tapped. When everything is checked, the whole section folds to "✅ All ingredients ready" and the timeline scrolls into view. Unchecking an item opens it again. The fold state is saved with the checkboxes, and "Clear checks" resets everything. Covered by `e2e_mise.py`.
+
+## Poland / Warsaw
+- Store search geocodes US and Polish addresses (diacritics fine, e.g. "Marszałkowska 104, Warszawa") and also finds `shop=convenience` (Żabka; max 10 per search so supermarkets aren't crowded out) and `shop=discount`.
+- Polish chain presets/brand mapping: Biedronka, Lidl, Żabka, Carrefour, Auchan, Kaufland, Dino, Netto, Stokrotka, ALDI, Frisco (online) → slugs `biedronka-pl`, `lidl-pl`, … (city appended, e.g. `biedronka-pl-warszawa`).
+- Currency: if your main store is Polish, costs show in zł. Regular prices are US estimates converted at a fixed **1 USD = 3.90 zł** (NBP mid-rate 19 Oct 2026, rounded) and labeled as estimates; leaflet sale prices are real zł.
+- Deals: Lidl gazetka 19–21.10.2026 (official leaflet data) and Biedronka 19–21.10.2026 (via gazetkowo.pl summary), with source and dates. Newer leaflets can be published as `specials/<slug>.json` (same format, `"currency":"PLN"`, prices like `"4,99 zł/kg"`).

@@ -780,7 +780,40 @@ const SK_SPECIALS = {
     ['Pistachio Kernels', '$12.99 lb', 'G', ['pistachio']],
   ].map(([name, price, sec, kw]) => ({ name, price, sec, kw })),
 };
-if (typeof module !== 'undefined') module.exports = { SK_SPECIALS };
+
+/* Lidl Polska — gazetka "19.10" (Od poniedziałku, kw43). Transcribed 2026-10-20 from the official leaflet API behind
+   https://www.lidl.pl/l/pl/gazetki/gazetka-19-10-pon-kw43/ar/0 (offerStartDate 2026-10-19, offerEndDate 2026-10-21).
+   Only items whose price is unambiguous in the leaflet text; Lidl Plus app-only coupons omitted. Prices in zł. */
+const LIDL_PL_SPECIALS = {
+  store: 'lidl-pl', currency: 'PLN',
+  validFrom: '2026-10-19', validTo: '2026-10-21',
+  source: 'https://www.lidl.pl/l/pl/gazetki/gazetka-19-10-pon-kw43/ar/0',
+  fetched: '2026-10-20',
+  items: [
+    ['Ziemniaki jadalne 2,5 kg (potatoes)', '5,99 zł', 'P', ['=potato']],
+    ['Polskie jabłka czerwone luzem (red apples, loose)', '2,49 zł', 'P', ['=apple']],
+    ['Seler naciowy (celery)', '3,99 zł', 'P', ['celery']],
+    ['Dynia piżmowa luzem (butternut squash)', '4,89 zł', 'P', ['butternut']],
+    ['Rzeźnik schab wieprzowy XXL (pork loin)', '9,99 zł', 'M', ['pork loin']],
+    ['Złota Nioska polskie jaja z chowu ściółkowego (eggs)', '0,70 zł/jajo', 'D', ['=eggs']],
+  ].map(([name, price, sec, kw]) => ({ name, price, sec, kw })),
+};
+/* Biedronka — gazetka "Od poniedziałku" 19.10–24.10.2026 (fresh-produce offers 19.10–21.10).
+   biedronka.pl loads its leaflet viewer by script, so prices are taken from the public summary of that leaflet at
+   https://www.gazetkowo.pl/blog/aktualnosci-o-promocjach/ziemniaki-po-099-zl-i-kilogram-sera-za-2299-zl-biedronka-rusza-z-nowa-gazetka-1910-2410 (fetched 2026-10-20). */
+const BIEDRONKA_PL_SPECIALS = {
+  store: 'biedronka-pl', currency: 'PLN',
+  validFrom: '2026-10-19', validTo: '2026-10-21',
+  source: 'https://www.gazetkowo.pl/blog/aktualnosci-o-promocjach/ziemniaki-po-099-zl-i-kilogram-sera-za-2299-zl-biedronka-rusza-z-nowa-gazetka-1910-2410',
+  sourceNote: 'Biedronka gazetka 19–24.10.2026 via gazetkowo.pl summary',
+  fetched: '2026-10-20',
+  items: [
+    ['Polskie ziemniaki jadalne na wagę (potatoes)', '0,99 zł/kg', 'P', ['=potato']],
+    ['Winogrona mołdawskie na wagę (grapes)', '5,99 zł/kg', 'P', ['grapes']],
+    ['Ser żółty Gouda w plastrach 1 kg (gouda)', '22,99 zł', 'D', ['gouda']],
+  ].map(([name, price, sec, kw]) => ({ name, price, sec, kw })),
+};
+if (typeof module !== 'undefined') module.exports = { SK_SPECIALS, LIDL_PL_SPECIALS, BIEDRONKA_PL_SPECIALS };
 </script>
 <script id="logic">/* ===== Pure planning logic (testable in Node) ===== */
 const CUISINES = ['Mexican', 'Italian', 'Mediterranean', 'Middle Eastern', 'Armenian', 'Latin American', 'Japanese', 'Korean', 'Thai', 'Indian', 'Chinese', 'Vietnamese', 'American', 'Polish'];
@@ -878,18 +911,22 @@ function haversine(a, b) { const R = 6371008.8, r = x => x * Math.PI / 180, dLa 
   const h = Math.sin(dLa / 2) ** 2 + Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(dLo / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(h)); }
 const distText = (m, units) => units === 'metric' ? (m < 1000 ? `${Math.round(m / 10) * 10} m` : `${num(m / 1000, 1)} km`) : m < 0.05 * MI ? '<0.1 mi' : `${num(m / MI, m < 16 * MI ? 1 : 0)} mi`;
 // known chains → store keys with deals/ad links; local stores (with a published ad) match only near their own location
+const inPL = p => p && p.lat >= 49 && p.lat <= 54.9 && p.lon >= 14.1 && p.lon <= 24.2;
+const PLB = { pl: true };
 const BRANDS = [
+  [/biedronka/i, 'biedronka-pl', PLB], [/\blidl\b/i, 'lidl-pl', PLB], [/[żz]abka/i, 'zabka-pl', PLB], [/carrefour/i, 'carrefour-pl', PLB], [/auchan/i, 'auchan-pl', PLB], [/kaufland/i, 'kaufland-pl', PLB],
+  [/\bdino\b/i, 'dino-pl', PLB], [/\bnetto\b/i, 'netto-pl', PLB], [/stokrotka/i, 'stokrotka-pl', PLB], [/\baldi\b/i, 'aldi-pl', PLB], [/frisco/i, 'frisco-pl', PLB],
   [/super ?king/i, 'superking-culvercity', { lat: 33.9906, lon: -118.3960, r: 500 }], [/\bh-?e-?b\b/i, 'heb-austin', { lat: 30.2672, lon: -97.7431, r: 60000 }],
   [/central market/i, 'centralmarket-austin', { lat: 30.2672, lon: -97.7431, r: 60000 }], [/whole foods/i, 'wholefoods-austin', { lat: 30.2672, lon: -97.7431, r: 60000 }],
   [/ralphs/i, 'ralphs'], [/\bvons\b/i, 'vons'], [/trader joe/i, 'traderjoes'], [/sprouts/i, 'sprouts'], [/\btarget\b/i, 'target'], [/walmart/i, 'walmart'], [/costco/i, 'costco'], [/\baldi\b/i, 'aldi'], [/smart ?& ?final/i, 'smartfinal'],
 ];
-function brandKey(s) { const t = `${s.brand || ''} ${s.name || ''}`; for (const [re, key, near] of BRANDS) if (re.test(t)) { if (!near) return key; if (haversine(s, near) <= near.r) return key; } return null; }
+function brandKey(s) { const t = `${s.brand || ''} ${s.name || ''}`; for (const [re, key, near] of BRANDS) if (re.test(t)) { if (!near) return key; if (near.pl ? inPL(s) : haversine(s, near) <= near.r) return key; } return null; }
 /** OSM element → store row */
 function osmStore(el, at) { const t = el.tags || {}, lat = el.lat != null ? el.lat : el.center && el.center.lat, lon = el.lon != null ? el.lon : el.center && el.center.lon;
   if (!t.name || lat == null) return null; const street = [t['addr:housenumber'], t['addr:street']].filter(Boolean).join(' ');
   const s = { osm: `${el.type}/${el.id}`, name: t.name, brand: t.brand || '', shop: t.shop, street, city: t['addr:city'] || '', state: t['addr:state'] || '', lat, lon };
-  s.dist = Math.round(haversine(at, s)); s.key = brandKey(s); return s; }
-function overpassQuery(at, r) { const a = `(around:${Math.round(r)},${(+at.lat).toFixed(5)},${(+at.lon).toFixed(5)})`; return `[out:json][timeout:45];(${['supermarket', 'grocery', 'greengrocer'].map(t => `nwr["shop"="${t}"]${a};`).join('')});out center tags qt 200;`; }
+  s.dist = Math.round(haversine(at, s)); s.key = brandKey(s); if (inPL(s)) s.cc = 'PL'; return s; }
+function overpassQuery(at, r) { const a = `(around:${Math.round(r)},${(+at.lat).toFixed(5)},${(+at.lon).toFixed(5)})`; return `[out:json][timeout:45];(${['supermarket', 'grocery', 'greengrocer', 'convenience', 'discount'].map(t => `nwr["shop"="${t}"]${a};`).join('')});out center tags qt 400;`; }
 let _lastOsm = 0; const _osmCache = {};
 async function osmGet(url, opts, fetchFn, wait) { const k = url + (opts && opts.body || ''); if (_osmCache[k]) return _osmCache[k];
   const dt = Date.now() - _lastOsm; if (dt < 1100) await (wait || (ms => new Promise(r => setTimeout(r, ms))))(1100 - dt); _lastOsm = Date.now();
@@ -897,13 +934,14 @@ async function osmGet(url, opts, fetchFn, wait) { const k = url + (opts && opts.
   let res; try { res = await fetchFn(url, ac ? { ...opts, signal: ac.signal } : opts); } finally { if (to) clearTimeout(to); } if (!res.ok) throw new Error('http ' + res.status); const j = await res.json(); _osmCache[k] = j; return j; }
 /** geocode a typed address (one request; caller only calls on explicit Search) */
 async function geocode(q, { fetch: f, wait } = {}) { q = String(q || '').trim(); if (q.length < 4) return null;
-  const j = await osmGet(`${NOMINATIM}?format=jsonv2&limit=1&countrycodes=us&q=${encodeURIComponent(q)}`, { headers: { Accept: 'application/json' }, referrerPolicy: 'strict-origin-when-cross-origin' }, f || fetch, wait);
+  const j = await osmGet(`${NOMINATIM}?format=jsonv2&limit=1&countrycodes=us,pl&accept-language=en,pl&q=${encodeURIComponent(q)}`, { headers: { Accept: 'application/json' }, referrerPolicy: 'strict-origin-when-cross-origin' }, f || fetch, wait);
   return j && j[0] ? { lat: +j[0].lat, lon: +j[0].lon, label: j[0].display_name } : null; }
 /** grocery stores around a point: ~5 mi, widening to 10 / 20 mi when fewer than 5 */
 async function storesNear(at, { fetch: f, wait } = {}) { let out = [], r = 5;
   for (r of [5, 10, 20]) { const opts = { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'data=' + encodeURIComponent(overpassQuery(at, r * MI)) };
     let j = null, err = null; for (const url of OVERPASS) { try { j = await osmGet(url, opts, f || fetch, wait); break; } catch (e) { err = e; } } if (!j) throw err;
     const seen = new Set(); out = (j.elements || []).map(e => osmStore(e, at)).filter(Boolean).filter(s => { const k = (s.name + '|' + (s.street || s.osm)).toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; }).sort((a, b) => a.dist - b.dist);
+    let nc = 0; out = out.filter(s => s.shop !== 'convenience' || ((s.key || s.cc === 'PL') && ++nc <= 10));
     if (out.length >= 5) break; }
   return { stores: out.slice(0, 40), radiusMi: r }; }
 
@@ -1277,7 +1315,7 @@ function cuisineFeasible(recipes, cuisine) {
 function specialsActive(sp, shopISO) { return !!(sp && sp.items && sp.items.length && (!sp.validFrom || shopISO >= sp.validFrom) && (!sp.validTo || shopISO <= sp.validTo)); }
 function matchSpecial(ingName, sp, unit) {
   if (!sp) return null; const n = ingName.toLowerCase();
-  const hits = sp.items.filter(it => (it.kw || []).some(k => k && n.includes(k.toLowerCase())));
+  const hits = sp.items.filter(it => (it.kw || []).some(k => k && (k[0] === '=' ? n === k.slice(1).toLowerCase() : n.includes(k.toLowerCase()))));
   if (hits.length < 2 || !unit) return hits[0] || null;
   // several stores (or ad lines) match: take the best per-unit price; unparseable prices lose to parseable ones
   let best = null, bp = Infinity; for (const it of hits) { const p = saleUnitPrice(ingName, unit, it); const v = p == null ? 1e9 : p; if (v < bp) { bp = v; best = it; } }
@@ -1663,11 +1701,15 @@ const PRICE = [ // [regex, {unit: $ per unit}] — first match wins; oz entries 
 ];
 const DEF_PRICE = { M: { oz: 0.4 }, D: { oz: 0.4, cup: 1.5, ea: 0.5, tbsp: 0.1 }, P: { ea: 0.6, cup: 1.0, bunch: 1.5, tbsp: 0.1, leaf: 0.05, oz: 0.15, inch: 0.25, stalk: 0.3 }, F: { cup: 1.0 }, B: { ea: 0.4, slice: 0.3 },
   G: { cup: 0.9, 'cup dry': 0.5, oz: 0.25, tbsp: 0.12, tsp: 0.05, ea: 0.2 }, S: { tsp: 0.08, tbsp: 0.2, ea: 0.1, pinch: 0.05 } };
-const EA_LB = { cucumber: 0.25, peach: 0.4, pear: 0.45, anaheim: 0.15, tangerine: 0.2, 'sweet lemon': 0.3, 'dragon fruit': 0.9 };
+const EA_LB = { potato: 0.45, apple: 0.4, cucumber: 0.25, peach: 0.4, pear: 0.45, anaheim: 0.15, tangerine: 0.2, 'sweet lemon': 0.3, 'dragon fruit': 0.9 };
 function regUnitPrice(n, u, sec) { for (const [re, m] of PRICE) if (re.test(n) && m[u] != null) return m[u]; const d = DEF_PRICE[sec] || {}; return d[u] != null ? d[u] : 0.1; }
 /** sale price per recipe unit from the ad text ('$4.99 lb', '69¢ lb', '2 for $3', '$1.99 ea') — null when it can't be mapped honestly */
 function saleUnitPrice(n, u, sp) {
   if (!sp || !sp.price) return null; const s = sp.price;
+  if (/zł/.test(s)) { const z = plnNum(s); if (z == null) return null; const usd = z / PLN_RATE; // Polish leaflet: per kg, per pack weight in the name, or per piece
+    const pk = sp.name.match(/(\d+(?:,\d+)?)\s*kg\b/), perKg = /\/\s*kg/.test(s) ? usd : pk ? usd / +pk[1].replace(',', '.') : null;
+    if (perKg != null) { const lb = perKg / 2.20462; if (u === 'oz') return lb / 16; if (u === 'g') return perKg / 1000; const k = Object.keys(EA_LB).find(x => n.toLowerCase().includes(x)); if (k && u === 'ea') return lb * EA_LB[k]; return null; }
+    if (/\/\s*(szt|jajo)/.test(s) && u === 'ea') return usd; return null; }
   const m = s.match(/(\d+) for \$(\d+(?:\.\d+)?)/), d = s.match(/\$(\d+(?:\.\d+)?)/), c = s.match(/(\d+)¢/);
   const unitP = m ? +m[2] / +m[1] : d ? +d[1] : c ? +c[1] / 100 : null; if (unitP == null) return null;
   if (/\blb\b/.test(s) && !m) { if (u === 'oz') return unitP / 16; const k = Object.keys(EA_LB).find(x => n.toLowerCase().includes(x)); if (k && u === 'ea') return unitP * EA_LB[k]; if (u === 'cup' && /papaya/i.test(n)) return unitP * 0.33; return null; }
@@ -1685,7 +1727,13 @@ function saleUnitPrice(n, u, sp) {
   if (u === 'ea' && pu === 'ct' && /egg|tortilla/i.test(n)) return unitP / amt;
   return null;
 }
-const money = x => '$' + (Math.round(x * 100) / 100).toFixed(2);
+/* currency: all internal prices are USD; Polish stores show PLN at a fixed, stated rate (NBP table A mid-rate, 19 Oct 2026) */
+const PLN_RATE = 3.90, PLN_NOTE = 'PLN estimates: typical US shelf prices converted at a fixed 1 USD = 3.90 zł (NBP mid-rate 19 Oct 2026, rounded). Real Warsaw prices are often lower. Sale prices from Polish leaflets are the real zł prices.';
+const MONEY = { cur: 'USD' };
+const plnText = z => (Math.round(z * 100) / 100).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0') + '\u00a0zł';
+const money = (x, cur) => (cur || MONEY.cur) === 'PLN' ? plnText(x * PLN_RATE) : '$' + (Math.round(x * 100) / 100).toFixed(2);
+/** parse a Polish price string '4,99 zł' → zł number */
+const plnNum = s => { const m = String(s).match(/(\d+)(?:[,.](\d{1,2}))?\s*zł/); return m ? +m[1] + (m[2] ? +m[2].padEnd(2, '0') / 100 : 0) : null; };
 /** cost summary over a grocery list (output of groceryList, optional K section with q) */
 function costSummary(g, plan) {
   const sec = {}, opt = { pantry: 0, kitchen: 0 }; let total = 0, reg = 0, save = 0, nSaleP = 0;
@@ -1784,7 +1832,7 @@ function prepGuide(plan, recipes, { level, known, maybe, startMin = 600, equip }
     cook: plan.cook.map(c => ({ ...c, name: byId[c.id] && byId[c.id].name })), riceCups, warn, needContainers: needC, nFreeze, equip: eq, flags, maybe: [...maybeSet] };
 }
 
-if (typeof module !== 'undefined') module.exports = { haversine, distText, brandKey, osmStore, overpassQuery, geocode, storesNear, fishOz, ensureFish, STAGE_SOURCES, STAGE_DISCLAIMER, PREG_KCAL, stageOf, stageKey, stageLabel, gainRange, NUTS, nutTags, isFishMeal, stageRecipe, stagePool, dayNutrients, fishServings, PREG_EXCLUDE, CURED_RX, measure, unitText, isLiquid, gPerCup, weekVariety, recVegKeys, ADDINS, ADDV, VEG_MODES, vegBoost, vegNote, dayVeg, pickSides, starchK, mergeSpecials, slugify, PRICE, costSummary, regUnitPrice, saleUnitPrice, money, CUISINES, LEVELS, DAYS, SECTIONS, TECH, QUIZ, scoreQuiz, macroTargets, fitplanTargets, specialsActive, matchSpecial, saleHits, recommendCuisine, recentCuisines, buildWeekPlan, groceryList, calcMacros, dietFilter, specialSafe, asList, amountText, batchList, inlineAmounts, equipPlan, equipFilter, EQUIP_DEFAULT, FREEZER_CAP, laneOf, servWords, servInfo, portionText, portionVol, macroLine, qtrs, metricText, qtyText, fmtQty, wt, wu, LB_KG, swapCandidates, swapRecipe, finalizeDays, swapName, SWAPS, cuisineFeasible, progressInfo, PACE, prepGuide, mondayOf, defaultWeek, defaultShop, laneOf, reheatOf, addDays, iso, parseISO };
+if (typeof module !== 'undefined') module.exports = { PLN_RATE, PLN_NOTE, MONEY, plnNum, inPL, money, haversine, distText, brandKey, osmStore, overpassQuery, geocode, storesNear, fishOz, ensureFish, STAGE_SOURCES, STAGE_DISCLAIMER, PREG_KCAL, stageOf, stageKey, stageLabel, gainRange, NUTS, nutTags, isFishMeal, stageRecipe, stagePool, dayNutrients, fishServings, PREG_EXCLUDE, CURED_RX, measure, unitText, isLiquid, gPerCup, weekVariety, recVegKeys, ADDINS, ADDV, VEG_MODES, vegBoost, vegNote, dayVeg, pickSides, starchK, mergeSpecials, slugify, PRICE, costSummary, regUnitPrice, saleUnitPrice, CUISINES, LEVELS, DAYS, SECTIONS, TECH, QUIZ, scoreQuiz, macroTargets, fitplanTargets, specialsActive, matchSpecial, saleHits, recommendCuisine, recentCuisines, buildWeekPlan, groceryList, calcMacros, dietFilter, specialSafe, asList, amountText, batchList, inlineAmounts, equipPlan, equipFilter, EQUIP_DEFAULT, FREEZER_CAP, laneOf, servWords, servInfo, portionText, portionVol, macroLine, qtrs, metricText, qtyText, fmtQty, wt, wu, LB_KG, swapCandidates, swapRecipe, finalizeDays, swapName, SWAPS, cuisineFeasible, progressInfo, PACE, prepGuide, mondayOf, defaultWeek, defaultShop, laneOf, reheatOf, addDays, iso, parseISO };
 </script>
 <script>/* ===== UI ===== */
 const $ = id => document.getElementById(id);
@@ -1811,6 +1859,18 @@ const STORES = {
   costco: { name: 'Costco', full: 'Costco', city: '', chain: true, family: 'costco', ad: 'https://www.costco.com/online-offers.html' },
   aldi: { name: 'ALDI', full: 'ALDI', city: '', chain: true, family: 'aldi', ad: 'https://www.aldi.us/weekly-specials/our-weekly-ads/' },
   smartfinal: { name: 'Smart & Final', full: 'Smart & Final', city: '', chain: true, family: 'smartfinal', ad: 'https://www.smartandfinal.com/weekly-ad' },
+  // Poland (prices in zł). Chains: slug gets the city, e.g. biedronka-pl-warszawa
+  'biedronka-pl': { name: 'Biedronka', full: 'Biedronka', city: '', chain: true, cc: 'PL', cur: 'PLN', family: 'biedronka', ad: 'https://www.biedronka.pl/pl/gazetki' },
+  'lidl-pl': { name: 'Lidl', full: 'Lidl Polska', city: '', chain: true, cc: 'PL', cur: 'PLN', family: 'lidl', ad: 'https://www.lidl.pl/c/nasze-gazetki/s10008614' },
+  'zabka-pl': { name: 'Żabka', full: 'Żabka', city: '', chain: true, cc: 'PL', cur: 'PLN', family: 'zabka', ad: 'https://www.zabka.pl' },
+  'carrefour-pl': { name: 'Carrefour', full: 'Carrefour Polska', city: '', chain: true, cc: 'PL', cur: 'PLN', family: 'carrefour', ad: 'https://www.carrefour.pl' },
+  'auchan-pl': { name: 'Auchan', full: 'Auchan Polska', city: '', chain: true, cc: 'PL', cur: 'PLN', family: 'auchan', ad: 'https://www.auchan.pl' },
+  'kaufland-pl': { name: 'Kaufland', full: 'Kaufland Polska', city: '', chain: true, cc: 'PL', cur: 'PLN', family: 'kaufland', ad: 'https://www.kaufland.pl' },
+  'dino-pl': { name: 'Dino', full: 'Dino Polska', city: '', chain: true, cc: 'PL', cur: 'PLN', family: 'dino', ad: 'https://marketdino.pl' },
+  'netto-pl': { name: 'Netto', full: 'Netto Polska', city: '', chain: true, cc: 'PL', cur: 'PLN', family: 'netto', ad: 'https://www.netto.pl' },
+  'stokrotka-pl': { name: 'Stokrotka', full: 'Stokrotka', city: '', chain: true, cc: 'PL', cur: 'PLN', family: 'stokrotka', ad: 'https://www.stokrotka.pl' },
+  'aldi-pl': { name: 'ALDI', full: 'ALDI Polska', city: '', chain: true, cc: 'PL', cur: 'PLN', family: 'aldi', ad: 'https://www.aldi.pl' },
+  'frisco-pl': { name: 'Frisco', full: 'Frisco.pl (online, Warszawa)', city: '', chain: true, cc: 'PL', cur: 'PLN', family: 'frisco', online: true, ad: 'https://www.frisco.pl' },
   'custom': { name: 'Other', full: 'Other store', city: '', family: 'custom' },
 };
 const today = iso(new Date());
@@ -1871,17 +1931,19 @@ const stInfo = st => { const p = STORES[st.key] || STORES.custom; const custom =
 const store = () => stInfo(S.stores[0]);
 const syncStore = () => { S.store = { ...(S.store || {}), id: store().slug }; };
 syncStore();
-const SEED = { 'superking-culvercity': SK_SPECIALS };
+const SEED = { 'superking-culvercity': SK_SPECIALS, 'lidl-pl': LIDL_PL_SPECIALS, 'biedronka-pl': BIEDRONKA_PL_SPECIALS };
+/** currency of the plan = main store's (Polish stores → PLN) */
+const curOf = st => { st = st || S.stores[0]; const p = STORES[st.key]; return (p && p.cur) || (st.cc === 'PL' ? 'PLN' : 'USD'); };
 /** effective deals for one store: your own edits > published file (exact slug, then chain-wide) > built-in seed */
 function effSp(st) { const i = stInfo(st), own = S.specials[i.slug];
   if (own && own.manual && own.items && own.items.length) return { ...own, store: i.slug, name: i.full, origin: 'manual' };
   const r = S.remote[i.slug] || S.remote[i.key]; if (r && r.items) return { ...r, store: i.slug, name: i.full, origin: 'remote' };
-  const sd = SEED[i.slug]; return sd ? { ...sd, store: i.slug, name: i.full, origin: 'seed' } : null; }
+  const sd = SEED[i.slug] || SEED[i.key]; return sd ? { ...sd, store: i.slug, name: i.full, origin: 'seed' } : null; }
 const spAll = () => effSp(S.stores[0]);
 function dealStatus(st) { const sp = effSp(st); if (!sp || !sp.items || !sp.items.length) return { ok: false, txt: 'No deals found yet for this store' };
   const when = sp.updated ? new Date(sp.updated).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : sp.fetched ? fmtD(sp.fetched) : '';
   const act = specialsActive(sp, shopDate());
-  return { ok: act, txt: (sp.origin === 'manual' ? 'Your deals' : `Deals updated ${when}`) + (act ? ` · ${sp.items.length} deals` : ` · expired (valid ${fmtD(sp.validFrom)}–${fmtD(sp.validTo)})`) }; }
+  return { ok: act, txt: (sp.origin === 'manual' ? 'Your deals' : `Deals updated ${when}`) + (act ? ` · ${sp.items.length} deals` : ` · ${sp.validFrom && shopDate() < sp.validFrom ? 'not yet valid on your shop day' : 'expired'} (valid ${fmtD(sp.validFrom)}–${fmtD(sp.validTo)})`) }; }
 async function loadDeals() {
   try { const r = await fetch('specials/index.json', { cache: 'no-cache' }); if (!r.ok) throw 0; const idx = await r.json(); S.remoteIdx = { updated: idx.updated, at: new Date().toISOString() };
     let changed = false;
@@ -2254,22 +2316,24 @@ function storeForm(pre) {
    <p class="hint small">🔒 Address is sent to OpenStreetMap to search; not saved anywhere except your phone.</p><div class="nearl" id="${pre}Near" aria-live="polite">${nearHTML()}</div></div>
   <p class="hint">Pick several stores: we use the best sale price for each item and group your list by store. ⭐ = main store.</p>`;
 }
+const fold = s => String(s || '').toLowerCase().replace(/ł/g, 'l').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 let NEAR = { st: 'idle', stores: [], msg: '' };
+const radTxt = mi => S.units === 'metric' ? `${Math.round(mi * 1.609344)} km` : `${mi} mi`;
 const nearSel = s => S.stores.some(x => (x.osm && x.osm === s.osm) || (s.key && STORES[s.key].city && x.key === s.key && !x.osm));
 function nearHTML() { const n = NEAR;
   if (n.st === 'busy') return `<p class="hint">🔎 ${esc(n.msg || 'Searching…')}</p>`;
   if (n.st === 'err' || n.st === 'none') return `<div class="note ${n.st === 'err' ? 'warn' : ''} small">${esc(n.msg)}</div>`;
   if (n.st !== 'ok') return '';
-  return `<p class="hint small">${n.stores.length} grocery stores within ${n.radiusMi} mi${n.label ? ' of ' + esc(n.label.split(',').slice(0, 3).join(',')) : ''} · tap to add (pick several)</p>${n.stores.map((x, i) => { const on = nearSel(x), deal = x.key && STORES[x.key];
+  return `<p class="hint small">${n.stores.length} grocery stores within ${radTxt(n.radiusMi)}${n.label ? ' of ' + esc(n.label.split(',').slice(0, 3).join(',')) : ''} · tap to add (pick several)</p>${n.stores.map((x, i) => { const on = nearSel(x), deal = x.key && STORES[x.key];
     return `<button type="button" class="nst${on ? ' on' : ''}" data-near="${i}" aria-pressed="${on}"><span class="nck">${on ? '✓' : '+'}</span><span class="nmain"><b>${esc(x.name)}</b>${x.brand && x.brand !== x.name ? ` <span class="muted small">${esc(x.brand)}</span>` : ''}${deal ? ` <span class="pill sale small">🏷 ${STORES[x.key].city ? 'weekly deals' : 'weekly ad'}</span>` : ''}<span class="small muted nad">${esc([x.street, x.city].filter(Boolean).join(', ') || x.shop)}</span></span><span class="ndist">${distText(x.dist, S.units)}</span></button>`; }).join('')}<p class="hint small">Store data © OpenStreetMap contributors</p>`; }
 async function runNear(pre, at, after) {
   const box = $(pre + 'Near'), draw = () => { if ($(pre + 'Near')) { $(pre + 'Near').innerHTML = nearHTML(); bindNear(pre, after); } };
   if (!navigator.onLine) { NEAR = { st: 'err', stores: [], msg: 'You\u2019re offline. Connect to search for nearby stores, or add one by name above.' }; return draw(); }
   try {
-    if (at.q) { NEAR = { st: 'busy', stores: [], msg: 'Finding that address…' }; draw(); const g = await geocode(at.q); if (!g) { NEAR = { st: 'none', stores: [], msg: 'Couldn\u2019t find that address. Try adding the city and state, e.g. “5587 Sepulveda Blvd, Culver City, CA”.' }; return draw(); } at = g; }
+    if (at.q) { NEAR = { st: 'busy', stores: [], msg: 'Finding that address…' }; draw(); const g = await geocode(at.q); if (!g) { NEAR = { st: 'none', stores: [], msg: 'Couldn\u2019t find that address. Try adding the city, e.g. “5587 Sepulveda Blvd, Culver City, CA” or “Marszałkowska 104, Warszawa”.' }; return draw(); } at = g; }
     NEAR = { st: 'busy', stores: [], msg: 'Looking for grocery stores nearby…' }; draw();
     const r = await storesNear(at);
-    NEAR = r.stores.length ? { st: 'ok', stores: r.stores, radiusMi: r.radiusMi, label: at.label || '' } : { st: 'none', stores: [], msg: `No grocery stores found within ${r.radiusMi} mi. Add one by name above.` };
+    NEAR = r.stores.length ? { st: 'ok', stores: r.stores, radiusMi: r.radiusMi, label: at.label || '' } : { st: 'none', stores: [], msg: `No grocery stores found within ${radTxt(r.radiusMi)}. Add one by name above.` };
   } catch (e) { NEAR = { st: 'err', stores: [], msg: 'Store search is unavailable right now (network or OpenStreetMap busy). Try again in a minute, or add a store by name above.' }; }
   draw();
 }
@@ -2277,7 +2341,7 @@ function bindNear(pre, after) { const box = $(pre + 'Near'); if (!box) return;
   box.querySelectorAll('[data-near]').forEach(b => b.onclick = () => { const x = NEAR.stores[+b.dataset.near]; const i = S.stores.findIndex(y => (y.osm && y.osm === x.osm) || (x.key && STORES[x.key].city && y.key === x.key && !y.osm));
     if (i >= 0) { if (S.stores.length > 1) S.stores.splice(i, 1); }
     else { const city = [x.city, x.state].filter(Boolean).join(', '); const addr = [x.street, x.city].filter(Boolean).join(', ');
-      S.stores.push(x.key ? (STORES[x.key].city ? { key: x.key, osm: x.osm, addr } : { key: x.key, city: x.city || city, osm: x.osm, addr }) : { key: 'custom', name: x.name, city: x.city || city, osm: x.osm, addr }); }
+      const cc = x.cc ? { cc: x.cc } : {}; S.stores.push(x.key ? (STORES[x.key].city ? { key: x.key, osm: x.osm, addr, ...cc } : { key: x.key, city: x.city || city, osm: x.osm, addr, ...cc }) : { key: 'custom', name: x.name, city: x.city || city, osm: x.osm, addr, ...cc }); }
     syncStore(); save(); loadDeals(); after(); }); }
 function bindStore(pre, after) {
   const go = () => { const q = $(pre + 'Addr').value.trim(); if (q.length < 4) { NEAR = { st: 'none', stores: [], msg: 'Type a street address with the city (or tap “Use my location”).' }; $(pre + 'Near').innerHTML = nearHTML(); return; }
@@ -2288,9 +2352,9 @@ function bindStore(pre, after) {
     navigator.geolocation.getCurrentPosition(p => runNear(pre, { lat: p.coords.latitude, lon: p.coords.longitude, label: 'your location' }, after),
       () => { NEAR = { st: 'err', stores: [], msg: 'Location permission was denied. Type your address instead.' }; $(pre + 'Near').innerHTML = nearHTML(); }, { timeout: 10000, maximumAge: 600000 }); };
   bindNear(pre, after);
-  const sug = () => { const q = $(pre + 'Q').value.trim().toLowerCase(), loc = $(pre + 'Loc').value.trim();
-    const m = Object.entries(STORES).filter(([k, v]) => k !== 'custom' && !(v.city && S.stores.some(x => x.key === k)) && (!q || (v.full + ' ' + v.name + ' ' + v.city).toLowerCase().includes(q)));
-    $(pre + 'Sug').innerHTML = m.map(([k, v]) => `<button type="button" class="chip" data-stadd="${k}">${esc(v.full)}${v.city ? ' · ' + esc(v.city) : loc ? ' · ' + esc(loc) : ''}</button>`).join('') + (q && !m.some(([, v]) => v.full.toLowerCase() === q) ? `<button type="button" class="chip" data-stadd="custom">➕ “${esc($(pre + 'Q').value.trim())}”${loc ? ' · ' + esc(loc) : ''}</button>` : '');
+  const sug = () => { const q = fold($(pre + 'Q').value.trim()), loc = $(pre + 'Loc').value.trim();
+    const m = Object.entries(STORES).filter(([k, v]) => k !== 'custom' && !(v.city && S.stores.some(x => x.key === k)) && (!q || fold(v.full + ' ' + v.name + ' ' + v.city).includes(q)));
+    $(pre + 'Sug').innerHTML = m.map(([k, v]) => `<button type="button" class="chip" data-stadd="${k}">${esc(v.full)}${v.city ? ' · ' + esc(v.city) : loc ? ' · ' + esc(loc) : ''}</button>`).join('') + (q && !m.some(([, v]) => fold(v.full) === q) ? `<button type="button" class="chip" data-stadd="custom">➕ “${esc($(pre + 'Q').value.trim())}”${loc ? ' · ' + esc(loc) : ''}</button>` : '');
     $(pre + 'Sug').querySelectorAll('[data-stadd]').forEach(b => b.onclick = () => { const k = b.dataset.stadd, loc2 = $(pre + 'Loc').value.trim();
       const st = k === 'custom' ? { key: 'custom', name: $(pre + 'Q').value.trim(), city: loc2 } : STORES[k].city ? { key: k } : { key: k, city: loc2 };
       if (!S.stores.some(x => stSlug(x) === stSlug(st))) S.stores.push(st); syncStore(); save(); loadDeals(); after(); }); };
@@ -2454,7 +2518,7 @@ function wzDone() {
   $('wzGo').onclick = () => { S.onboarded = true; save(); closeModal(); setTab('plan'); renderAll(); };
 }
 
-function renderAll() { usePool((week() && week().plan.veg) || S.veg, week() ? (week().plan.stage || '') : curStage()); document.body.dataset.tab = tab; renderChips(); renderWeekBar(); renderOut(); }
+function renderAll() { MONEY.cur = curOf(); usePool((week() && week().plan.veg) || S.veg, week() ? (week().plan.stage || '') : curStage()); document.body.dataset.tab = tab; renderChips(); renderWeekBar(); renderOut(); }
 renderAll();
 if (!S.onboarded && !/demo/.test(location.hash)) openQuiz(true);
 if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => {});
@@ -2464,12 +2528,12 @@ function costCard(cs, w) {
   const SN = { P: 'Produce', M: 'Meat & seafood', D: 'Dairy, eggs & deli', B: 'Bakery & tortillas', F: 'Frozen', G: 'Pantry & international' };
   const rows = Object.keys(SN).filter(s => cs.bySection[s]).map(s => `<tr><td>${SN[s]}</td><td class="num">${money(cs.bySection[s])}</td></tr>`).join('');
   const opt = [cs.optional.pantry > 0.005 ? `<tr><td>🧂 Spices & pantry (probably have)</td><td class="num">${money(cs.optional.pantry)}</td></tr>` : '', cs.optional.kitchen > 0.005 ? `<tr><td>🥡 Meal-prep containers</td><td class="num">${money(cs.optional.kitchen)}</td></tr>` : ''].join('');
-  return `<div class="card cost" id="costCard"><h3>💵 Estimated cost this week</h3>
+  return `<div class="card cost" id="costCard"><h3>${MONEY.cur === 'PLN' ? '💵 Estimated cost this week (zł, estimate)' : '💵 Estimated cost this week'}</h3>
     <div class="cbig"><b id="costTotal">${money(cs.total)}</b><span>${money(cs.perDay)} per day · ${money(cs.perMeal)} per meal <span class="muted">(${cs.meals} meals &amp; snacks over ${cs.days} days)</span></span></div>
     ${cs.savings > 0.005 ? `<div class="csave">🏷 You save <b id="costSave">${money(cs.savings)}</b> with this week’s specials <span class="muted">(regular ${money(cs.regular)})</span></div>` : '<div class="small muted">No sale items matched this week.</div>'}
     <table class="ctab"><tbody>${rows}<tr class="sub"><td>Groceries total</td><td class="num">${money(cs.total)}</td></tr></tbody></table>
     ${opt ? `<h4>Optional, not in the total</h4><table class="ctab opt"><tbody>${opt}<tr class="sub"><td>If you buy them all</td><td class="num">${money(cs.total + cs.optTotal)}</td></tr></tbody></table>` : ''}
-    <p class="small muted">Prices are estimates for the amounts used in your plan; packages may round up. Sale prices come from the ${esc((w && w.store) || 'store')} weekly ad where an item matches; everything else uses typical regular prices.</p></div>`;
+    <p class="small muted">Prices are estimates for the amounts used in your plan; packages may round up. Sale prices come from the ${esc((w && w.store) || 'store')} weekly ad where an item matches; everything else uses typical regular prices.</p>${MONEY.cur === 'PLN' ? `<p class="small muted" id="plnNote">💱 ${esc(PLN_NOTE)}</p>` : ''}</div>`;
 }
 /* techniques the cook answered "Maybe / not sure" to: allowed, but flagged with a beginner tip on the recipe */
 function maybeTips(r) { const M = new Set((S.skill && S.skill.maybe) || []); return r.tech.filter(t => M.has(t) && TECH[t]).map(t => `<div class="tip maybe">🤔 <b>${et(TECH[t].label)}</b> (you said maybe): ${et(TECH[t].tip)}</div>`).join(''); }
