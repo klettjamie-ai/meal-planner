@@ -926,7 +926,9 @@ function osmStore(el, at) { const t = el.tags || {}, lat = el.lat != null ? el.l
   if (!t.name || lat == null) return null; const street = [t['addr:housenumber'], t['addr:street']].filter(Boolean).join(' ');
   const s = { osm: `${el.type}/${el.id}`, name: t.name, brand: t.brand || '', shop: t.shop, street, city: t['addr:city'] || '', state: t['addr:state'] || '', lat, lon };
   s.dist = Math.round(haversine(at, s)); s.key = brandKey(s); if (inPL(s)) s.cc = 'PL'; return s; }
-function overpassQuery(at, r) { const a = `(around:${Math.round(r)},${(+at.lat).toFixed(5)},${(+at.lon).toFixed(5)})`; return `[out:json][timeout:45];(${['supermarket', 'grocery', 'greengrocer', 'convenience', 'discount'].map(t => `nwr["shop"="${t}"]${a};`).join('')});out center tags qt 400;`; }
+// convenience shops (Żabka…) only within ~1.5 mi: dense cities have hundreds; no result cap that could drop the nearest stores
+function overpassQuery(at, r) { const ar = x => `(around:${Math.round(x)},${(+at.lat).toFixed(5)},${(+at.lon).toFixed(5)})`, a = ar(r);
+  return `[out:json][timeout:45];(${['supermarket', 'grocery', 'greengrocer', 'discount'].map(t => `nwr["shop"="${t}"]${a};`).join('')}nwr["shop"="convenience"]${ar(Math.min(r, 1.5 * MI))};);out center tags qt 2000;`; }
 let _lastOsm = 0; const _osmCache = {};
 async function osmGet(url, opts, fetchFn, wait) { const k = url + (opts && opts.body || ''); if (_osmCache[k]) return _osmCache[k];
   const dt = Date.now() - _lastOsm; if (dt < 1100) await (wait || (ms => new Promise(r => setTimeout(r, ms))))(1100 - dt); _lastOsm = Date.now();
