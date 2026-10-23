@@ -2,484 +2,244 @@
  "store": "superking-culvercity",
  "name": "Super King Markets",
  "city": "Culver City, CA",
- "validFrom": "2026-10-12",
- "validTo": "2026-10-18",
+ "validFrom": "2026-10-19",
+ "validTo": "2026-10-25",
  "source": "https://www.superkingmarkets.com/weekly-ad",
- "fetched": "2026-10-17",
- "updated": "2026-10-18T04:57:31Z",
+ "fetched": "2026-10-23",
+ "updated": "2026-10-23T16:09:33Z",
  "items": [
   {
-   "name": "Persian Cucumbers",
-   "price": "69¢ lb",
+   "name": "Large Avocados",
+   "price": "49¢ ea",
    "sec": "P",
    "kw": [
-    "persian cucumber"
+    "avocado"
    ]
   },
   {
-   "name": "Strawberries 1 lb pkg",
-   "price": "2 for $3",
-   "sec": "P",
-   "kw": [
-    "strawberr"
-   ]
-  },
-  {
-   "name": "Mexican Papaya",
-   "price": "69¢ lb",
-   "sec": "P",
-   "kw": [
-    "papaya"
-   ]
-  },
-  {
-   "name": "Bartlett Pears",
-   "price": "79¢ lb",
-   "sec": "P",
-   "kw": [
-    "pear"
-   ]
-  },
-  {
-   "name": "Green Satsuma Tangerines",
-   "price": "99¢ lb",
-   "sec": "P",
-   "kw": [
-    "tangerine",
-    "satsuma"
-   ]
-  },
-  {
-   "name": "Sweet Lemons",
-   "price": "$1.49 lb",
-   "sec": "P",
-   "kw": [
-    "sweet lemon"
-   ]
-  },
-  {
-   "name": "Dragon Fruit",
-   "price": "$1.49 lb",
-   "sec": "P",
-   "kw": [
-    "dragon fruit"
-   ]
-  },
-  {
-   "name": "Yellow Peaches",
-   "price": "$1.99 lb",
-   "sec": "P",
-   "kw": [
-    "peach"
-   ]
-  },
-  {
-   "name": "Anaheim Chili",
-   "price": "69¢ lb",
-   "sec": "P",
-   "kw": [
-    "anaheim"
-   ]
-  },
-  {
-   "name": "Garlic 5 ct pkg",
-   "price": "2 for $3",
-   "sec": "P",
-   "kw": [
-    "garlic"
-   ]
-  },
-  {
-   "name": "Mushrooms 8 oz pkg",
-   "price": "2 for $3",
-   "sec": "P",
-   "kw": [
-    "mushroom"
-   ]
-  },
-  {
-   "name": "Organic Salads 5 oz pkg",
-   "price": "$1.99 ea",
-   "sec": "P",
-   "kw": [
-    "salad greens"
-   ]
-  },
-  {
-   "name": "Beef Sirloin Tip Steak or Roast (USDA Choice)",
-   "price": "$4.99 lb",
-   "sec": "M",
-   "kw": [
-    "sirloin"
-   ]
-  },
-  {
-   "name": "Salmon Fillet",
-   "price": "$7.99 lb",
-   "sec": "M",
-   "kw": [
-    "salmon"
-   ]
-  },
-  {
-   "name": "Beef Shanks",
-   "price": "$3.99 lb",
-   "sec": "M",
-   "kw": [
-    "beef shank"
-   ]
-  },
-  {
-   "name": "Chicken Breast Steak or Milanesa, regular or marinated",
-   "price": "$1.99 lb",
-   "sec": "M",
-   "kw": [
-    "chicken breast",
-    "milanesa"
-   ]
-  },
-  {
-   "name": "Beef Chuck Tender Roast or Stew Meat (USDA Choice)",
-   "price": "$5.99 lb",
-   "sec": "M",
-   "kw": [
-    "beef chuck",
-    "stew meat"
-   ]
-  },
-  {
-   "name": "Chicken Wings",
-   "price": "$1.79 lb",
-   "sec": "M",
-   "kw": [
-    "chicken wing"
-   ]
-  },
-  {
-   "name": "Pork Leg Roast or Picnic",
-   "price": "$1.49 lb",
-   "sec": "M",
-   "kw": [
-    "pork leg"
-   ]
-  },
-  {
-   "name": "Pork Short Ribs or Riblets",
-   "price": "$3.49 lb",
-   "sec": "M",
-   "kw": [
-    "pork short rib"
-   ]
-  },
-  {
-   "name": "Lamb Shanks",
-   "price": "$6.99 lb",
-   "sec": "M",
-   "kw": [
-    "lamb shank"
-   ]
-  },
-  {
-   "name": "Beef Short Ribs or Flanken Ribs (USDA Choice)",
-   "price": "$6.99 lb",
-   "sec": "M",
-   "kw": [
-    "flanken"
-   ]
-  },
-  {
-   "name": "Whole Cleaned Tilapia",
-   "price": "$1.99 lb",
-   "sec": "M",
-   "kw": [
-    "whole tilapia"
-   ]
-  },
-  {
-   "name": "Tilapia Fillet",
-   "price": "$2.99 lb",
-   "sec": "M",
-   "kw": [
-    "tilapia fillet"
-   ]
-  },
-  {
-   "name": "Headless Raw Shrimp 36/40 ct, 4 lb box",
-   "price": "$3.99 lb",
-   "sec": "M",
-   "kw": [
-    "shrimp"
-   ]
-  },
-  {
-   "name": "SK EZ Peel Raw White Shrimp 16/20 ct, 2 lb bag",
-   "price": "$5.99 lb",
-   "sec": "M",
-   "kw": [
-    "shrimp"
-   ]
-  },
-  {
-   "name": "Mozzarella or Pepper Jack Cheese",
-   "price": "$2.49 lb",
-   "sec": "D",
-   "kw": [
-    "mozzarella",
-    "pepper jack"
-   ]
-  },
-  {
-   "name": "Joseph Farms Mozzarella / Monterey Jack blocks or shredded, 2 lb",
-   "price": "$6.99",
-   "sec": "D",
-   "kw": [
-    "monterey jack"
-   ]
-  },
-  {
-   "name": "Karoun or Gopi Plain Yogurt 64 oz",
-   "price": "$4.99",
-   "sec": "D",
-   "kw": [
-    "plain yogurt"
-   ]
-  },
-  {
-   "name": "Chobani Greek Yogurt 5.3 oz (selected)",
-   "price": "99¢",
-   "sec": "D",
-   "kw": [
-    "greek yogurt"
-   ]
-  },
-  {
-   "name": "Chobani 20 g Protein Yogurt Cups 6.7 oz",
-   "price": "2 for $3",
-   "sec": "D",
-   "kw": [
-    "protein yogurt"
-   ]
-  },
-  {
-   "name": "Ranchero Queso Fresco 10 oz or Cacique Crema 15 oz",
-   "price": "2 for $5",
-   "sec": "D",
-   "kw": [
-    "crema"
-   ]
-  },
-  {
-   "name": "Los Altos Queso Fresco or Sigma Oaxaca Cheese (service deli)",
-   "price": "$4.49 lb",
-   "sec": "D",
-   "kw": [
-    "queso fresco",
-    "oaxaca"
-   ]
-  },
-  {
-   "name": "Domestic Feta or Aiello Black Low-Salt Olives (service deli)",
-   "price": "$2.99 lb",
-   "sec": "D",
-   "kw": [
-    "feta",
-    "black olives"
-   ]
-  },
-  {
-   "name": "Karoun Halebi Cheese (service deli)",
-   "price": "$4.99 lb",
-   "sec": "D",
-   "kw": [
-    "halebi"
-   ]
-  },
-  {
-   "name": "Karoun String Cheese 13 oz",
-   "price": "$4.99",
-   "sec": "D",
-   "kw": [
-    "string cheese"
-   ]
-  },
-  {
-   "name": "Abali Yogurt Drinks 16 oz",
-   "price": "4 for $5",
-   "sec": "D",
-   "kw": [
-    "yogurt drink"
-   ]
-  },
-  {
-   "name": "Jennie-O Turkey Bacon 12 oz",
-   "price": "$2.99",
-   "sec": "D",
-   "kw": [
-    "turkey bacon"
-   ]
-  },
-  {
-   "name": "Almond Breeze 64 oz",
-   "price": "$2.99",
-   "sec": "D",
-   "kw": [
-    "almond milk"
-   ]
-  },
-  {
-   "name": "Imported Parma Prosciutto or Eureka Flat Beef Soujuk",
-   "price": "$16.99 lb",
-   "sec": "D",
-   "kw": [
-    "prosciutto",
-    "soujuk"
-   ]
-  },
-  {
-   "name": "Free 12 ct medium eggs w/ purchase of Hatfield Bacon 12 oz + Heritage Milk 64 oz",
-   "price": "FREE eggs w/ purchase",
-   "sec": "D",
-   "kw": []
-  },
-  {
-   "name": "Montana Frozen Okra 14 oz or Double-Peeled Fava Beans 14 oz",
-   "price": "$1.99",
-   "sec": "F",
-   "kw": [
-    "okra",
-    "fava"
-   ]
-  },
-  {
-   "name": "Montana Frozen Molokhia Minced 14 oz",
-   "price": "2 for $3",
-   "sec": "F",
-   "kw": [
-    "molokhia"
-   ]
-  },
-  {
-   "name": "Guerrero Corn Tortilla 100 ct / Riquisima Flour 24 ct / Mission Estilo Casero 70 ct",
-   "price": "$2.99 (must buy 2)",
-   "sec": "B",
-   "kw": [
-    "corn tortilla",
-    "flour tortilla"
-   ]
-  },
-  {
-   "name": "Bimbo Sandwich Bread 24 oz / buns",
-   "price": "$2.99",
-   "sec": "B",
-   "kw": [
-    "sandwich bread"
-   ]
-  },
-  {
-   "name": "Monte Italian Ciabatta 16 oz or Sandwich Bread 16 oz",
-   "price": "$2.49",
-   "sec": "B",
-   "kw": [
-    "ciabatta"
-   ]
-  },
-  {
-   "name": "Zergut Puff Pastry 8 ct or Indo Fillo Dough / Kataifi 16 oz",
-   "price": "2 for $5",
-   "sec": "F",
-   "kw": [
-    "fillo"
-   ]
-  },
-  {
-   "name": "Diamond G Calrose Rice 15 lb",
-   "price": "$7.99",
+   "name": "Chandler Walnuts",
+   "price": "$1.29 lb",
    "sec": "G",
+   "kw": [
+    "walnut"
+   ]
+  },
+  {
+   "name": "Headless Raw Shrimp 16/20 ct 4 lb Box",
+   "price": "$4.99 lb",
+   "sec": "M",
+   "kw": [
+    "shrimp"
+   ]
+  },
+  {
+   "name": "Medium Eggs Grade AA 12 ct",
+   "price": "99¢ (limit 5)",
+   "sec": "D",
+   "kw": [
+    "eggs"
+   ]
+  },
+  {
+   "name": "Pistachios Roasted and Salted",
+   "price": "$5.99 lb",
+   "sec": "G",
+   "kw": [
+    "pistachio"
+   ]
+  },
+  {
+   "name": "Royal Chef's Secret Basmati Rice 10 lb",
+   "price": "$10.99",
+   "sec": "P",
    "kw": [
     "white rice"
    ]
   },
   {
-   "name": "Aleppo Castle Extra Virgin Olive Oil 2.85 L or Zergut Honey 5 lb",
-   "price": "$19.99",
+   "name": "Mid East Garbanzo or Fava Beans 15 oz",
+   "price": "99¢",
    "sec": "G",
    "kw": [
-    "olive oil",
-    "honey"
+    "fava"
    ]
   },
   {
-   "name": "Valhalla Pure Avocado Oil 2 L",
-   "price": "$11.99",
-   "sec": "G",
-   "kw": [
-    "avocado oil"
-   ]
-  },
-  {
-   "name": "Yergat Grape Leaves 16 oz",
-   "price": "$7.99",
+   "name": "Mid East Grape Leaves 16 oz",
+   "price": "$4.49",
    "sec": "G",
    "kw": [
     "grape leaves"
    ]
   },
   {
-   "name": "Indo European Tomato and Pepper Paste 660 g",
-   "price": "$2.99",
-   "sec": "G",
-   "kw": [
-    "pepper paste",
-    "tomato paste"
-   ]
-  },
-  {
-   "name": "Al Wadi Tahini 32 oz",
-   "price": "$6.99",
+   "name": "Mid East Tahini 32 oz",
+   "price": "$7.99",
    "sec": "G",
    "kw": [
     "tahini"
    ]
   },
   {
-   "name": "Gold Medal Flour 5 lb",
-   "price": "$2.49",
+   "name": "Barilla Pasta 16 oz Selected Varieties",
+   "price": "99¢ (limit 4)",
    "sec": "G",
    "kw": [
-    "all-purpose flour"
+    "pasta"
    ]
   },
   {
-   "name": "La Moderna Pasta 7 oz (selected)",
-   "price": "6 for $2 (must buy 6)",
-   "sec": "G",
+   "name": "Zuelo Avocado or Extra Virgin Olive Oil 1 Ltr",
+   "price": "$6.99",
+   "sec": "P",
    "kw": [
-    "pasta",
-    "fideo"
+    "avocado",
+    "olive oil"
    ]
   },
   {
-   "name": "Cashews raw or roasted & salted",
+   "name": "Aiello Buckwheat 900 Grams or Arter Spelt Wheat 750 Grams",
+   "price": "$2.99",
+   "sec": "G",
+   "kw": [
+    "buckwheat"
+   ]
+  },
+  {
+   "name": "Ground Beef 73% Lean",
    "price": "$4.99 lb",
-   "sec": "G",
+   "sec": "M",
    "kw": [
-    "cashew"
+    "ground beef"
    ]
   },
   {
-   "name": "Pumpkin Seeds roasted & salted",
-   "price": "$2.99 lb",
-   "sec": "G",
+   "name": "Chicken Thighs or Whole Legs",
+   "price": "$1.49 lb",
+   "sec": "M",
    "kw": [
-    "pumpkin seeds"
+    "chicken thigh"
    ]
   },
   {
-   "name": "Pistachio Kernels",
-   "price": "$12.99 lb",
-   "sec": "G",
+   "name": "Beef Top Sirloin Steak Thick or Thin",
+   "price": "$9.99 lb (USDA Prime)",
+   "sec": "M",
+   "kw": [
+    "sirloin"
+   ]
+  },
+  {
+   "name": "Pork Sirloin Chops Blade or Roast",
+   "price": "$1.99 lb",
+   "sec": "M",
+   "kw": [
+    "sirloin"
+   ]
+  },
+  {
+   "name": "Salmon Steak",
+   "price": "$5.99 lb",
+   "sec": "M",
+   "kw": [
+    "salmon"
+   ]
+  },
+  {
+   "name": "SK Peeled and Deveined Raw Shrimp 13/15 ct 2 lb Bag",
+   "price": "$8.99 lb",
+   "sec": "M",
+   "kw": [
+    "shrimp"
+   ]
+  },
+  {
+   "name": "Los Altos Queso Fresco 10 oz, Crema or Jocoque 15 oz Selected Varieties",
+   "price": "$1.99",
+   "sec": "D",
+   "kw": [
+    "queso fresco",
+    "crema"
+   ]
+  },
+  {
+   "name": "Rodopa Bulgarian Feta 2 lb",
+   "price": "$6.99",
+   "sec": "D",
+   "kw": [
+    "feta"
+   ]
+  },
+  {
+   "name": "ZOI Greek Yogurt 32 oz Selected Varieties or Kareem's Frozen Falafel 12 ct 12.8 oz",
+   "price": "$3.99",
+   "sec": "D",
+   "kw": [
+    "greek yogurt"
+   ]
+  },
+  {
+   "name": "Califia Almond Milk Selected Varieties 48 oz",
+   "price": "$3.99",
+   "sec": "D",
+   "kw": [
+    "almond milk"
+   ]
+  },
+  {
+   "name": "Pom Juice 48 oz Selected Varieties or Cacique Ranchero Queso Fresco Twin Pack 16 oz",
+   "price": "$7.99",
+   "sec": "D",
+   "kw": [
+    "queso fresco"
+   ]
+  },
+  {
+   "name": "Bulgarian Feta Cheese or Greek Imported Kalamata Olives",
+   "price": "$3.99 lb",
+   "sec": "D",
+   "kw": [
+    "feta"
+   ]
+  },
+  {
+   "name": "Principe Italian Mortadella With Pistachio or BelGioioso Italian Gorgonzola",
+   "price": "$6.49 lb",
+   "sec": "D",
    "kw": [
     "pistachio"
+   ]
+  },
+  {
+   "name": "Andy's Moscow Style Garlic Ham or Jennie-O Cajun or Cracked Pepper Turkey Breast",
+   "price": "$6.99 lb",
+   "sec": "D",
+   "kw": [
+    "garlic"
+   ]
+  },
+  {
+   "name": "Mikailian Mortadella with Garlic, Without Garlic or Busseto Dry Salami",
+   "price": "$8.99 lb",
+   "sec": "D",
+   "kw": [
+    "garlic"
+   ]
+  },
+  {
+   "name": "Guerrero Corn Tortillas White, Yellow 80 ct or Sonora Style Soft Taco 20 ct",
+   "price": "$2.99 (must buy 2)",
+   "sec": "D",
+   "kw": [
+    "corn tortilla"
+   ]
+  },
+  {
+   "name": "Brown Onions",
+   "price": "49¢ lb",
+   "sec": "P",
+   "kw": [
+    "onion"
    ]
   }
  ]
