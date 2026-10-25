@@ -217,6 +217,13 @@ header h1{display:flex;align-items:center;gap:8px}header h1 .logo{width:34px;hei
 .nearl{margin-top:6px}.nst{display:flex;gap:10px;align-items:center;width:100%;min-height:52px;text-align:left;background:var(--card,#fff);border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin:6px 0;font:inherit;color:var(--ink);cursor:pointer}
 .nst.on{border-color:#15803d;background:#f0fdf4}.nst .nck{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--line);font-weight:700;flex:none}.nst.on .nck{background:#15803d;color:#fff}
 .nst .nmain{flex:1;min-width:0}.nst .nad{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.nst .ndist{font-weight:700;white-space:nowrap;font-size:13px}
+
+.onionbox{margin:8px 0 4px}.onbtn{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;padding:8px 12px;border:1.5px solid var(--line);background:#fff;border-radius:14px;font:inherit;text-align:left;cursor:pointer}
+.onbtn .onem{font-size:26px}.onbtn .ont{flex:1;display:flex;flex-direction:column;gap:2px;font-size:15px}.onbtn .ont .hint{margin:0;font-size:12.5px;line-height:1.3}
+.onbtn .onst{min-width:46px;text-align:center;padding:6px 10px;border-radius:999px;background:#e5e7eb;color:#4b5563;font-weight:700;font-size:13px}
+.onbtn.on{border-color:#a855f7;background:#faf5ff}.onbtn.on .onst{background:#9333ea;color:#fff}.onhint{margin:6px 2px 0}
+.pill.onionp{background:#f3e8ff;color:#6b21a8;font-weight:700}.csave.onion{background:#faf5ff;border-color:#d8b4fe;color:#581c87}
+#onionBar .onionbox{margin:0 0 10px}
 </style></head><body>
 <header><div class="wrap"><h1><img class="logo" src="logo.svg" alt="" width="34" height="36"> Chef Momo</h1><div class="chips" id="chips"></div></div></header>
 <main>
@@ -226,7 +233,7 @@ header h1{display:flex;align-items:center;gap:8px}header h1 .logo{width:34px;hei
       <div class="f planonly"><label for="cuisineSel">Cuisine</label><select id="cuisineSel"></select></div>
       <div class="planonly"><button class="btn big" id="gen" type="button">Make my week</button></div>
     </div>
-    <div id="recBox" class="planonly"></div><div id="weekNotes"></div>
+    <div id="onionBar" class="planonly"></div><div id="recBox" class="planonly"></div><div id="weekNotes"></div>
   </section>
   <section class="card">
     <div class="tabs" id="tabs"><button data-t="plan" class="on"><span class="ti">📅</span>Plan</button><button data-t="grocery"><span class="ti">🛒</span>Groceries</button><button data-t="prep"><span class="ti">🔪</span>Prep</button><button data-t="progress"><span class="ti">📈</span>Progress</button><button data-t="settings"><span class="ti">⚙️</span>Settings</button></div>
@@ -1455,7 +1462,7 @@ function pickRecipes(pool, n, scoreFn) {
 }
 const ROUND = x => Math.round(x * 4) / 4;
 
-function buildWeekPlan({ recipes, cuisine, weekISO, targets, level, known, maybe, stretch, specials, seed, favs, veg }) {
+function buildWeekPlan({ recipes, cuisine, weekISO, targets, level, known, maybe, stretch, specials, seed, favs, veg, onion }) {
   const VM = VEG_MODES[veg] || VEG_MODES.normal; veg = VEG_MODES[veg] ? veg : 'normal';
   const FAV = new Set(favs || []);
   const R = rng(`${seed || ''}|${weekISO}|${cuisine}`);
@@ -1465,7 +1472,7 @@ function buildWeekPlan({ recipes, cuisine, weekISO, targets, level, known, maybe
   const score = x => {
     const pPct = x.p * 4 / x.kcal;
     const techKnown = x.tech.length ? x.tech.reduce((a, t) => a + (knownSet.has(t) ? 1 : maybeSet.has(t) ? 0.5 : 0), 0) / x.tech.length : 1;
-    return 3 * (1 - Math.min(1, Math.abs(pPct - Math.max(tgtPct, 0.25)) / 0.2)) + 0.25 * Math.min(saleHits(x, specials).length, 4) + 0.6 * techKnown + (x.fz ? 0.8 : 0) + 0.1 * Math.min(x.fd, 5) - 0.004 * x.active + 1.2 * R() + (FAV.has(x.id) ? 1.5 : 0) + VM.w * Math.min(x.veg || 0, 4) + (x.stageBoost || 0);
+    return 3 * (1 - Math.min(1, Math.abs(pPct - Math.max(tgtPct, 0.25)) / 0.2)) + 0.25 * Math.min(saleHits(x, specials).length, 4) + 0.6 * techKnown + (x.fz ? 0.8 : 0) + 0.1 * Math.min(x.fd, 5) - 0.004 * x.active + (onion ? 0.6 : 1.2) * R() + (FAV.has(x.id) ? 1.5 : 0) + VM.w * Math.min(x.veg || 0, 4) + (x.stageBoost || 0) + (onion ? onionTerm(x, specials) : 0);
   };
   const CU = asList(cuisine); const multi = CU.length > 1; cuisine = CU.join(' + ');
   const C = recipes.filter(x => CU.includes(x.cuisine) && !x.fresh);
@@ -1515,8 +1522,9 @@ function buildWeekPlan({ recipes, cuisine, weekISO, targets, level, known, maybe
   const cov4 = CU.length <= 3 || B.some(x => x.cuisine === CU[3]);
   const snack4 = !cov4 ? C.find(x => x.meal === 's' && !x.fresh && x.cuisine === CU[3]) : null;
   if (!cov4 && !snack4) { const b4 = pickRecipes(C.filter(x => x.meal === 'b' && x.cuisine === CU[3] && (x.fz || x.fd >= 3)), 1, x => -x.diff * 10 + score(x))[0]; if (b4) { if (B.length > 1) B[1] = b4; else B.push(b4); } }
-  const snackC = snack4 || (CU.length > 4 ? C.find(x => x.meal === 's' && !x.fresh && CU.slice(4).includes(x.cuisine)) : null) || C.find(x => x.meal === 's' && !x.fresh && (CU.length > 3 ? CU.slice(3).includes(x.cuisine) : true)) || C.find(x => x.meal === 's' && !x.fresh);
-  const snackP = byId[PROTEIN_SNACKS.find(id => byId[id] && !CU.includes(byId[id].cuisine))] || recipes.find(x => x.meal === 's' && x.nocook && !CU.includes(x.cuisine));
+  const bestOf = a => onion ? pickRecipes(a, 1, score)[0] : a[0];
+  const snackC = snack4 || (CU.length > 4 ? bestOf(C.filter(x => x.meal === 's' && !x.fresh && CU.slice(4).includes(x.cuisine))) : null) || bestOf(C.filter(x => x.meal === 's' && !x.fresh && (CU.length > 3 ? CU.slice(3).includes(x.cuisine) : true))) || bestOf(C.filter(x => x.meal === 's' && !x.fresh));
+  const snackP = (onion && pickRecipes(PROTEIN_SNACKS.map(id => byId[id]).filter(x => x && !CU.includes(x.cuisine)), 1, score)[0]) || byId[PROTEIN_SNACKS.find(id => byId[id] && !CU.includes(byId[id].cuisine))] || recipes.find(x => x.meal === 's' && x.nocook && !CU.includes(x.cuisine));
   const SN = [snackC, snackP].filter(Boolean);
   // assign
   const uses = new Map(M.concat(B).map(x => [x.id, 0]));
@@ -1542,13 +1550,13 @@ function buildWeekPlan({ recipes, cuisine, weekISO, targets, level, known, maybe
     const order = [...daysPlan].sort((x, y) => ((x.b.veg || 0) + (x.l.veg || 0) + (x.d.veg || 0)) - ((y.b.veg || 0) + (y.l.veg || 0) + (y.d.veg || 0)));
     for (const dp of order) { const base = (dp.b.veg || 0) + (dp.l.veg || 0) + (dp.d.veg || 0), need = VM.target - base;
       if (need <= 0.25 && U.size >= VM.uniq + (VM.target ? 2 : 0)) continue;
-      const cand = allS.filter(r => ok(r, dp.k) && (usesS.get(r.id) || 0) < 2).map(r => ({ r, s: 3 * recVegKeys(r).filter(k => !U.has(k)).length + 0.3 * r.veg + (fitS(r) ? 2.5 : 0) - 1.2 * (usesS.get(r.id) || 0) + 0.3 * R() })).sort((a, b) => b.s - a.s);
+      const cand = allS.filter(r => ok(r, dp.k) && (usesS.get(r.id) || 0) < 2).map(r => ({ r, s: 3 * recVegKeys(r).filter(k => !U.has(k)).length + 0.3 * r.veg + (fitS(r) ? 2.5 : 0) - 1.2 * (usesS.get(r.id) || 0) + 0.3 * R() + (onion ? 0.6 * onionTerm(r, specials) : 0) })).sort((a, b) => b.s - a.s);
       if (!cand.length) continue; const side = cand[0].r;
       dp.vs = [side, need > 0 ? Math.min(2, Math.max(1, Math.ceil(need / side.veg * 2) / 2)) : 1]; usesS.set(side.id, (usesS.get(side.id) || 0) + 1); recVegKeys(side).forEach(k => U.add(k)); if (!used.includes(side.name)) used.push(side.name); }
     if (!VM.target) { if (used.length) notes.push(`🥦 Added ${used.join(' / ')} on a few days so the week has ${VM.uniq}+ different vegetables.`); }
     else notes.push(`🥦 ${VM.label}: extra vegetables folded into each main (a little less rice/noodles/potato to stay on target)${used.length ? `, plus rotating sides: ${used.join(' / ')}` : ''}. Aim: ${VM.target}+ servings a day, ${VM.uniq}+ different veggies a week.`); }
   const { days, cook } = finalizeDays(daysPlan, weekISO, targets);
-  return { v: 2, veg, cuisine, cuisines: CU, weekISO, cookDay: addDays(weekISO, -1), targets, level, stretchId: stretchR ? stretchR.id : null, notes, days, cook, snacks: SN.map(x => x.id), created: new Date().toISOString(), seed: seed || '' };
+  return { v: 2, veg, cuisine, cuisines: CU, weekISO, cookDay: addDays(weekISO, -1), targets, level, stretchId: stretchR ? stretchR.id : null, notes, days, cook, snacks: SN.map(x => x.id), created: new Date().toISOString(), seed: seed || '', onion: !!onion };
 }
 
 /* ---- grocery list ---- */
@@ -1580,7 +1588,7 @@ const BASIC_EQUIP = new Set(['pan', 'pot', 'sheet', 'oven', 'ricecooker', 'wok',
 const keepsFor = (r, k) => r.nocook || k <= r.fd || r.fz;
 function planSnacks(plan) { return plan.snacks || [...new Set(plan.days.flatMap(d => d.meals.filter(m => m.slot === 'Snack').map(m => m.id)))]; }
 /** rank eligible replacements for fromId. recipes = already diet/never-filtered pool */
-function swapCandidates({ plan, fromId, recipes, all, level, known, favs, anyCuisine, query, specials, limit, equip }) {
+function swapCandidates({ plan, fromId, recipes, all, level, known, favs, anyCuisine, query, specials, limit, equip, onion }) {
   const by = Object.fromEntries((all || recipes).map(x => [x.id, x])); const r0 = by[fromId]; if (!r0) return [];
   const inPlan = new Set(plan.days.flatMap(d => d.meals.map(m => m.id)).concat(planSnacks(plan)));
   const ks = plan.days.map((d, i) => d.meals.some(m => m.id === fromId) ? i + 1 : 0).filter(Boolean);
@@ -1593,7 +1601,13 @@ function swapCandidates({ plan, fromId, recipes, all, level, known, favs, anyCui
       (q ? (x.name + ' ' + x.cuisine).toLowerCase().includes(q) : (anyCuisine || r0.meal === 's' || r0.meal === 'v' || asList(plan.cuisines || plan.cuisine).includes(x.cuisine))))
     .map(x => ({ r: x, fit: Math.abs(x.kcal - r0.kcal) / r0.kcal + 3 * Math.abs(pp(x) - pp(r0)) + (asList(plan.cuisines || plan.cuisine).includes(x.cuisine) ? 0 : 0.15) - (FAV.has(x.id) ? 0.4 : 0) - 0.05 * Math.min(saleHits(x, specials).length, 3) }))
     .sort((a, b) => a.fit - b.fit);
-  return out.slice(0, limit || (q ? 20 : 5)).map(o => ({ ...o.r, fit: +o.fit.toFixed(3), fav: FAV.has(o.r.id), sale: saleHits(o.r, specials).length }));
+  const lim = limit || (q ? 20 : 5);
+  if (onion) { // Onion mode: keep the closest-fitting dishes, then show the cheapest (deal-adjusted, per 500 kcal) first
+    const cn = o => { const d = recipeDeals(o.r, specials); return d.cost * 500 / Math.max(150, o.r.kcal); };
+    const pool = out.slice(0, Math.max(lim, q ? 40 : 12)).sort((a, b) => cn(a) - cn(b) || a.fit - b.fit);
+    return pool.slice(0, lim).map(o => { const d = recipeDeals(o.r, specials); return { ...o.r, fit: +o.fit.toFixed(3), fav: FAV.has(o.r.id), sale: saleHits(o.r, specials).length, cost: d.cost, dealSaved: d.saved, cost500: d.cost * 500 / Math.max(150, o.r.kcal) }; });
+  }
+  return out.slice(0, lim).map(o => ({ ...o.r, fit: +o.fit.toFixed(3), fav: FAV.has(o.r.id), sale: saleHits(o.r, specials).length }));
 }
 /** pregnancy: if the week has < 2 low-mercury fish meals, swap one lunch/dinner recipe for a same-cuisine fish recipe (FDA: 2–3 servings/week) */
 function ensureFish(plan, o) {
@@ -1752,6 +1766,81 @@ function costSummary(g, plan) {
   const days = (plan && plan.days || []).length || 7, meals = (plan && plan.days || []).reduce((a, d) => a + d.meals.length, 0) || days * 3;
   return { total, regular: reg, savings: save, nSalePriced: nSaleP, bySection: sec, optional: opt, optTotal: opt.pantry + opt.kitchen, perDay: total / days, perMeal: total / meals, days, meals };
 }
+/* ---- Onion mode: build the week around the current store deals, then keep it cheap — still healthy and tasty ---- */
+const _dealC = new WeakMap(), _noSp = {};
+/** per-serving cost of a recipe's groceries (spices/pantry excluded, like the grocery total): regular, with deals, # ingredients really on special */
+function recipeDeals(r, sp) {
+  const key = sp || _noSp; let m = _dealC.get(key); if (!m) _dealC.set(key, m = new WeakMap());
+  let d = m.get(r); if (d) return d;
+  let reg = 0, cost = 0, hits = 0, loose = 0;
+  for (const i of r.ing) { if (i.sec === 'S') continue;
+    const rc = Math.max(0.02, i.q * regUnitPrice(i.n, i.u, i.sec)); let c = rc;
+    const sm = sp && sp.items ? matchSpecial(i.n, sp, i.u) : null;
+    if (sm) { const su = saleUnitPrice(i.n, i.u, sm); if (su != null && su * i.q < rc) { c = su * i.q; hits++; } else loose++; }
+    reg += rc; cost += c; }
+  m.set(r, d = { reg, cost, saved: reg - cost, hits, loose }); return d;
+}
+const ONION_PMIN = { b: 18, m: 28 };      // protein source at every breakfast / lunch / dinner (grams per serving)
+const ONION_CHEAP_REF = 3.2;               // $ per 500 kcal of groceries that counts as "average"
+/** score bonus for a recipe in Onion mode: deals first (count + dollars saved), then cheap staples; nutrition guards so cheap never means thin */
+function onionTerm(x, sp) {
+  const d = recipeDeals(x, sp), k = 500 / Math.max(150, x.kcal);
+  const deal = 0.9 * Math.min(d.hits, 5) + 0.2 * Math.min(d.loose, 2) + 2.2 * Math.min(d.saved * k, 3);
+  const cheap = Math.max(-3, Math.min(2.5, 0.8 * (ONION_CHEAP_REF - d.cost * k)));
+  const pmin = ONION_PMIN[x.meal], lowP = pmin && x.p < pmin ? 0.35 * (pmin - x.p) : 0;
+  const nut = (x.meal === 'v' ? 0 : 0.35 * Math.min(x.veg || 0, 3)) - lowP - (x.meal === 'm' && !(x.veg > 0) ? 0.8 : 0);
+  return deal + cheap + nut;
+}
+/** cheaper-ingredient swaps inside recipes (only where the current price is lower and macros stay close); returns the recipe unchanged when nothing applies */
+const ONION_SUBS = [
+  { id: 'thigh', pr: 22.5 / 19.7, re: /chicken breast(?! milanesa)/i, to: n => n.replace(/chicken breast/i, 'chicken thighs'), from: 'chicken breast', toName: 'chicken thighs',
+    macro: i => i.u === 'oz' ? { p: -0.8 * i.q, f: 0.42 * i.q, kcal: 0.6 * i.q } : null, steps: [[/chicken breasts?/gi, 'chicken thighs']] },
+  { id: 'cabbage', re: /^(kale|swiss chard|chard)\b/i, to: () => 'green cabbage (shredded)', from: 'leafy greens', toName: 'green cabbage', q: 0.6,
+    macro: () => null, steps: [[/\b(kale|swiss chard|chard)\b/gi, 'cabbage']] },
+];
+function onionRecipe(r, sp) {
+  const subs = [], hasCab = r.ing.some(i => /cabbage/i.test(i.n)); let steps = r.steps, tip = r.tip, kcal = r.kcal, p = r.p, f = r.f, any = false;
+  const ing = r.ing.map(i => { if (i.sec === 'S') return i;
+    for (const S of ONION_SUBS) { if (!S.re.test(i.n)) continue; if (S.id === 'cabbage' && hasCab) continue;
+      const ni = { ...i, n: S.to(i.n), q: i.q * (S.q || 1) };
+      const c0 = i.q * regUnitPrice(i.n, i.u, i.sec), c1 = ni.q * regUnitPrice(ni.n, ni.u, ni.sec);
+      const sm0 = sp && sp.items ? matchSpecial(i.n, sp, i.u) : null, sm1 = sp && sp.items ? matchSpecial(ni.n, sp, ni.u) : null;
+      const e0 = sm0 && saleUnitPrice(i.n, i.u, sm0) != null ? Math.min(c0, i.q * saleUnitPrice(i.n, i.u, sm0)) : c0, e1 = sm1 && saleUnitPrice(ni.n, ni.u, sm1) != null ? Math.min(c1, ni.q * saleUnitPrice(ni.n, ni.u, sm1)) : c1;
+      if (!(e1 * (S.pr || 1) < e0 - 0.01)) continue; // must be cheaper per gram of protein too
+      const m = S.macro(i); if (m) { p += m.p; f += m.f; kcal += m.kcal; }
+      for (const [rx, to] of S.steps) { steps = steps.replace(rx, to); tip = tip.replace(rx, to); }
+      subs.push(`${S.from} → ${S.toName}`); any = true; return ni; }
+    return i; });
+  if (!any) return r;
+  const o = { ...r, ing, steps, tip, kcal: Math.round(kcal), p: Math.round(p * 10) / 10, f: Math.round(f * 10) / 10, onionSubs: [...new Set(subs)] };
+  o.vegG = Math.round(ing.reduce((t, i) => t + _vegG(i), 0)); o.veg = Math.round(o.vegG / 80 * 10) / 10;
+  return o;
+}
+const _onionPools = new WeakMap();
+function onionPool(recipes, sp) { const key = sp || _noSp; let m = _onionPools.get(recipes); if (!m) _onionPools.set(recipes, m = new WeakMap()); let v = m.get(key); if (!v) m.set(key, v = recipes.map(r => onionRecipe(r, sp))); return v; }
+/** plan-level numbers for comparing Onion vs normal: grocery total, deal savings, # ingredient lines on special */
+function planDeals(plan, recipes, sp, units) { const g = groceryList(plan, recipes, sp, units || 'us'), cs = costSummary(g, plan);
+  const items = Object.entries(g).filter(([k]) => k !== 'K' && k !== 'S').flatMap(([, v]) => v);
+  return { total: cs.total, regular: cs.regular, savings: cs.savings, nSale: items.filter(x => x.saved > 0).length, nItems: items.length, perDay: cs.perDay }; }
+/** re-price/re-fit an existing plan (same dishes, same days) with another version of the recipes, e.g. after cheaper-ingredient swaps */
+function rePlan(plan, all) { const by = Object.fromEntries(all.map(x => [x.id, x])), sn0 = planSnacks(plan);
+  const daysPlan = plan.days.map((d, i) => { const g = s => by[d.meals.find(x => x.slot === s).id], sm = d.meals.find(x => x.slot === 'Side'), k = i + 1;
+    return { k, b: g('Breakfast'), l: g('Lunch'), d: g('Dinner'), vs: sm ? [by[sm.id], sm.sv] : null, sn: sn0.map(id => by[id]).filter(r => r && keepsFor(r, k)) }; });
+  const { days, cook } = finalizeDays(daysPlan, plan.weekISO, plan.targets); return { ...plan, days, cook }; }
+const ONION_TRIES = 6;
+const planOK = (np, T, uniq, by) => np.days.every(d => Math.abs(d.tot.kcal - T.kcal) / T.kcal <= 0.12 && d.tot.p >= T.p * 0.9) && weekVariety(np, by).n >= uniq;
+/** Onion mode planner: builds several deal-first candidate weeks, keeps the ones that pass the nutrition checks, and returns the one that costs least after deals */
+function buildOnionPlan(o) {
+  const pool = o.recipes, by = Object.fromEntries(pool.map(r => [r.id, r])), uniq = (VEG_MODES[o.veg] || VEG_MODES.normal).uniq;
+  let best = null;
+  for (let i = -1; i < (o.tries || ONION_TRIES); i++) { // i = -1: the normal pick on the cheaper-ingredient recipes, so Onion is never worse than normal
+    const p = i < 0 ? (o.baseRecipes ? rePlan(buildWeekPlan({ ...o, recipes: o.baseRecipes, onion: false }), pool) : buildWeekPlan({ ...o, onion: false })) : buildWeekPlan({ ...o, onion: true, seed: `${o.seed || ''}~o${i}` }); if (p.error) return p;
+    const pd = planDeals(p, pool, o.specials, 'us'), ok = planOK(p, o.targets, uniq, by);
+    const obj = pd.total - 0.1 * pd.savings + (ok ? 0 : 1e4);
+    if (!best || obj < best.obj) best = { p, obj, pd };
+  }
+  best.p.seed = o.seed || ''; best.p.onion = true; return best.p;
+}
 /* ---- prep guide: one Sunday cook day ---- */
 function laneOf(r, eq) { if (eq) { const p = equipPlan(r, eq); if (p.lane) return p.lane; if (r.nocook || !r.equip.length) return 'counter'; if (r.equip.every(q => q === 'ricecooker')) return eq.rice ? 'counter' : 'stove'; return eq.burners > 0 ? 'stove' : (eq.ip ? 'pressure' : 'counter'); }
   if (r.tech.includes('pressure') && r.equip.includes('pressure')) return 'pressure'; if (r.equip.some(e => e === 'oven' || e === 'sheet')) return 'oven'; if (r.nocook || !r.equip.length) return 'counter'; return 'stove'; }
@@ -1834,17 +1923,17 @@ function prepGuide(plan, recipes, { level, known, maybe, startMin = 600, equip }
     cook: plan.cook.map(c => ({ ...c, name: byId[c.id] && byId[c.id].name })), riceCups, warn, needContainers: needC, nFreeze, equip: eq, flags, maybe: [...maybeSet] };
 }
 
-if (typeof module !== 'undefined') module.exports = { PLN_RATE, PLN_NOTE, MONEY, plnNum, inPL, money, haversine, distText, brandKey, osmStore, overpassQuery, geocode, storesNear, fishOz, ensureFish, STAGE_SOURCES, STAGE_DISCLAIMER, PREG_KCAL, stageOf, stageKey, stageLabel, gainRange, NUTS, nutTags, isFishMeal, stageRecipe, stagePool, dayNutrients, fishServings, PREG_EXCLUDE, CURED_RX, measure, unitText, isLiquid, gPerCup, weekVariety, recVegKeys, ADDINS, ADDV, VEG_MODES, vegBoost, vegNote, dayVeg, pickSides, starchK, mergeSpecials, slugify, PRICE, costSummary, regUnitPrice, saleUnitPrice, CUISINES, LEVELS, DAYS, SECTIONS, TECH, QUIZ, scoreQuiz, macroTargets, fitplanTargets, specialsActive, matchSpecial, saleHits, recommendCuisine, recentCuisines, buildWeekPlan, groceryList, calcMacros, dietFilter, specialSafe, asList, amountText, batchList, inlineAmounts, equipPlan, equipFilter, EQUIP_DEFAULT, FREEZER_CAP, laneOf, servWords, servInfo, portionText, portionVol, macroLine, qtrs, metricText, qtyText, fmtQty, wt, wu, LB_KG, swapCandidates, swapRecipe, finalizeDays, swapName, SWAPS, cuisineFeasible, progressInfo, PACE, prepGuide, mondayOf, defaultWeek, defaultShop, laneOf, reheatOf, addDays, iso, parseISO };
+if (typeof module !== 'undefined') module.exports = { PLN_RATE, PLN_NOTE, MONEY, plnNum, inPL, money, haversine, distText, brandKey, osmStore, overpassQuery, geocode, storesNear, fishOz, ensureFish, STAGE_SOURCES, STAGE_DISCLAIMER, PREG_KCAL, stageOf, stageKey, stageLabel, gainRange, NUTS, nutTags, isFishMeal, stageRecipe, stagePool, dayNutrients, fishServings, PREG_EXCLUDE, CURED_RX, measure, unitText, isLiquid, gPerCup, weekVariety, recVegKeys, ADDINS, ADDV, VEG_MODES, vegBoost, vegNote, dayVeg, pickSides, starchK, mergeSpecials, slugify, PRICE, costSummary, regUnitPrice, saleUnitPrice, CUISINES, LEVELS, DAYS, SECTIONS, TECH, QUIZ, scoreQuiz, macroTargets, fitplanTargets, specialsActive, matchSpecial, saleHits, recommendCuisine, recentCuisines, buildWeekPlan, buildOnionPlan, planOK, recipeDeals, onionTerm, onionRecipe, onionPool, planDeals, ONION_PMIN, ONION_SUBS, groceryList, calcMacros, dietFilter, specialSafe, asList, amountText, batchList, inlineAmounts, equipPlan, equipFilter, EQUIP_DEFAULT, FREEZER_CAP, laneOf, servWords, servInfo, portionText, portionVol, macroLine, qtrs, metricText, qtyText, fmtQty, wt, wu, LB_KG, swapCandidates, swapRecipe, finalizeDays, swapName, SWAPS, cuisineFeasible, progressInfo, PACE, prepGuide, mondayOf, defaultWeek, defaultShop, laneOf, reheatOf, addDays, iso, parseISO };
 </script>
 <script>/* ===== UI ===== */
 const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const KEY = 'fitplan.meals.v1';
 const curStage = () => (typeof S !== 'undefined' && S && S.profile) ? stageKey(stageOf(S.profile)) : '';
-let RECIPES = RAW, BY = Object.fromEntries(RAW.map(r => [r.id, r])), POOL_MODE = 'normal|';
+let RECIPES0 = RAW, RECIPES = RAW, BY = Object.fromEntries(RAW.map(r => [r.id, r])), POOL_MODE = 'normal|';
 /* recipes as cooked under a Veggies setting (more veg, a little less starch); the shown week uses the mode it was made with */
-function usePool(mode, sk) { mode = VEG_MODES[mode] ? mode : 'normal'; sk = sk == null ? curStage() : sk; const av = (S && S.diet ? (S.diet.dislikeOther + ',' + S.diet.allergyOther) : '').toLowerCase().split(/[,;]+/).map(x => x.trim().replace(/s$/, '')).filter(x => x.length > 2); const key = mode + '|' + av.join(',') + '|' + sk;
-  if (key === POOL_MODE) return; POOL_MODE = key; RECIPES = stagePool(vegBoost(RAW, mode, av), sk); BY = Object.fromEntries(RECIPES.map(r => [r.id, r])); }
+function usePool(mode, sk, onion, osp) { mode = VEG_MODES[mode] ? mode : 'normal'; sk = sk == null ? curStage() : sk; const av = (S && S.diet ? (S.diet.dislikeOther + ',' + S.diet.allergyOther) : '').toLowerCase().split(/[,;]+/).map(x => x.trim().replace(/s$/, '')).filter(x => x.length > 2); onion = !!onion; const key = mode + '|' + av.join(',') + '|' + sk + '|' + (onion ? 'o' + (osp && osp.items ? osp.items.length + ':' + hashStr(osp.items.map(i => i.name + i.price).join('|')) : '') : '');
+  if (key === POOL_MODE) return; POOL_MODE = key; RECIPES0 = stagePool(vegBoost(RAW, mode, av), sk); RECIPES = onion ? onionPool(RECIPES0, osp || null) : RECIPES0; BY = Object.fromEntries(RECIPES.map(r => [r.id, r])); }
 const EMOJI = { Mexican: '🌮', Italian: '🍝', Mediterranean: '🫒', 'Middle Eastern': '🧆', Armenian: '🍇', 'Latin American': '🫓', Japanese: '🍱', Korean: '🥘', Thai: '🥥', Indian: '🍛', Chinese: '🥟', Vietnamese: '🍜', American: '🍔', Polish: '🥬' };
 const SLOT_IC = { Breakfast: '☀️', Lunch: '🥗', Dinner: '🍽️', Side: '🥦', Snack: '🍎' };
 const STORES = {
@@ -1883,7 +1972,7 @@ if (S.onboarded == null) S.onboarded = !!S.skill.taken;
 if (!S.profile) S.profile = { sex: 'female', age: '', ft: '', inch: '', activity: '1.375', curLb: '', goalLb: '', plan: 'pace', pace: 'moderate', date: '', fatPct: 27, auto: true };
 if (!S.weighins) S.weighins = [];
 if (!S.units) S.units = 'us';
-if (!S.veg) S.veg = 'normal';
+if (!S.veg) S.veg = 'normal'; S.onion = !!S.onion;
 if (!S.equip) S.equip = { ...EQUIP_DEFAULT, set: false };
 if (!S.favs) S.favs = []; if (!S.never) S.never = [];
 if (!S.diet) S.diet = { allergens: [], allergyOther: '', dislikes: [], dislikeOther: '', set: false };
@@ -1892,7 +1981,7 @@ let tab = 'plan';
 const AL = Object.fromEntries(ALLERGENS), PL = Object.fromEntries(PROTEINS);
 const AL_IC = { peanut: '🥜', treenut: '🌰', dairy: '🥛', egg: '🥚', wheat: '🌾', soy: '🫘', fish: '🐟', shellfish: '🦐', sesame: '⚪' };
 const PR_IC = { chicken: '🍗', beef: '🥩', pork: '🐖', lamb: '🐑', turkey: '🦃', fish: '🐟', shellfish: '🦐', egg: '🥚', tofu: '🧈', beans: '🫘' };
-const allowed = () => { const ok = dietFilter(S.diet), nv = new Set(S.never); return RECIPES.filter(r => ok(r) && !nv.has(r.id) && equipPlan(r, S.equip).ok); };
+const allowed = (pool) => { const ok = dietFilter(S.diet), nv = new Set(S.never); return (pool || RECIPES).filter(r => ok(r) && !nv.has(r.id) && equipPlan(r, S.equip).ok); };
 const isFav = id => S.favs.includes(id);
 const MET = () => S.units === 'metric';
 const cEm = c => asList(c).map(x => EMOJI[x] || '').join('');
@@ -2003,7 +2092,8 @@ function renderWeekBar() {
   if (w && w.plan.notes.length) notes += `<div class="note small">${w.plan.notes.map(esc).join('<br>')}</div>`;
   if (w && (w.plan.targets.kcal !== targets().kcal || w.plan.targets.p !== targets().p || w.plan.level !== level())) notes += `<div class="note warn small">Targets or level changed. Tap “Remake week” to update.</div>`;
   if (w && w.plan.v === 2 && (w.plan.veg || 'normal') !== S.veg) notes += `<div class="note warn small">🥦 Veggies set to “${esc(VEG_MODES[S.veg].label)}”. Tap “Remake week” to apply.</div>`;
-  $('weekNotes').innerHTML = notes;
+  if (w && w.plan.v === 2 && !!w.plan.onion !== !!S.onion) notes += `<div class="note warn small">🧅 Onion mode is ${S.onion ? 'on' : 'off'}. <button class="btn sm" type="button" id="onRe">↻ Remake week</button></div>`;
+  $('weekNotes').innerHTML = notes; if ($('onionBar')) $('onionBar').innerHTML = onionToggle('wb'); if ($('onRe')) $('onRe').onclick = () => $('gen').click();
   if ($('useCombo')) $('useCombo').onclick = () => { (S.draft[S.cur] = S.draft[S.cur] || {}).pick = '__combo'; save(); renderWeekBar(); };
 }
 $('weekSel').addEventListener('change', e => { S.cur = e.target.value; save(); renderAll(); });
@@ -2033,10 +2123,20 @@ function build(pick, shuffle) {
   const label = asList(cuisine).join(' + ');
   const prev = week(); const seed = shuffle ? String(Date.now()) : (prev && prev.cuisine === label ? prev.plan.seed : '');
   if (!cuisine) return false;
-  usePool(S.veg, curStage());
-  let plan = buildWeekPlan({ veg: S.veg, recipes: allowed(), cuisine, weekISO: S.cur, targets: targets(), level: level(), known: S.skill.known, maybe: S.skill.maybe || [], stretch: S.skill.stretch, specials: spActive(), seed, favs: S.favs });
-  if (plan.error) return false; plan.stage = curStage();
-  if (plan.stage === 'preg') { const fp = ensureFish(plan, { recipes: allowed(), all: RECIPES, level: level(), known: S.skill.known, favs: S.favs, specials: spActive(), equip: S.equip }); fp.stage = plan.stage; plan = fp; }
+  const onion = !!S.onion, spB = onion ? safeSp(spActive()) : spActive();
+  usePool(S.veg, curStage(), onion, onion ? spB : null);
+  const args = { veg: S.veg, cuisine, weekISO: S.cur, targets: targets(), level: level(), known: S.skill.known, maybe: S.skill.maybe || [], stretch: S.skill.stretch, specials: spB, seed, favs: S.favs };
+  const finish = (pl, recs, all, on) => { if (pl.error) return pl; pl.stage = curStage();
+    if (pl.stage === 'preg') { const fp = ensureFish(pl, { recipes: recs, all, level: level(), known: S.skill.known, favs: S.favs, specials: spB, equip: S.equip, onion: on }); fp.stage = pl.stage; pl = fp; } return pl; };
+  let plan, twin = null;
+  if (onion) { // the normal plan (same deals, same seed) is the yardstick for "saved vs the normal plan"
+    twin = finish(buildWeekPlan({ ...args, recipes: allowed(RECIPES0) }), allowed(RECIPES0), RECIPES0, false);
+    plan = finish(buildOnionPlan({ ...args, recipes: allowed(), baseRecipes: allowed(RECIPES0) }), allowed(), RECIPES, true);
+  } else plan = finish(buildWeekPlan({ ...args, recipes: allowed() }), allowed(), RECIPES, false);
+  if (plan.error) return false;
+  if (onion) { plan.onion = true; plan.baseline = twin && !twin.error ? planDeals(twin, RECIPES0, spB, 'us') : null;
+    const me = planDeals(plan, RECIPES, spB, 'us'), subs = [...new Set(plan.days.flatMap(d => d.meals.map(m => BY[m.id] && BY[m.id].onionSubs)).flat().filter(Boolean))];
+    plan.notes = plan.notes.concat([`🧅 Onion mode: built around this week\u2019s deals${me.nSale ? ` (${me.nSale} grocery item${me.nSale > 1 ? 's' : ''} on special, about ${money(me.savings)} saved)` : ' (no matching specials this week, so it leans on cheap staples)'}, then cheaper staples. Same calorie, protein and veggie targets, and the same seasoning.${subs.length ? ' Cheaper swaps: ' + subs.join(', ') + '.' : ''}`]); }
   S.weeks[S.cur] = { cuisine: label, cuisines: asList(cuisine), mode: pick === '__rec' ? 'rec' : pick === '__combo' ? 'combo' : 'pick', rec, plan, shop: shopDate(), store: S.stores.map(st => stInfo(st).full).join(' + '), specialsUsed: !!spActive() };
   if (S.draft[S.cur]) delete S.draft[S.cur].pick;
   save(); return true;
@@ -2059,7 +2159,7 @@ function renderOut() {
   if (tab === 'plan') {
     const avg = k => Math.round(p.days.reduce((s, d) => s + d.tot[k], 0) / 7);
     const pgx = p.v === 2 ? prepGuide(p, RECIPES, { level: p.level, known: S.skill.known, maybe: S.skill.maybe || [], equip: S.equip }) : null;
-    $('out').innerHTML = `<div class="sum"><span><b>${esc(cLabel(w.cuisine))}</b></span><span>avg <b>${avg('kcal').toLocaleString()} kcal</b> of ${p.targets.kcal.toLocaleString()} kcal</span><span><b>${avg('p')} g protein</b> of ${p.targets.p} g</span><span>🥦 <b>${Math.round(p.days.reduce((s, d) => s + vegOf(d), 0) / 7 * 2) / 2}</b> veggie servings/day${(p.veg || 'normal') !== 'normal' ? ' · ' + esc(VEG_MODES[p.veg].label.toLowerCase()) : ''}</span>${(() => { const v = weekVariety(p, BY); return `<span class="vvar" title="${esc(v.keys.join(', '))}">🌈 <b>${v.n}</b> different veggies this week <span class="fams" aria-label="Color mix: ${Object.keys(v.fams).map(f => VEG_FAMS[f][1]).join(', ')}">${Object.entries(VEG_FAMS).filter(([f]) => f !== 'other').map(([f, [ic, l]]) => `<i class="${v.fams[f] ? 'on' : ''}" title="${esc(l)}${v.fams[f] ? ': ' + esc(v.fams[f].join(', ')) : ''}">${ic}</i>`).join('')}</span></span>`; })()}${p.stage ? `<span class="pill stg">${p.stage === 'preg' ? '🤰 Pregnancy-safe' : '🍼 Postpartum'}</span><span title="FDA: 8–12 oz a week of Best Choice fish">🐟 <b>${String(fishServings(p, BY)).replace('.5', '½')}</b> fish servings (~${MET() ? Math.round(fishOz(p, BY) * 28.35 / 10) * 10 + ' g' : Math.round(fishOz(p, BY)) + ' oz'}) · aim 2–3</span>` : ''}${pgx ? `<span>🍳 Cook ${fmtD(pgx.cookDay, { weekday: 'short' })} · <b>${p.cook.filter(c => !BY[c.id].nocook).length}</b> recipes · ~${hm(pgx.totalMin)}</span>` : ''}</div>
+    $('out').innerHTML = `<div class="sum"><span><b>${esc(cLabel(w.cuisine))}</b></span>${p.onion ? '<span class="pill onionp">🧅 Onion mode</span>' : ''}<span>avg <b>${avg('kcal').toLocaleString()} kcal</b> of ${p.targets.kcal.toLocaleString()} kcal</span><span><b>${avg('p')} g protein</b> of ${p.targets.p} g</span><span>🥦 <b>${Math.round(p.days.reduce((s, d) => s + vegOf(d), 0) / 7 * 2) / 2}</b> veggie servings/day${(p.veg || 'normal') !== 'normal' ? ' · ' + esc(VEG_MODES[p.veg].label.toLowerCase()) : ''}</span>${(() => { const v = weekVariety(p, BY); return `<span class="vvar" title="${esc(v.keys.join(', '))}">🌈 <b>${v.n}</b> different veggies this week <span class="fams" aria-label="Color mix: ${Object.keys(v.fams).map(f => VEG_FAMS[f][1]).join(', ')}">${Object.entries(VEG_FAMS).filter(([f]) => f !== 'other').map(([f, [ic, l]]) => `<i class="${v.fams[f] ? 'on' : ''}" title="${esc(l)}${v.fams[f] ? ': ' + esc(v.fams[f].join(', ')) : ''}">${ic}</i>`).join('')}</span></span>`; })()}${p.stage ? `<span class="pill stg">${p.stage === 'preg' ? '🤰 Pregnancy-safe' : '🍼 Postpartum'}</span><span title="FDA: 8–12 oz a week of Best Choice fish">🐟 <b>${String(fishServings(p, BY)).replace('.5', '½')}</b> fish servings (~${MET() ? Math.round(fishOz(p, BY) * 28.35 / 10) * 10 + ' g' : Math.round(fishOz(p, BY)) + ' oz'}) · aim 2–3</span>` : ''}${pgx ? `<span>🍳 Cook ${fmtD(pgx.cookDay, { weekday: 'short' })} · <b>${p.cook.filter(c => !BY[c.id].nocook).length}</b> recipes · ~${hm(pgx.totalMin)}</span>` : ''}</div>
     <div class="grid7">${p.days.map(d => { const ok = Math.abs(d.tot.kcal - p.targets.kcal) / p.targets.kcal <= 0.05 && d.tot.p >= p.targets.p * 0.95;
       return `<div class="day"><div class="hd"><b>${d.day}</b><span class="muted small">${fmtD(d.date)}</span></div>${d.meals.map(m => { const r = BY[m.id]; return `<div class="meal"><span class="ic" title="${m.slot}">${SLOT_IC[m.slot]}</span><span class="nm"><a href="#" data-r="${r.id}">${esc(r.name)}</a>${isFav(r.id) ? ' <span class="fav" title="Favorite">♥</span>' : ''}${badges(r, p, sp)}</span><button class="sw" type="button" data-sw="${r.id}" aria-label="Swap ${esc(r.name)}" title="Swap">⇄</button></div><div class="msub">${m.st === 'freezer' ? '<span title="From the freezer">❄️</span> ' : ''}${svBtn(r, m.sv)}${portion(r, m.sv) ? ` <span class="por">${esc(portion(r, m.sv))}</span>` : ''}<div class="mac">${macroLine(r.kcal * m.sv, r.p * m.sv, r.c * m.sv, r.f * m.sv)}</div></div>`; }).join('')}
       <div class="vegd">🥦 ${fmtVeg(vegOf(d))} veggies</div>${p.stage ? (() => { const n = dayNutrients(d, BY); return `<div class="nutd" aria-label="Nutrient highlights">${n.tags.filter(k => k !== 'vitc' || !n.ironC).map(k => k === 'iron' && n.ironC ? `<i title="Iron paired with vitamin C helps absorption">🩸🍊 Iron+C</i>` : `<i>${NUTS[k][0]} ${NUTS[k][1]}</i>`).join('')}</div>`; })() : ''}<div class="tot ${ok ? 'good' : 'off'}">Day total: ${macroLine(d.tot.kcal, d.tot.p, d.tot.c, d.tot.f)}</div></div>`; }).join('')}</div>
@@ -2075,7 +2175,7 @@ function renderOut() {
     ${safeNote()}${pgc && pgc.needContainers > 0 ? `<div class="note warn small">🥡 Low on containers: you need ${pgc.nContainers}, you have ${S.equip.containers ? S.equip.nCont : 0}. Added ${pgc.needContainers} to the list (optional).</div>` : ''}${glHTML(g, ck)}`;
         $('out').insertAdjacentHTML('beforeend', costCard(costSummary(g, p), w));
 $('out').querySelectorAll('input[type=checkbox]').forEach(c => c.onchange = () => { ck[c.dataset.k] = c.checked; save(); c.nextElementSibling.classList.toggle('done', c.checked); });
-    $('glCopy').onclick = e => { const cs = costSummary(g, p); const txt = [...Object.keys(SECTIONS), 'K'].filter(s => g[s]).map(s => (SECTIONS[s] || 'Kitchen (optional)').toUpperCase() + '\n' + g[s].map(x => `- ${x.n}, ${x.qty}${x.special ? ' [SALE ' + x.special.price + ']' : ''}`).join('\n')).join('\n\n') + `\n\nESTIMATED TOTAL: ${money(cs.total)} (${money(cs.perDay)}/day, ${money(cs.perMeal)}/meal)${cs.savings > 0.005 ? `, saves ${money(cs.savings)} with specials` : ''}`; navigator.clipboard && navigator.clipboard.writeText(txt).catch(() => {}); e.target.textContent = 'Copied ✓'; };
+    $('glCopy').onclick = e => { const cs = costSummary(g, p); const txt = [...Object.keys(SECTIONS), 'K'].filter(s => g[s]).map(s => (SECTIONS[s] || 'Kitchen (optional)').toUpperCase() + '\n' + g[s].map(x => `- ${x.n}, ${x.qty}${x.special ? ' [SALE ' + x.special.price + ']' : ''}`).join('\n')).join('\n\n') + `\n\nESTIMATED TOTAL: ${money(cs.total)} (${money(cs.perDay)}/day, ${money(cs.perMeal)}/meal)${cs.savings > 0.005 ? `, saves ${money(cs.savings)} with specials` : ''}${p.onion && p.baseline && p.baseline.total - cs.total > 0.005 ? `. Onion mode saved about ${money(p.baseline.total - cs.total)} vs the normal plan` : ''}`; navigator.clipboard && navigator.clipboard.writeText(txt).catch(() => {}); e.target.textContent = 'Copied ✓'; };
   } else if (tab === 'prep') {
     if (p.v !== 2) { $('out').innerHTML = '<div class="note warn">This week was made with the old planner. Tap “Remake week” to get a Sunday cook-day plan.</div>'; return; }
     const pg = prepGuide(p, RECIPES, { level: p.level, known: S.skill.known, maybe: S.skill.maybe || [], equip: S.equip });
@@ -2140,6 +2240,12 @@ function bindMise(p) { const out = $('out'), sec = $('mise'); if (!sec) return; 
 }
 const vegOf = d => d.veg != null ? d.veg : dayVeg(d, BY);
 const fmtVeg = v => { const x = Math.round(v * 2) / 2; return `${String(x).replace('.5', '½').replace(/^0½/, '½')} serving${x === 1 ? '' : 's'}`; };
+const ONION_ONE = 'Maximum frugality: builds your week around the best deals, cheapest staples next.';
+const ONION_DESC = 'Cheapest possible, still healthy and tasty: same calories, protein, veggies and seasoning.';
+function onionToggle(pre) { return `<div class="onionbox"><button type="button" class="onbtn ${S.onion ? 'on' : ''}" data-onion role="switch" aria-checked="${S.onion}" id="${pre}Onion"><span class="onem">🧅</span><span class="ont"><b>Onion mode</b><span class="hint">${ONION_ONE}</span></span><span class="onst">${S.onion ? 'ON' : 'OFF'}</span></button><p class="hint onhint">${ONION_DESC}</p></div>`; }
+document.addEventListener('click', e => { const b = e.target.closest('[data-onion]'); if (!b) return; S.onion = !S.onion; save();
+  document.querySelectorAll('[data-onion]').forEach(x => { x.classList.toggle('on', S.onion); x.setAttribute('aria-checked', S.onion); const t = x.querySelector('.onst'); if (t) t.textContent = S.onion ? 'ON' : 'OFF'; });
+  if ($('modal').classList.contains('hidden')) renderWeekBar(); });
 function vegSeg(pre) { return `<div class="seg2 vegseg" role="group" aria-label="Veggies">${Object.entries(VEG_MODES).map(([k, m]) => `<button type="button" data-veg="${k}" class="${S.veg === k ? 'on' : ''}" aria-pressed="${S.veg === k}">${k === 'normal' ? '🥗' : k === 'more' ? '🥦' : '🥦🥕'} ${m.label}</button>`).join('')}</div><p class="hint" id="${pre}VegHint">${vegHint()}</p>`; }
 function vegHint() { const m = VEG_MODES[S.veg]; return S.veg === 'normal' ? 'Recipes as written (a side is added only if the week has fewer than 6 different veggies).' : `Each main gets ${m.add} new cuisine-matched vegetable${m.add > 1 ? 's' : ''} (and ${m.sx}× its own veg), a little less rice/noodles/potato to keep calories on target, plus rotating sides. Aim: ${m.target}+ servings a day, ${m.uniq}+ different veggies a week.`; }
 function bindVeg(host, after) { host.querySelectorAll('[data-veg]').forEach(b => b.onclick = () => { S.veg = b.dataset.veg; save(); host.querySelectorAll('[data-veg]').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); }); const h = host.querySelector('[id$=VegHint]'); if (h) h.textContent = vegHint(); after && after(); }); }
@@ -2148,7 +2254,7 @@ const short2 = n => n.split(/ — | with | \(/)[0];
 function recipeBody(r) {
   const w = week(), sp = w ? safeSp(spFor(w.shop)) : null, sale = saleHits(r, sp);
   const keep = r.nocook ? 'Grab & go' : `Keeps ${r.fd} days in the fridge${r.fz ? ' · freezes well ❄️' : ''}`;
-  return `<div class="note small">🥡 ${keep}${r.note ? ' · ' + esc(r.note) : ''}</div>${sale.length ? `<div class="note small" style="background:var(--salebg);color:var(--sale)">🏷 On sale: ${esc(sale.map(short).join(', '))}</div>` : ''}<div class="meta">⏱ ${r.active} min${r.total > r.active ? ` (${r.total} total)` : ''}</div><div class="meta"><b>1 serving</b> (${esc(portion(r, 1) || 'as packaged')}): ${macroLine(r.kcal, r.p, r.c, r.f)}${r.veg ? ` · 🥦 ${fmtVeg(r.veg)} veggies` : ''}</div>${r.vegBoost ? `<div class="note ok small">${esc(vegNote(r))}</div>` : ''}
+  return `<div class="note small">🥡 ${keep}${r.note ? ' · ' + esc(r.note) : ''}</div>${sale.length ? `<div class="note small" style="background:var(--salebg);color:var(--sale)">🏷 On sale: ${esc(sale.map(short).join(', '))}</div>` : ''}<div class="meta">⏱ ${r.active} min${r.total > r.active ? ` (${r.total} total)` : ''}</div><div class="meta"><b>1 serving</b> (${esc(portion(r, 1) || 'as packaged')}): ${macroLine(r.kcal, r.p, r.c, r.f)}${r.veg ? ` · 🥦 ${fmtVeg(r.veg)} veggies` : ''}</div>${r.vegBoost ? `<div class="note ok small">${esc(vegNote(r))}</div>` : ''}${r.onionSubs ? `<div class="note ok small">🧅 Onion swap: ${esc(r.onionSubs.join(', '))}. Cheaper right now, macros stay about the same.</div>` : ''}
   ${(() => { const ep = equipPlan(r, S.equip); return !ep.ok ? '<div class="note warn small">🔧 Needs equipment you don\u2019t have.</div>' : ep.alts.length ? `<div class="note small">🔧 ${ep.alts.map(et).join(' ')}</div>` : ''; })()}
   ${r.stage ? `<div class="note ok small stagenote"><span class="pill stg">${r.stage.k === 'preg' ? '🤰 Pregnancy-safe' : '🍼 Postpartum'}</span>${r.stage.nut.length ? ' ' + r.stage.nut.map(k => `${NUTS[k][0]} ${NUTS[k][1]}`).join(' · ') : ''}${r.stage.notes.length ? `<ul>${r.stage.notes.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}</div>` : ''}
   ${r.allergens.length ? `<div class="hint">Contains: ${r.allergens.map(a => AL_IC[a] + ' ' + esc(AL[a])).join(' · ')}</div>` : '<div class="hint">No major allergens tagged</div>'}
@@ -2173,13 +2279,13 @@ function openSwap(fromId, st) {
   const w = week(); if (!w) return; const p = w.plan, r0 = BY[fromId]; st = st || { any: false, q: '' };
   const used = p.days.flatMap(d => d.meals.filter(m => m.id === fromId).map(m => d.day + ' ' + m.slot.toLowerCase()));
   const sp = safeSp(spFor(w.shop));
-  const base = { plan: p, fromId, recipes: allowed(), all: RECIPES, level: level(), known: (S.skill.known || []).concat(S.skill.maybe || []), favs: S.favs, specials: sp, equip: S.equip };
+  const base = { plan: p, fromId, recipes: allowed(), all: RECIPES, level: level(), known: (S.skill.known || []).concat(S.skill.maybe || []), favs: S.favs, specials: sp, equip: S.equip, onion: !!p.onion };
   let list = swapCandidates({ ...base, anyCuisine: st.any, query: st.q }), padded = false;
   if (!st.q && !st.any && list.length < 3) { const more = swapCandidates({ ...base, anyCuisine: true }).filter(x => !list.some(y => y.id === x.id)); list = list.concat(more.slice(0, 3 - list.length)); padded = more.length > 0; }
   const card = x => `<div class="alt"><button class="altmain" type="button" data-to="${x.id}"><b>${EMOJI[x.cuisine] || ''} ${esc(x.name)}</b>
-      <span class="hint" style="margin:2px 0 0">${macroLine(x.kcal, x.p, x.c, x.f)} per serving · ${x.active} min · ${x.nocook ? 'grab & go' : x.fz ? 'freezes ❄️' : 'fridge ' + x.fd + 'd'}${x.sale ? ' · 🏷 ' + x.sale : ''}${x.cuisine !== p.cuisine ? ' · ' + esc(x.cuisine) : ''}</span></button>
+      <span class="hint" style="margin:2px 0 0">${macroLine(x.kcal, x.p, x.c, x.f)} per serving · ${x.active} min · ${x.nocook ? 'grab & go' : x.fz ? 'freezes ❄️' : 'fridge ' + x.fd + 'd'}${x.sale ? ' · 🏷 ' + x.sale : ''}${x.cost != null ? ` · 🧅 ~${money(x.cost)}/serving${x.dealSaved > 0.05 ? ' (deals save ' + money(x.dealSaved) + ')' : ''}` : ''}${x.cuisine !== p.cuisine ? ' · ' + esc(x.cuisine) : ''}</span></button>
       <button class="hb ${x.fav ? 'on' : ''}" type="button" data-fav="${x.id}" aria-label="Favorite ${esc(x.name)}" aria-pressed="${x.fav}">${x.fav ? '♥' : '♡'}</button></div>`;
-  openModal(`<div class="sheet"><div class="grab"></div><h2>Swap ${esc(short2(r0.name))}</h2><p class="hint">Used ${used.length}×: ${esc(used.join(', '))}. Servings re-fit your macros.</p>
+  openModal(`<div class="sheet"><div class="grab"></div><h2>Swap ${esc(short2(r0.name))}</h2><p class="hint">Used ${used.length}×: ${esc(used.join(', '))}. Servings re-fit your macros.${p.onion ? ' 🧅 Onion mode: cheapest first (deals counted).' : ''}</p>
     <div class="seg2" role="group" aria-label="Cuisine"><button type="button" data-any="0" class="${st.any ? '' : 'on'}">${esc(cLabel(p.cuisines || p.cuisine))}</button><button type="button" data-any="1" class="${st.any ? 'on' : ''}">🌎 Any cuisine</button></div>
     <input id="swQ" type="search" placeholder="🔍 Search all recipes" value="${esc(st.q)}" aria-label="Search recipes" autocomplete="off">
     <div class="alts">${list.length ? list.map(card).join('') : '<p class="hint">No matches that keep for the week and fit your skill & allergies.</p>'}</div>
@@ -2206,7 +2312,7 @@ function renderProgress() {
        <details><summary>All weigh-ins (${pi.list.length})</summary><table class="hist">${[...pi.list].reverse().map(x => `<tr><td>${fmtD(x.date, { month: 'short', day: 'numeric', year: 'numeric' })}</td><td><b>${W(x.lb)}</b> ${WU()}</td><td><button class="btn sm ghost" data-wrm="${x.date}" type="button" aria-label="Delete weigh-in">🗑</button></td></tr>`).join('')}</table></details>`
      : '<p class="hint">Log your weight once a week, same time of day. Targets update automatically.</p>'}</div>
    <h3>Past weeks</h3>${ws.length ? `<table class="hist">${ws.map(w => { const x = S.weeks[w], d = x.plan.days; const a = k => Math.round(d.reduce((s, y) => s + y.tot[k], 0) / 7);
-    return `<tr><td><a href="#" data-go="${w}">${fmtD(w)}</a></td><td>${esc(cLabel(x.cuisine))}${x.mode === 'rec' || x.mode === 'combo' ? ' ✨' : ''}</td><td class="small">${a('kcal')} kcal</td><td><button class="btn sm ghost" data-rm="${w}" type="button" aria-label="Delete week">🗑</button></td></tr>`; }).join('')}</table>` : '<p class="hint">No saved weeks yet.</p>'}`;
+    return `<tr><td><a href="#" data-go="${w}">${fmtD(w)}</a></td><td>${esc(cLabel(x.cuisine))}${x.plan.onion ? ' 🧅' : ''}${x.mode === 'rec' || x.mode === 'combo' ? ' ✨' : ''}</td><td class="small">${a('kcal')} kcal</td><td><button class="btn sm ghost" data-rm="${w}" type="button" aria-label="Delete week">🗑</button></td></tr>`; }).join('')}</table>` : '<p class="hint">No saved weeks yet.</p>'}`;
   $('wiAdd').onclick = () => { const lb = +$('wiLb').value, dt = $('wiDate').value || today; const lbs = toLb(lb); if (!(lbs > 50 && lbs < 800)) { $('wiLb').focus(); return; } logWeight(lbs, dt); renderAll(); };
   $('out').querySelectorAll('[data-wrm]').forEach(b => b.onclick = () => { S.weighins = S.weighins.filter(x => x.date !== b.dataset.wrm); syncCur(); save(); renderAll(); });
   $('out').querySelectorAll('[data-go]').forEach(a => a.onclick = e => { e.preventDefault(); S.cur = a.dataset.go; save(); setTab('plan'); renderAll(); });
@@ -2373,6 +2479,7 @@ function renderSettings() {
      <details><summary>Set calories by hand</summary>${targetsForm('st')}</details></div>
    <div class="card" id="set-diet"><h2>🚫 Allergies & dislikes</h2>${dietForm('sd')}<div id="sdInfo">${dietInfo()}</div></div>
    <div class="card" id="set-veg"><h2>🥦 Veggies</h2>${vegSeg('sv')}</div>
+   <div class="card" id="set-onion"><h2>🧅 Onion mode</h2>${onionToggle('so')}</div>
    <div class="card" id="set-kitchen"><h2>🍳 My kitchen</h2>${equipForm('se')}<div id="seInfo">${equipInfo()}</div></div>
    <div class="card" id="set-faves"><h2>♥ Favorites & 👎 hidden</h2>
      ${S.favs.length ? `<div class="tags">${S.favs.filter(id => BY[id]).map(id => `<span class="tag">♥ ${esc(short2(BY[id].name))}<button type="button" data-unfav="${id}" aria-label="Remove favorite">✕</button></span>`).join('')}</div>` : '<p class="hint">Tap ♡ on a dish to favorite it. We\u2019ll pick it more often.</p>'}
@@ -2501,7 +2608,7 @@ function wzCuisine() {
   const rec = computeRec(); let pick = rec.cuisine ? '__rec' : (CUISINES.find(c => feas(c).ok) || '__rec');
   const okPick = () => !Array.isArray(pick) || feas(pick).ok;
   const draw = () => {
-    openModal(`<div class="wz">${stepBar(5)}<h2>What sounds good this week?</h2><label>Veggies</label>${vegSeg('wv')}<p class="hint">Pick one or more cuisines, or let us choose.</p>
+    openModal(`<div class="wz">${stepBar(5)}<h2>What sounds good this week?</h2><label>Veggies</label>${vegSeg('wv')}<label>Budget</label>${onionToggle('wo')}<p class="hint">Pick one or more cuisines, or let us choose.</p>
       ${tilesHTML(pick, rec)}${!okPick() ? tooFewNote(pick.join(' + ')) : ''}
       ${rec.cuisine ? '' : `<div class="note warn small">${esc(rec.reasons[0])}</div>`}
       <div class="foot"><button class="btn sec" id="wzBack" type="button">Back</button><button class="btn big" id="wzNext" type="button">Make my week</button></div></div>`);
@@ -2520,19 +2627,23 @@ function wzDone() {
   $('wzGo').onclick = () => { S.onboarded = true; save(); closeModal(); setTab('plan'); renderAll(); };
 }
 
-function renderAll() { MONEY.cur = curOf(); usePool((week() && week().plan.veg) || S.veg, week() ? (week().plan.stage || '') : curStage()); document.body.dataset.tab = tab; renderChips(); renderWeekBar(); renderOut(); }
+function renderAll() { MONEY.cur = curOf(); { const wk = week(), on = wk ? !!wk.plan.onion : false; usePool((wk && wk.plan.veg) || S.veg, wk ? (wk.plan.stage || '') : curStage(), on, on ? safeSp(spFor(wk.shop)) : null); } document.body.dataset.tab = tab; renderChips(); renderWeekBar(); renderOut(); }
 renderAll();
 if (!S.onboarded && !/demo/.test(location.hash)) openQuiz(true);
 if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => {});
 
 /* cost summary card at the end of the Groceries tab */
+function onionSave(cs, w) { const p = w && w.plan; if (!p || !p.onion) return ''; const b = p.baseline;
+  if (!b) return '<div class="csave onion">🧅 Onion mode: built around this week\u2019s deals.</div>';
+  const vs = b.total - cs.total, vsReg = b.regular - cs.total;
+  return `<div class="csave onion" id="onionSave">🧅 <b>${vs > 0.005 ? `Onion mode saved about <span id="onionVs">${money(vs)}</span> vs the normal plan` : 'Onion mode: about the same cost as the normal plan this week'}</b>${b.total > 0 ? ` <span class="muted">(${money(b.total)} → ${money(cs.total)}${vs > 0.005 ? ', ' + Math.round(vs / b.total * 100) + '% less' : ''})</span>` : ''}<br>🏷 Deal savings: <b id="dealSave">${money(cs.savings)}</b> from specials${cs.nSalePriced ? ` (${cs.nSalePriced} item${cs.nSalePriced > 1 ? 's' : ''})` : ''}${vsReg > 0.005 ? ` · <b id="onionAll">${money(vsReg)}</b> less than the normal plan at full shelf prices` : ''}</div>`; }
 function costCard(cs, w) {
   const SN = { P: 'Produce', M: 'Meat & seafood', D: 'Dairy, eggs & deli', B: 'Bakery & tortillas', F: 'Frozen', G: 'Pantry & international' };
   const rows = Object.keys(SN).filter(s => cs.bySection[s]).map(s => `<tr><td>${SN[s]}</td><td class="num">${money(cs.bySection[s])}</td></tr>`).join('');
   const opt = [cs.optional.pantry > 0.005 ? `<tr><td>🧂 Spices & pantry (probably have)</td><td class="num">${money(cs.optional.pantry)}</td></tr>` : '', cs.optional.kitchen > 0.005 ? `<tr><td>🥡 Meal-prep containers</td><td class="num">${money(cs.optional.kitchen)}</td></tr>` : ''].join('');
   return `<div class="card cost" id="costCard"><h3>${MONEY.cur === 'PLN' ? '💵 Estimated cost this week (zł, estimate)' : '💵 Estimated cost this week'}</h3>
     <div class="cbig"><b id="costTotal">${money(cs.total)}</b><span>${money(cs.perDay)} per day · ${money(cs.perMeal)} per meal <span class="muted">(${cs.meals} meals &amp; snacks over ${cs.days} days)</span></span></div>
-    ${cs.savings > 0.005 ? `<div class="csave">🏷 You save <b id="costSave">${money(cs.savings)}</b> with this week’s specials <span class="muted">(regular ${money(cs.regular)})</span></div>` : '<div class="small muted">No sale items matched this week.</div>'}
+    ${onionSave(cs, w)}${cs.savings > 0.005 ? `<div class="csave">🏷 You save <b id="costSave">${money(cs.savings)}</b> with this week’s specials <span class="muted">(regular ${money(cs.regular)})</span></div>` : '<div class="small muted">No sale items matched this week.</div>'}
     <table class="ctab"><tbody>${rows}<tr class="sub"><td>Groceries total</td><td class="num">${money(cs.total)}</td></tr></tbody></table>
     ${opt ? `<h4>Optional, not in the total</h4><table class="ctab opt"><tbody>${opt}<tr class="sub"><td>If you buy them all</td><td class="num">${money(cs.total + cs.optTotal)}</td></tr></tbody></table>` : ''}
     <p class="small muted">Prices are estimates for the amounts used in your plan; packages may round up. Sale prices come from the ${esc((w && w.store) || 'store')} weekly ad where an item matches; everything else uses typical regular prices.</p>${MONEY.cur === 'PLN' ? `<p class="small muted" id="plnNote">💱 ${esc(PLN_NOTE)}</p>` : ''}</div>`;
