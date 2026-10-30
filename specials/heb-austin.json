@@ -1,98 +1,94 @@
 {
  "store": "heb-austin",
  "name": "H-E-B",
- "city": "Austin, TX",
- "validFrom": "2026-10-21",
- "validTo": "2026-10-27",
- "source": "https://backflipp.wishabi.com/flipp/flyers/8190706?locale=en-us",
- "fetched": "2026-10-23",
- "updated": "2026-10-23T16:10:16Z",
+ "city": "",
+ "validFrom": "2026-10-28",
+ "validTo": "2026-11-03",
+ "source": "https://backflipp.wishabi.com/flipp/flyers/8197605?locale=en-us",
+ "fetched": "2026-10-30",
+ "updated": "2026-10-30T16:11:34Z",
  "items": [
   {
-   "name": "FRESH! Whole Golden Trout",
-   "price": "$4.47",
+   "name": "Hill Country Fare Bar-B-Q Seasoned Chicken Leg Quarters or Drumsticks, value pack",
+   "price": "$0.99",
    "sec": "M",
    "kw": [
-    "trout",
+    "chicken",
+    "chicken thigh",
+    "chicken drumstick"
+   ]
+  },
+  {
+   "name": "H-E-B Responsibly Raised Tilapia Fillets",
+   "price": "$5.97 lb",
+   "sec": "M",
+   "kw": [
+    "tilapia",
     "fish"
    ]
   },
   {
-   "name": "EZ PEEL! Colossal White Shrimp, under 15 ct per lb, previously frozen",
-   "price": "$7.97 lb",
+   "name": "Jumbo Raw White Shrimp, 16-25 ct per lb, previously frozen",
+   "price": "$5.97 lb",
    "sec": "M",
    "kw": [
     "shrimp"
    ]
   },
   {
-   "name": "Hill Country Fare Boneless Skinless Split Chicken Breast with Rib Meat",
-   "price": "$2.49",
+   "name": "Pork Baby Back Ribs or St. Louis Style Spareribs or H-E-B Seasoned Boneless Skinless Chicken Breasts for Fajitas, Texas-Size Pack",
+   "price": "$2.49 lb",
    "sec": "M",
    "kw": [
-    "chicken breast"
+    "chicken breast",
+    "pork",
+    "pork ribs"
    ]
   },
   {
-   "name": "H-E-B Bella Mandarins 3 lb bag or JUMBO! Pineapple",
-   "price": "$2.97",
+   "name": "Navel Oranges or envy Apples",
+   "price": "$0.97",
    "sec": "P",
    "kw": [
-    "mandarin",
-    "pineapple"
-   ]
-  },
-  {
-   "name": "H-E-B Texas Style Beef Ribs, boneless shoulder, USDA Select, Texas-Size Pack",
-   "price": "$5.99",
-   "sec": "M",
-   "kw": [
-    "beef rib",
-    "short rib"
-   ]
-  },
-  {
-   "name": "Red Seedless Grapes or Opal Apples",
-   "price": "$1.47",
-   "sec": "P",
-   "kw": [
-    "grape",
+    "orange",
     "apple"
    ]
   },
   {
-   "name": "H-E-B Pork Center Loin Chops, bone-in, Texas-Size Pack",
-   "price": "$2.49",
-   "sec": "M",
-   "kw": [
-    "pork chop",
-    "pork loin"
-   ]
-  },
-  {
-   "name": "FRESH! JUMBO! Blueberries 9.8 oz",
+   "name": "Organic Shiitake Mushrooms 3.5 oz or Organic Sweet Potatoes 4 ct tray",
    "price": "$3.97",
    "sec": "P",
    "kw": [
-    "blueberr"
+    "mushroom",
+    "shiitake",
+    "sweet potato"
    ]
   },
   {
-   "name": "Beef Shoulder Roast, USDA Select",
-   "price": "$5.49 lb",
-   "sec": "M",
+   "name": "Blackberries or Raspberries, 6 oz",
+   "price": "$1.97",
+   "sec": "P",
    "kw": [
-    "beef shoulder",
-    "beef roast",
-    "chuck"
+    "berries",
+    "raspberry",
+    "blackberry"
    ]
   },
   {
-   "name": "Nabisco Family Size Ritz Crackers 17.8-20.5 oz",
-   "price": "$2.99",
+   "name": "H-E-B Fresh Cranberries, 12 oz",
+   "price": "$0.74",
+   "sec": "P",
+   "kw": [
+    "cranberry"
+   ]
+  },
+  {
+   "name": "H-E-B Italian Filled Pasta or Italian Style Pasta Sauce (save $2 when you buy 2, yellow coupon)",
+   "price": "$2 off 2",
    "sec": "G",
    "kw": [
-    "cracker"
+    "pasta",
+    "pasta sauce"
    ]
   }
  ]
