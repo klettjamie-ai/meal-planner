@@ -1,30 +1,19 @@
 {
  "store": "heb-austin",
  "name": "H-E-B",
- "city": "",
- "validFrom": "2026-10-28",
- "validTo": "2026-11-03",
- "source": "https://backflipp.wishabi.com/flipp/flyers/8197605?locale=en-us",
- "fetched": "2026-10-30",
- "updated": "2026-10-30T16:11:34Z",
+ "city": "Austin, TX",
+ "validFrom": "2026-11-04",
+ "validTo": "2026-11-10",
+ "source": "https://backflipp.wishabi.com/flipp/flyers/8212429?locale=en-us",
+ "fetched": "2026-11-06",
+ "updated": "2026-11-06T17:10:32Z",
  "items": [
   {
-   "name": "Hill Country Fare Bar-B-Q Seasoned Chicken Leg Quarters or Drumsticks, value pack",
-   "price": "$0.99",
+   "name": "Hill Country Fare Boneless Skinless Split Chicken Breast with Rib Meat",
+   "price": "$2.49 lb",
    "sec": "M",
    "kw": [
-    "chicken",
-    "chicken thigh",
-    "chicken drumstick"
-   ]
-  },
-  {
-   "name": "H-E-B Responsibly Raised Tilapia Fillets",
-   "price": "$5.97 lb",
-   "sec": "M",
-   "kw": [
-    "tilapia",
-    "fish"
+    "chicken breast"
    ]
   },
   {
@@ -36,59 +25,62 @@
    ]
   },
   {
-   "name": "Pork Baby Back Ribs or St. Louis Style Spareribs or H-E-B Seasoned Boneless Skinless Chicken Breasts for Fajitas, Texas-Size Pack",
-   "price": "$2.49 lb",
+   "name": "FRESH! Boneless Beef Eye of Round Roast (USDA Select)",
+   "price": "$4.99 lb",
    "sec": "M",
    "kw": [
-    "chicken breast",
-    "pork",
-    "pork ribs"
+    "beef"
    ]
   },
   {
-   "name": "Navel Oranges or envy Apples",
-   "price": "$0.97",
+   "name": "FRESH! Boston Butt Pork Roast, bone-in",
+   "price": "$1.49 lb",
+   "sec": "M",
+   "kw": [
+    "pork"
+   ]
+  },
+  {
+   "name": "Blueberries, 9.8 oz., or H-E-B Navel Oranges",
+   "price": "$3.97 ea",
    "sec": "P",
    "kw": [
     "orange",
-    "apple"
+    "berr"
    ]
   },
   {
-   "name": "Organic Shiitake Mushrooms 3.5 oz or Organic Sweet Potatoes 4 ct tray",
-   "price": "$3.97",
+   "name": "H-E-B Organics Gold Potatoes or H-E-B Organics Tri-Color Onions, 2 lb bag",
+   "price": "$2.97",
    "sec": "P",
    "kw": [
-    "mushroom",
-    "shiitake",
-    "sweet potato"
+    "onion",
+    "potato"
    ]
   },
   {
-   "name": "Blackberries or Raspberries, 6 oz",
-   "price": "$1.97",
+   "name": "H-E-B Flavor Bombs Sweet Tomatoes, 12 oz",
+   "price": "$2.97",
    "sec": "P",
    "kw": [
-    "berries",
-    "raspberry",
-    "blackberry"
+    "tomato"
    ]
   },
   {
-   "name": "H-E-B Fresh Cranberries, 12 oz",
-   "price": "$0.74",
+   "name": "Red Bell Peppers, or H-E-B Cut & Peeled Baby Carrots, 16 oz",
+   "price": "$0.97 ea",
    "sec": "P",
    "kw": [
-    "cranberry"
+    "pepper",
+    "carrot"
    ]
   },
   {
-   "name": "H-E-B Italian Filled Pasta or Italian Style Pasta Sauce (save $2 when you buy 2, yellow coupon)",
-   "price": "$2 off 2",
-   "sec": "G",
+   "name": "H-E-B Premium Bacon, 12 oz",
+   "price": "$3.99",
+   "sec": "D",
    "kw": [
-    "pasta",
-    "pasta sauce"
+    "bacon"
    ]
   }
  ]

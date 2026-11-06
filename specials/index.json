@@ -1,24 +1,24 @@
 {
  "version": 1,
- "updated": "2026-10-30T16:11:41Z",
+ "updated": "2026-11-06T17:10:44Z",
  "stores": {
   "heb-austin": {
    "name": "H-E-B",
-   "city": "",
-   "validFrom": "2026-10-28",
-   "validTo": "2026-11-03",
+   "city": "Austin, TX",
+   "validFrom": "2026-11-04",
+   "validTo": "2026-11-10",
    "items": 9,
-   "updated": "2026-10-30T16:11:34Z",
-   "source": "https://backflipp.wishabi.com/flipp/flyers/8197605?locale=en-us",
+   "updated": "2026-11-06T17:10:32Z",
+   "source": "https://backflipp.wishabi.com/flipp/flyers/8212429?locale=en-us",
    "file": "heb-austin.json"
   },
   "superking-culvercity": {
    "name": "Super King Markets",
    "city": "Culver City, CA",
-   "validFrom": "2026-10-26",
-   "validTo": "2026-11-01",
-   "items": 30,
-   "updated": "2026-10-30T16:10:21Z",
+   "validFrom": "2026-11-02",
+   "validTo": "2026-11-08",
+   "items": 35,
+   "updated": "2026-11-06T17:07:39Z",
    "source": "https://www.superkingmarkets.com/weekly-ad",
    "file": "superking-culvercity.json"
   }
