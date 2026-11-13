@@ -1,86 +1,94 @@
 {
  "store": "heb-austin",
  "name": "H-E-B",
- "city": "Austin, TX",
- "validFrom": "2026-11-04",
- "validTo": "2026-11-10",
- "source": "https://backflipp.wishabi.com/flipp/flyers/8212429?locale=en-us",
- "fetched": "2026-11-06",
- "updated": "2026-11-06T17:10:32Z",
+ "city": "",
+ "validFrom": "2026-11-11",
+ "validTo": "2026-11-17",
+ "source": "https://backflipp.wishabi.com/flipp/flyers/8222164?locale=en-us",
+ "fetched": "2026-11-13",
+ "updated": "2026-11-13T17:13:15Z",
  "items": [
   {
-   "name": "Hill Country Fare Boneless Skinless Split Chicken Breast with Rib Meat",
-   "price": "$2.49 lb",
+   "name": "Rainbow Trout Fillets",
+   "price": "$6.97 lb",
    "sec": "M",
    "kw": [
-    "chicken breast"
+    "trout"
    ]
   },
   {
    "name": "Jumbo Raw White Shrimp, 16-25 ct per lb, previously frozen",
-   "price": "$5.97 lb",
+   "price": "$6.97 lb",
    "sec": "M",
    "kw": [
     "shrimp"
    ]
   },
   {
-   "name": "FRESH! Boneless Beef Eye of Round Roast (USDA Select)",
+   "name": "H-E-B 80% Lean Ground Chuck",
    "price": "$4.99 lb",
    "sec": "M",
    "kw": [
-    "beef"
+    "ground beef",
+    "ground chuck"
    ]
   },
   {
-   "name": "FRESH! Boston Butt Pork Roast, bone-in",
-   "price": "$1.49 lb",
+   "name": "Hill Country Fare Chicken Drumsticks or Thighs, value pack",
+   "price": "$0.99 lb",
    "sec": "M",
    "kw": [
-    "pork"
+    "chicken thigh",
+    "chicken drumstick"
    ]
   },
   {
-   "name": "Blueberries, 9.8 oz., or H-E-B Navel Oranges",
-   "price": "$3.97 ea",
+   "name": "H-E-B Texas Roots Russet Potatoes, 5 lb bag",
+   "price": "$1.97 ea",
    "sec": "P",
    "kw": [
-    "orange",
-    "berr"
+    "potato",
+    "russet"
    ]
   },
   {
-   "name": "H-E-B Organics Gold Potatoes or H-E-B Organics Tri-Color Onions, 2 lb bag",
-   "price": "$2.97",
+   "name": "Fresh Sweet Cob Corn, 4 ct tray",
+   "price": "$1.97 ea",
    "sec": "P",
    "kw": [
-    "onion",
-    "potato"
+    "corn"
    ]
   },
   {
-   "name": "H-E-B Flavor Bombs Sweet Tomatoes, 12 oz",
-   "price": "$2.97",
+   "name": "Campari Tomatoes, 16 oz",
+   "price": "$1.97 ea",
    "sec": "P",
    "kw": [
     "tomato"
    ]
   },
   {
-   "name": "Red Bell Peppers, or H-E-B Cut & Peeled Baby Carrots, 16 oz",
-   "price": "$0.97 ea",
+   "name": "Fresh Cut Pineapple, 11 oz",
+   "price": "$1.97 ea",
    "sec": "P",
    "kw": [
-    "pepper",
-    "carrot"
+    "pineapple"
    ]
   },
   {
-   "name": "H-E-B Premium Bacon, 12 oz",
-   "price": "$3.99",
-   "sec": "D",
+   "name": "Blackberries, 6 oz",
+   "price": "$1.97 ea",
+   "sec": "P",
    "kw": [
-    "bacon"
+    "blackberr"
+   ]
+  },
+  {
+   "name": "Organic Cosmic Crisp Apples",
+   "price": "$1.97 lb",
+   "sec": "P",
+   "kw": [
+    "apple"
    ]
   }
  ]
