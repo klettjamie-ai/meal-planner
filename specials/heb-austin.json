@@ -1,12 +1,12 @@
 {
  "store": "heb-austin",
- "name": "H-E-B",
- "city": "",
+ "name": "H-E-B Mueller",
+ "city": "Austin, TX",
  "validFrom": "2026-11-11",
  "validTo": "2026-11-17",
  "source": "https://backflipp.wishabi.com/flipp/flyers/8222164?locale=en-us",
  "fetched": "2026-11-13",
- "updated": "2026-11-13T17:13:15Z",
+ "updated": "2026-11-14T02:40:14Z",
  "items": [
   {
    "name": "Rainbow Trout Fillets",

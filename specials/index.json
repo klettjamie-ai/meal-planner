@@ -1,14 +1,14 @@
 {
  "version": 1,
- "updated": "2026-11-13T17:13:15Z",
+ "updated": "2026-11-14T02:40:14Z",
  "stores": {
   "heb-austin": {
-   "name": "H-E-B",
-   "city": "",
+   "name": "H-E-B Mueller",
+   "city": "Austin, TX",
    "validFrom": "2026-11-11",
    "validTo": "2026-11-17",
    "items": 10,
-   "updated": "2026-11-13T17:13:15Z",
+   "updated": "2026-11-14T02:40:14Z",
    "source": "https://backflipp.wishabi.com/flipp/flyers/8222164?locale=en-us",
    "file": "heb-austin.json"
   },

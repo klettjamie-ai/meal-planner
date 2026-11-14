@@ -27,7 +27,7 @@ def slugify(s): return re.sub(r'[^a-z0-9]+', '-', s.lower().replace('&', ' and '
 # slug -> name, city, weekly-ad URL, adapter. Chain slugs (no city) hold chain-wide ads; the app also looks up "<chain>-<city|zip>".
 STORES = {
   'superking-culvercity': dict(name='Super King Markets', city='Culver City, CA', ad='https://www.superkingmarkets.com/weekly-ad', adapter='superking'),
-  'heb-austin':           dict(name='H-E-B', city='Austin, TX', ad='https://www.heb.com/weekly-ad/deals', adapter='heb'),
+  'heb-austin':           dict(name='H-E-B Mueller', city='Austin, TX', ad='https://www.heb.com/weekly-ad/deals', adapter='heb'),
   'centralmarket-austin': dict(name='Central Market', city='Austin, TX', ad='https://www.centralmarket.com'),
   'wholefoods-austin':    dict(name='Whole Foods Market', city='Austin, TX', ad='https://www.wholefoodsmarket.com/sales-flyer'),
   'ralphs':      dict(name='Ralphs', city='', ad='https://www.ralphs.com/weeklyad'),
@@ -107,8 +107,10 @@ def adapter_heb(slug, meta):
     """H-E-B's weekly ad is store-specific (zone picked by your H-E-B store) and heb.com sits behind Imperva/Incapsula bot
     protection: scripted requests get a ~200-byte challenge page or 'errorCode 15'. We don't try to get around that.
     If the page ever comes back with real content, parse it; otherwise fail cleanly and keep the previous file.
-    Fallback: export the Austin-store ad by hand (My H-E-B app / heb.com with your store selected) to CSV and run
-      update_specials.py import heb-austin heb.csv --from YYYY-MM-DD --to YYYY-MM-DD --source https://www.heb.com/weekly-ad/deals"""
+    Fallback: export the Austin-store ad by hand, or transcribe the Flipp H-E-B flyer for postal code 78723
+    (H-E-B Mueller) from https://backflipp.wishabi.com/flipp/data?locale=en-us&postal_code=78723 and the flyer
+    URL https://backflipp.wishabi.com/flipp/flyers/<id>?locale=en-us. Use only items with a real price. Then run
+      update_specials.py import heb-austin heb.csv --from YYYY-MM-DD --to YYYY-MM-DD --source FLYER_URL"""
     h = http_get(meta['ad'])
     if 'Incapsula' in h or '"errorCode"' in h or len(h) < 2000:
         raise RuntimeError('heb.com blocked automated access (Incapsula bot protection). Import a CSV from the Austin-store ad instead (see adapter_heb docstring).')

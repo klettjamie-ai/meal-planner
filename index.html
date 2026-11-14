@@ -1938,7 +1938,7 @@ const EMOJI = { Mexican: '🌮', Italian: '🍝', Mediterranean: '🫒', 'Middle
 const SLOT_IC = { Breakfast: '☀️', Lunch: '🥗', Dinner: '🍽️', Side: '🥦', Snack: '🍎' };
 const STORES = {
   'superking-culvercity': { name: 'Super King', full: 'Super King Markets', city: 'Culver City, CA', addr: '5587 Sepulveda Blvd · 7am–9pm', family: 'superking', ad: 'https://www.superkingmarkets.com/weekly-ad' },
-  'heb-austin': { name: 'H-E-B', full: 'H-E-B', city: 'Austin, TX', family: 'heb', ad: 'https://www.heb.com/weekly-ad' },
+  'heb-austin': { name: 'H-E-B Mueller', full: 'H-E-B Mueller', city: 'Austin, TX', addr: '1801 E 51st St, Austin TX 78723 · 6 AM–11 PM daily', family: 'heb', ad: 'https://www.heb.com/weekly-ad' },
   'centralmarket-austin': { name: 'Central Market', full: 'Central Market', city: 'Austin, TX', family: 'centralmarket', ad: 'https://www.centralmarket.com' },
   'wholefoods-austin': { name: 'Whole Foods', full: 'Whole Foods Market', city: 'Austin, TX', family: 'wholefoods', ad: 'https://www.wholefoodsmarket.com/sales-flyer' },
   ralphs: { name: 'Ralphs', full: 'Ralphs', city: '', chain: true, family: 'ralphs', ad: 'https://www.ralphs.com/weeklyad' },
@@ -1966,7 +1966,7 @@ const STORES = {
 };
 const today = iso(new Date());
 const fresh = () => ({ v: 1, onboarded: false, targets: { kcal: 2100, protein: 160, fatPct: 30, src: 'default' }, skill: { answers: {}, taken: false, quizLevel: 1, known: [], override: 'auto', stretch: true },
-  store: { id: 'superking-culvercity', customName: '', customCity: '' }, specials: { 'superking-culvercity': JSON.parse(JSON.stringify(SK_SPECIALS)) }, weeks: {}, cur: defaultWeek(today), checks: {}, draft: {} });
+  store: { id: 'heb-austin', customName: '', customCity: '' }, specials: { 'superking-culvercity': JSON.parse(JSON.stringify(SK_SPECIALS)) }, weeks: {}, cur: defaultWeek(today), checks: {}, draft: {} });
 let S; try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) {} if (!S || S.v !== 1) S = fresh();
 if (S.onboarded == null) S.onboarded = !!S.skill.taken;
 if (!S.profile) S.profile = { sex: 'female', age: '', ft: '', inch: '', activity: '1.375', curLb: '', goalLb: '', plan: 'pace', pace: 'moderate', date: '', fatPct: 27, auto: true };
@@ -2015,12 +2015,21 @@ const prof = () => ({ ...S.profile, units: S.units, heightIn: (+S.profile.ft || 
 const macros = () => calcMacros(prof(), today);
 const targets = () => { const m = S.profile.auto ? macros() : null; return m && m.ok ? { kcal: m.kcal, p: m.protein, f: m.fat, c: m.carbs, fatPct: m.fatPct, src: 'goal' } : macroTargets(S.targets); };
 /* ---- stores: several at once; deals come from specials/<slug>.json on this site (weekly job), else your own edits ---- */
-if (!S.stores) S.stores = S.store && S.store.id === 'custom' ? [{ key: 'custom', name: S.store.customName || 'Other store', city: S.store.customCity || '' }] : [{ key: (S.store && STORES[S.store.id]) ? S.store.id : 'superking-culvercity' }];
+if (!S.stores) S.stores = S.store && S.store.id === 'custom' ? [{ key: 'custom', name: S.store.customName || 'Other store', city: S.store.customCity || '' }] : [{ key: (S.store && STORES[S.store.id]) ? S.store.id : 'heb-austin' }];
 if (!S.remote) S.remote = {};
 const stSlug = st => { const p = STORES[st.key]; if (p && p.city) return st.key; const loc = slugify(st.city || st.zip || ''); return st.key === 'custom' ? slugify(st.name || 'store') + (loc ? '-' + loc : '') : st.key + (loc ? '-' + loc : ''); };
 const stInfo = st => { const p = STORES[st.key] || STORES.custom; const custom = st.key === 'custom'; return { ...p, key: st.key, slug: stSlug(st), name: custom ? (st.name || 'Other store') : p.name, full: custom ? (st.name || 'Other store') : p.full, city: p.city || st.city || '', addr: st.addr || p.addr || '' }; };
 const store = () => stInfo(S.stores[0]);
 const syncStore = () => { S.store = { ...(S.store || {}), id: store().slug }; };
+/* One-time: default shop is now H-E-B Mueller. Keep Super King / Warsaw if the user already picked them. */
+if (!S.movedToMueller) {
+  const first = S.stores[0] || {};
+  const defaultSK = first.key === 'superking-culvercity' && !first.osm && !first.addr;
+  const hi = S.stores.findIndex(x => x.key === 'heb-austin');
+  if (defaultSK && S.stores.length === 1) S.stores = [{ key: 'heb-austin' }];
+  else if (defaultSK && hi > 0) { const [h] = S.stores.splice(hi, 1); S.stores.unshift(h); }
+  S.movedToMueller = true; syncStore(); save();
+}
 syncStore();
 const SEED = { 'superking-culvercity': SK_SPECIALS, 'lidl-pl': LIDL_PL_SPECIALS, 'biedronka-pl': BIEDRONKA_PL_SPECIALS };
 /** currency of the plan = main store's (Polish stores → PLN) */
@@ -2416,7 +2425,7 @@ function bindTargets(pre, after) {
 }
 function storeForm(pre) {
   const sel = new Set(S.stores.map(stSlug));
-  return `<div class="stl" id="${pre}Stl">${S.stores.map((st, k) => { const i = stInfo(st), d = dealStatus(st); return `<div class="stc"><div><b>${k === 0 ? '⭐ ' : ''}${esc(i.full)}</b>${i.city ? ` <span class="muted">· ${esc(i.city)}</span>` : ''}${st.addr && !STORES[st.key]?.addr ? `<div class="small muted">${esc(st.addr)}</div>` : ''}<div class="small ${d.ok ? 'okc' : 'muted'}">${d.ok ? '🏷 ' : ''}${esc(d.txt)}${i.ad ? ` · <a href="${i.ad}" target="_blank" rel="noopener">weekly ad</a>` : ''}</div></div>${S.stores.length > 1 ? `<button type="button" class="btn sm ghost" data-strm="${k}" aria-label="Remove ${esc(i.full)}">✕</button>` : ''}</div>`; }).join('')}</div>
+  return `<div class="stl" id="${pre}Stl">${S.stores.map((st, k) => { const i = stInfo(st), d = dealStatus(st); return `<div class="stc"><div><b>${k === 0 ? '⭐ ' : ''}${esc(i.full)}</b>${i.city ? ` <span class="muted">· ${esc(i.city)}</span>` : ''}${i.addr ? `<div class="small muted">${esc(i.addr)}</div>` : ''}<div class="small ${d.ok ? 'okc' : 'muted'}">${d.ok ? '🏷 ' : ''}${esc(d.txt)}${i.ad ? ` · <a href="${i.ad}" target="_blank" rel="noopener">weekly ad</a>` : ''}</div></div>${S.stores.length > 1 ? `<button type="button" class="btn sm ghost" data-strm="${k}" aria-label="Remove ${esc(i.full)}">✕</button>` : ''}</div>`; }).join('')}</div>
   <label for="${pre}Q">Add a store</label><div class="row"><div><input id="${pre}Q" autocomplete="off" placeholder="Search or type any store"></div><div><input id="${pre}Loc" autocomplete="off" placeholder="City or ZIP"></div></div>
   <div class="stsug" id="${pre}Sug"></div>
   <div class="near"><label for="${pre}Addr">📍 Find stores near me</label><div class="nrow"><input id="${pre}Addr" autocomplete="street-address" enterkeyhint="search" placeholder="Street address, city" value="${esc(S.nearQ || '')}"><button type="button" class="btn sm" id="${pre}NearGo">Search</button></div>
