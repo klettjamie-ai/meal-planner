@@ -2,22 +2,14 @@
  "store": "heb-austin",
  "name": "H-E-B Mueller",
  "city": "Austin, TX",
- "validFrom": "2026-11-11",
- "validTo": "2026-11-17",
- "source": "https://backflipp.wishabi.com/flipp/flyers/8222164?locale=en-us",
- "fetched": "2026-11-13",
- "updated": "2026-11-14T02:40:14Z",
+ "validFrom": "2026-11-18",
+ "validTo": "2026-11-26",
+ "source": "https://backflipp.wishabi.com/flipp/flyers/8226921?locale=en-us",
+ "fetched": "2026-11-20",
+ "updated": "2026-11-20T17:20:36Z",
  "items": [
   {
-   "name": "Rainbow Trout Fillets",
-   "price": "$6.97 lb",
-   "sec": "M",
-   "kw": [
-    "trout"
-   ]
-  },
-  {
-   "name": "Jumbo Raw White Shrimp, 16-25 ct per lb, previously frozen",
+   "name": "Jumbo Raw White Shrimp",
    "price": "$6.97 lb",
    "sec": "M",
    "kw": [
@@ -25,70 +17,54 @@
    ]
   },
   {
-   "name": "H-E-B 80% Lean Ground Chuck",
-   "price": "$4.99 lb",
+   "name": "Boston Butt Pork Roast",
+   "price": "$1.47 lb",
    "sec": "M",
    "kw": [
-    "ground beef",
-    "ground chuck"
+    "pork shoulder",
+    "pork butt"
    ]
   },
   {
-   "name": "Hill Country Fare Chicken Drumsticks or Thighs, value pack",
-   "price": "$0.99 lb",
+   "name": "FRESH! H-E-B Beef Shoulder Roast",
+   "price": "$5.99 lb",
    "sec": "M",
    "kw": [
-    "chicken thigh",
-    "chicken drumstick"
+    "beef shoulder",
+    "chuck"
    ]
   },
   {
-   "name": "H-E-B Texas Roots Russet Potatoes, 5 lb bag",
-   "price": "$1.97 ea",
+   "name": "RiverSide Grade A Young Turkey",
+   "price": "$0.77 lb",
+   "sec": "M",
+   "kw": [
+    "turkey"
+   ]
+  },
+  {
+   "name": "Sweet Potatoes",
+   "price": "$1.00 lb",
    "sec": "P",
    "kw": [
-    "potato",
-    "russet"
+    "sweet potato"
    ]
   },
   {
-   "name": "Fresh Sweet Cob Corn, 4 ct tray",
-   "price": "$1.97 ea",
+   "name": "Red Bell Peppers or Sweet Onions",
+   "price": "$0.97 lb",
    "sec": "P",
    "kw": [
-    "corn"
+    "bell pepper",
+    "onion"
    ]
   },
   {
-   "name": "Campari Tomatoes, 16 oz",
-   "price": "$1.97 ea",
-   "sec": "P",
-   "kw": [
-    "tomato"
-   ]
-  },
-  {
-   "name": "Fresh Cut Pineapple, 11 oz",
-   "price": "$1.97 ea",
-   "sec": "P",
-   "kw": [
-    "pineapple"
-   ]
-  },
-  {
-   "name": "Blackberries, 6 oz",
-   "price": "$1.97 ea",
-   "sec": "P",
-   "kw": [
-    "blackberr"
-   ]
-  },
-  {
-   "name": "Organic Cosmic Crisp Apples",
+   "name": "H-E-B Premium Red Grapes",
    "price": "$1.97 lb",
    "sec": "P",
    "kw": [
-    "apple"
+    "grape"
    ]
   }
  ]
